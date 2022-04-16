@@ -1,0 +1,35 @@
+Route #1: 39 47 94
+Route #2: 24 50 80
+Route #3: 17 45 38
+Route #4: 27 59 100
+Route #5: 14 53 13
+Route #6: 90 29 7
+Route #7: 73 76 18
+Route #8: 36 72 16
+Route #9: 32 91 61
+Route #10: 79 75 2
+Route #11: 62 11 65
+Route #12: 25
+Route #13: 55 26 57
+Route #14: 51 9 66
+Route #15: 21 87 35
+Route #16: 92 4 5
+Route #17: 95 19 3
+Route #18: 89 81 31
+Route #19: 78 58 37
+Route #20: 46 99 44
+Route #21: 83 63 28
+Route #22: 96 20 6
+Route #23: 67 84 60
+Route #24: 68 52 86
+Route #25: 34 42 70
+Route #26: 15 22 74
+Route #27: 10 30 33
+Route #28: 1 69 23
+Route #29: 93 43 97
+Route #30: 49 12 64
+Route #31: 8 40 48
+Route #32: 82 88 85
+Route #33: 54 56 71
+Route #34: 41 98 77
+Cost 22587

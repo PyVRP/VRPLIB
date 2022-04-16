@@ -1,0 +1,56 @@
+#+TITLE: CVRPLIB.py
+
+This package reads data from [[http://vrp.atd-lab.inf.puc-rio.br/index.php/en/][CVRPLIB]]. It is inspired by [[https://github.com/chkwon/CVRPLIB.jl][CVRPLIB.jl]].
+
+* Usage
+The script requires Python 3.9+. It provides a =Parser= class which can be used to parse data. Assuming that your code is in the same directory, here is a small example:
+#+begin_src python
+from .Parser import Parser
+
+inst_path = "data/CVRPLIB/D/ORTEC-n242-k12.vrp"
+sol_path = "data/CVRPLIB/D/ORTEC-n242-k12.sol"
+
+instance, solution = Parser.from_file(inst_path, sol_path)
+#+end_src
+
+The attributes of =instance= and =solution= are given by their respective classes:
+#+begin_src python
+@dataclass
+class Instance:
+    name: str
+    comment: str
+    dimension: int
+    capacity: int
+    distances: list[float]
+    coordinates: list[list[float]]
+    demands: list[int]
+    depot: int
+    customers: list[int]
+
+
+@dataclass
+class Solution:
+    routes: list[int]
+    cost: float | int
+
+#+end_src
+
+* Conventions
+- The depot is indexed by 0, whereas customers are indexed from 1 to n.
+- The distances are all integral, where distances calculated by taking the Euclidean distance are rounded to the nearest integer.
+
+* TODOs
+** TODO Download the full information about the instances
+The current instance files are not sufficient as they are lacking the following info:
+- Optimality
+- Objective value
+- Num of vehicles
+
+We can download the from the main page I think.
+http://vrp.atd-lab.inf.puc-rio.br/index.php/en/
+** TODO Download instances
+Add a method to download instances directly from the website.
+** TODO Add tests to compute the objective values of solution
+This would verify that creation of distance matrix is correct.
+** TODO Include numpy
+Currently t
