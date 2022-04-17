@@ -174,7 +174,7 @@ class Instance:
     comment: str
     dimension: int
     capacity: int
-    distances: list[float]
+    distances: list[list[float]]
     coordinates: list[list[float]]
     demands: list[int]
     depot: int

@@ -1,6 +1,5 @@
-#+TITLE: CVRPLIB.py
-
-This package reads data from [[http://vrp.atd-lab.inf.puc-rio.br/index.php/en/][CVRPLIB]]. It is inspired by [[https://github.com/chkwon/CVRPLIB.jl][CVRPLIB.jl]].
+#+TITLE: cvrplib-pyparser
+This package reads Capacitated Vehicle Routing Problem (CVRP) instaces from the [[http://vrp.atd-lab.inf.puc-rio.br/index.php/en/][CVRPLIB]] benchmark library. It is inspired by [[https://github.com/chkwon/CVRPLIB.jl][CVRPLIB.jl]].
 
 * Usage
 The script requires Python 3.9+. It provides a =Parser= class which can be used to parse data. Assuming that your code is in the same directory, here is a small example:
