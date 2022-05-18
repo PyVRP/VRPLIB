@@ -418,3 +418,5 @@ archive/*
 
 # Statistics output
 statistics/*.csv
+*DS_STORE
+notes.org

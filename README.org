@@ -53,3 +53,4 @@ Add a method to download instances directly from the website.
 This would verify that creation of distance matrix is correct.
 ** TODO Include numpy
 Currently t
+** TODO <2022-05-03 Tue> Need to test all instances (E didn't work)
