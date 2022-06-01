@@ -18,6 +18,7 @@ pytest = "^7.1.2"
 mypy = "^0.950"
 ipdb = "^0.13.9"
 types-requests = "^2.27.29"
+pre-commit = "^2.19.0"
 
 [pytest]
 pythonpath = [".", "pycvrplib"]

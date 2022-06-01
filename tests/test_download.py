@@ -1,7 +1,8 @@
 import pytest
 
-from ._utils import selected_cases
 from pycvrplib import download
+
+from ._utils import selected_cases
 
 
 # Only test the first two because it takes time to download

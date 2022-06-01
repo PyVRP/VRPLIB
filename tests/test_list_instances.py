@@ -1,7 +1,8 @@
 import pytest
 
-from ._utils import compute_distance, selected_cases
 from pycvrplib import list_instances
+
+from ._utils import compute_distance, selected_cases
 
 
 @pytest.mark.parametrize("case", selected_cases())

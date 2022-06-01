@@ -1,7 +1,8 @@
 import re
-import requests
 from functools import lru_cache
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
+
+import requests
 
 from .constants import MEDIA_URL
 

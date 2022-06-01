@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import glob
+from dataclasses import dataclass
 
 _DATA_DIR = "data/"
 
