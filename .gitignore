@@ -420,3 +420,4 @@ archive/*
 statistics/*.csv
 *DS_STORE
 notes.org
+old/
