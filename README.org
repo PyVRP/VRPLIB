@@ -17,9 +17,9 @@ Using this package is simple. We expose three functions =read=, =download= and =
 import pycvrplib
 
 # Read instances
-instance = pycvrplib.read('../path/to/A-n32-k5.vrp')
-instance, solution = pycvrplib.read(instance_path='../path/to/A-n32-k5.sol',
-                                    solution_path='../path/to/A-n32-k5.sol')
+instance = pycvrplib.read('/path/to/A-n32-k5.vrp')
+instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.sol',
+                                    solution_path='/path/to/A-n32-k5.sol')
 
 # List all instance names including set name
 pycvrplib.list_instances()
@@ -60,45 +60,3 @@ class Solution:
 - The =XML100= data set, which contains 10000 CVRP instances for training ML algorithms, is not listed in =list_instances= and cannot be downloaded using the =download= function. Please download these instances directly from [[http://vrp.atd-lab.inf.puc-rio.br/index.php/en/][CVRPLIB]]. This package does support reading the instances.
 - Our package currently does not support reading and downloading VRPTW instances, i.e., instances that belong to the =Solomon= and =Homberger and Gehring= set. Support for this will be in a later version.
 
-* TODOs
-** DONE Download instances
-Add a method to download instances directly from the website.
-** DONE rename =selected_cases=
-** TODO <2022-05-03 Tue> Need to test all instances (E didn't work) - deviating objective values
-- There are some instances for which the objective values are slightly off, e.g., E-n30-k3. I have no clue why though - 99.9% works correctly.
-- Here's the log from running =pytest= on all instances.
-  #+begin_src
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/B/B-n50-k8.vrp-./data/CVRPLIB/B/B-n50-k8.sol] - assert 1312 ± 1.3e-03 == 1319
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/B/B-n57-k7.vrp-./data/CVRPLIB/B/B-n57-k7.sol] - assert 1153 ± 1.2e-03 == 1155
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/E/E-n30-k3.vrp-./data/CVRPLIB/E/E-n30-k3.sol] - assert 534 ± 5.3e-04 == 537
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/F/F-n45-k4.vrp-./data/CVRPLIB/F/F-n45-k4.sol] - assert 724 ± 7.2e-04 == 722
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_3271_25.vrp-./data/CVRPLIB/XML/XML100_3271_25.sol] - assert 36510 ± 3.7e-02 == 36853
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_3171_14.vrp-./data/CVRPLIB/XML/XML100_3171_14.sol] - assert 68469 ± 6.8e-02 == 68468
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_2271_15.vrp-./data/CVRPLIB/XML/XML100_2271_15.sol] - assert 22623 ± 2.3e-02 == 22995
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_3171_06.vrp-./data/CVRPLIB/XML/XML100_3171_06.sol] - assert 59841 ± 6.0e-02 == 59839
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_1372_01.vrp-./data/CVRPLIB/XML/XML100_1372_01.sol] - assert 16816 ± 1.7e-02 == 16815
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_1371_24.vrp-./data/CVRPLIB/XML/XML100_1371_24.sol] - assert 41108 ± 4.1e-02 == 40884
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_1271_23.vrp-./data/CVRPLIB/XML/XML100_1271_23.sol] - assert 33607 ± 3.4e-02 == 34294
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_1356_16.vrp-./data/CVRPLIB/XML/XML100_1356_16.sol] - assert 8198 ± 8.2e-03 == 5816
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_2171_14.vrp-./data/CVRPLIB/XML/XML100_2171_14.sol] - assert 26218 ± 2.6e-02 == 26151
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_3371_05.vrp-./data/CVRPLIB/XML/XML100_3371_05.sol] - assert 48471 ± 4.8e-02 == 49082
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_3271_11.vrp-./data/CVRPLIB/XML/XML100_3271_11.sol] - assert 60790 ± 6.1e-02 == 60219
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_2271_02.vrp-./data/CVRPLIB/XML/XML100_2271_02.sol] - assert 27392 ± 2.7e-02 == 28061
-FAILED tests/test_read.py::test_distances[./data/CVRPLIB/XML/XML100_1271_15.vrp-./data/CVRPLIB/XML/XML100_1271_15.sol] - assert 58452 ± 5.8e-02 == 59317
-================================================================================================== 13 failed, 9987 passed in 32.10s ==================================================================================================
-
-  #+end_src
-- See =old/= for the test functions and data
-
-** Low prio
-*** TODO Also read the VRPTW instances
-*** TODO Option to select your own distance and rounding function.
-*** DONE Fixed identification of lower row flattened representation
-*** TODO Download the full information about the instances
-The current instance files are not sufficient as they are lacking the following info:
-- Optimality
-- Objective value
-- Num of vehicles
-We can download the from the main page I think.
-http://vrp.atd-lab.inf.puc-rio.br/index.php/en/
-*** TODO Make asynchronous requests in =list_instances=
