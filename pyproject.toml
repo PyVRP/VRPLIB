@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pycvrplib"
-version = "0.1.0"
-description = "Python library for reading and downloading CVRPLIB files."
+version = "1.0.0"
+description = "Python library for reading and downloading CVRPLIB instances."
 authors = ["Leon Lan <leon.lanyidong@gmail.com>"]
 license = "MIT"
 
