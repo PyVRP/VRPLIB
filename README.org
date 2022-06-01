@@ -18,7 +18,7 @@ Using this package is simple. We expose three functions:
 - =download= :: Return an instance (and optionally solution) by directly downloading it from the CVRPLIB website using the corresponding set and instance name.
 - =list_instances= :: Return a list of all instance names that can be passed to =download=. Includes the set names.
 
-Here's a quick example:
+** Example
 #+begin_src python
 import pycvrplib
 

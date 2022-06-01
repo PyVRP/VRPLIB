@@ -1,9 +1,12 @@
+from functools import lru_cache
+
 import requests
 
 from ._parse_utils import parse_instance, parse_solution
 from .constants import MEDIA_URL
 
 
+@lru_cache()
 def download(name: str, solution: bool = False):
     """
     Download the instance from CVRPLIB directly. Also downloads the
