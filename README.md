@@ -13,7 +13,9 @@ This package is inspired by [CVRPLIB.jl](https://github.com/chkwon/CVRPLIB.jl).
 
 This library works with Python 3.7+ and be installed using
 
-    pip install pycvrplib
+```shell
+pip install pycvrplib
+```
 
 
 <a id="org5b103be"></a>
@@ -30,44 +32,44 @@ Using this package is simple. We expose three functions:
 <a id="org9003630"></a>
 
 ## Example
+```python
+import pycvrplib
 
-    import pycvrplib
-    
-    # Read instances
-    instance = pycvrplib.read('/path/to/A-n32-k5.vrp')
-    instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
-                                        solution_path='/path/to/A-n32-k5.sol')
-    
-    # List all instance names including set name
-    pycvrplib.list_instances()
-    
-    # To directly download an instance and the corresponding solution, you must
-    # provide the instance name prefixed with the corresponding set name and a
-    # forward slash. For example, the =A-n32-k5= instance belongs to the set =A=,
-    # hence =A/A-n32-k5= is the correct name to download this instance.
-    
-    # Note that downloading may take a few seconds.
-    instance = pycvrplib.download('A/A-n32-k5')
-    instance, solution = pycvrplib.download('A/A-n32-k5', solution=True)
+# Read instances
+instance = pycvrplib.read('/path/to/A-n32-k5.vrp')
+instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
+                                    solution_path='/path/to/A-n32-k5.sol')
 
+# List all instance names including set name
+pycvrplib.list_instances()
+
+# To directly download an instance and the corresponding solution, you must
+# provide the instance name prefixed with the corresponding set name and a
+# forward slash. For example, the =A-n32-k5= instance belongs to the set =A=,
+# hence =A/A-n32-k5= is the correct name to download this instance.
+
+# Note that downloading may take a few seconds.
+instance = pycvrplib.download('A/A-n32-k5')
+instance, solution = pycvrplib.download('A/A-n32-k5', solution=True)
+```
 The `instance` and `solution` objects are defined by their respective classes as follows:
+```python
+@dataclass
+class Instance:
+    name: str
+    comment: str
+    dimension: int
+    capacity: int
+    distances: List[List[float]]
+    demands: List[int]
+    depot: int
+    coordinates: Optional[List[List[float]]] = None
 
-    @dataclass
-    class Instance:
-        name: str
-        comment: str
-        dimension: int
-        capacity: int
-        distances: List[List[float]]
-        demands: List[int]
-        depot: int
-        coordinates: Optional[List[List[float]]] = None
-    
-    @dataclass
-    class Solution:
-        routes: List[int]
-        cost: float
-
+@dataclass
+class Solution:
+    routes: List[int]
+    cost: float
+```
 
 <a id="org50088b2"></a>
 
