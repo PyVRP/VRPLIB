@@ -11,20 +11,27 @@ pip install pycvrplib
 
 * Usage
 ** Functions
-Using this package is simple. We expose three functions =read=, =download= and =list_instances=. Reading works with the =.vrp= and =.sol= files that can be found on the CVRPLIB website. To directly download an instance and the corresponding solution, you must provide the instance name prefixed with the corresponding set name and a forward slash. For example, the =A-n32-k5= instance belongs to the set =A=, hence =A/A-n32-k5= is the correct name to download this instance.
+Using this package is simple. We expose three functions:
+- =read= :: Return an instance (and optionally solution) by reading a local file.
+- =download= :: Return an instance (and optionally solution) by directly downloading it from the CVRPLIB website using the corresponding set and instance name.
+- =list_instances= :: Return a list of all instance names that can be passed to =download=. Includes the set names.
 
 #+begin_src python
 import pycvrplib
 
 # Read instances
 instance = pycvrplib.read('/path/to/A-n32-k5.vrp')
-instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.sol',
+instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
                                     solution_path='/path/to/A-n32-k5.sol')
 
 # List all instance names including set name
 pycvrplib.list_instances()
 
-# Download instances: passed-in argument must be the full set and instance name
+# To directly download an instance and the corresponding solution, you must
+# provide the instance name prefixed with the corresponding set name and a
+# forward slash. For example, the =A-n32-k5= instance belongs to the set =A=,
+# hence =A/A-n32-k5= is the correct name to download this instance.
+
 # Note that downloading may take a few seconds.
 instance = pycvrplib.download('A/A-n32-k5')
 instance, solution = pycvrplib.download('A/A-n32-k5', solution=True)
