@@ -11,7 +11,7 @@ This package is inspired by [CVRPLIB.jl](https://github.com/chkwon/CVRPLIB.jl).
 
 # Installation
 
-This library works with Python 3.7+ and be installed using
+This library works with Python 3.7+.
 
 ```shell
 pip install pycvrplib
@@ -22,11 +22,10 @@ pip install pycvrplib
 
 # Usage
 
-Using this package is simple. We expose three functions:
-
--   **`read`:** Return an instance (and optionally solution) by reading a local file.
--   **`download`:** Return an instance (and optionally solution) by directly downloading it from the CVRPLIB website using the corresponding set and instance name.
--   **`list_instances`:** Return a list of all instance names that can be passed to `download`. Includes the set names.
+Using this package is simple, it exposes the following three functions:
+-   `read`: Return an instance (and optionally solution) by reading a local file.
+-   `download`: Return an instance (and optionally solution) by directly downloading it from the CVRPLIB website using the corresponding set and instance name.
+-   `list_instances`: Return a list of all instance names that can be passed to `download`. Includes the set names.
 
 
 <a id="org9003630"></a>
