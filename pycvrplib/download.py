@@ -2,8 +2,9 @@ from functools import lru_cache
 
 import requests
 
-from ._parse_utils import parse_instance, parse_solution
+from ._parse_utils import parse_instance
 from .constants import MEDIA_URL
+from .solution import parse_solution
 
 
 @lru_cache()

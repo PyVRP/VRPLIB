@@ -1,6 +1,7 @@
 from typing import Optional
 
-from ._parse_utils import parse_instance, parse_solution
+from ._parse_utils import parse_instance
+from .solution import parse_solution
 
 
 def read(instance_path: str, solution_path: Optional[str] = None):
