@@ -113,9 +113,10 @@ def get_representation(edge_weights: List[List[int]], n: int) -> str:
     """
     Returns the representation type in which the lower row data is given.
 
-    Some instances have a flattened representation, e.g., E-n13-k4,
-    whereas others have a triangular repr, e.g., ORTEC-n242-k12.
-
+    Notes
+    -----
+    - Some instances have a flattened representation, e.g., E-n13-k4,
+      whereas others have a triangular repr, e.g., ORTEC-n242-k12.
     """
     if len(edge_weights) == n - 1:
         return "triangular"
@@ -123,9 +124,11 @@ def get_representation(edge_weights: List[List[int]], n: int) -> str:
         return "flattened"
 
 
-def euclidean(coords: List[List[int]]) -> List[List[int]]:
+def euclidean(coords: List[List[int]], round_func=round) -> List[List[int]]:
     """
     Compute the pairwise Euclidean distances using the passed-in coordinates.
+    `round_func` can be used to specify the rouding function. Default is to
+    round to the nearest integer.
     """
 
     def dist(p, q):
@@ -138,7 +141,7 @@ def euclidean(coords: List[List[int]]) -> List[List[int]]:
     distances = [[0 for _ in range(n)] for _ in range(n)]
 
     for (i, coord_i), (j, coord_j) in combinations(enumerate(coords), r=2):
-        d_ij = round(dist(coord_i, coord_j))
+        d_ij = round_func(dist(coord_i, coord_j))
         distances[i][j] = d_ij
         distances[j][i] = d_ij
 
