@@ -2,9 +2,42 @@
 Shared utility functions.
 """
 import inspect
+import re
 from itertools import combinations
 from math import sqrt
 from typing import List
+
+from .constants import CVRP_SETS, DIMACS_names, XXL_names
+
+
+def find_set(instance_name: str) -> str:
+    """
+    Find the set name corresponding to an instance.
+
+    Notes
+    -----
+    - VRPTW instances start with "C, R, RC" directly followed by 1 or 2.
+        HG can be distinguished from Solomon, having underscores ("_") in the name
+    - CVRP instance names and their corresponding set names share the same first letter.
+        The exceptions are XXL and DIMACS instances, which have unique instance names
+    """
+    if re.match("(R|C|RC)[12]", instance_name):
+        if "_" in instance_name:
+            return "HG"
+        else:
+            return "Solomon"
+
+    if any([instance_name.startswith(xxl) for xxl in XXL_names]):
+        return "XXL"
+
+    if any([instance_name.startswith(dimacs) for dimacs in DIMACS_names]):
+        return "D"
+
+    for set_name in CVRP_SETS:
+        if instance_name.startswith(set_name):
+            return set_name
+
+    raise ValueError(f"Set name not known for instance: {instance_name}.")
 
 
 def from_dict_to_dataclass(cls, data):

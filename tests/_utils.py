@@ -1,12 +1,15 @@
 import glob
 from dataclasses import dataclass
 
+from pycvrplib.utils import find_set
+
 _DATA_DIR = "data/"
 
 
 @dataclass
 class Case:
     name: str
+    set_name: str
     instance_name: str
     instance_path: str
     solution_path: str
@@ -21,8 +24,11 @@ def make_case(set_name, instance_name, dimension, capacity, cost):
     """
     return Case(
         name=set_name + "/" + instance_name,
+        set_name=set_name,
         instance_name=instance_name,
-        instance_path=_DATA_DIR + instance_name + ".vrp",
+        instance_path=_DATA_DIR
+        + instance_name
+        + (".txt" if find_set(instance_name) in ["Solomon", "HG"] else ".vrp"),
         solution_path=_DATA_DIR + instance_name + ".sol",
         dimension=dimension,
         capacity=capacity,
@@ -47,6 +53,8 @@ def selected_cases():
     P = make_case("P", "P-n16-k8", 16, 35, 450)
     X = make_case("X", "X-n101-k25", 101, 206, 27591)
     XXL = make_case("XXL", "Antwerp1", 6001, 30, 477277)
+    Solomon = make_case("Solomon", "C101", 101, 200, 827.3)
+    HG = make_case("HG", "C1_2_1", 201, 200, 2698.6)
 
     return [
         A,
@@ -61,6 +69,8 @@ def selected_cases():
         P,
         X,
         # XXL
+        Solomon,
+        HG,
     ]
 
 

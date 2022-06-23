@@ -10,7 +10,7 @@ def read(instance_path: str, solution_path: Optional[str] = None):
     provided path.
     """
     with open(instance_path, "r") as fi:
-        lines = list(fi.read().splitlines())
+        lines = [l for l in (line.strip() for line in fi) if l]
 
     instance = parse_instance(lines)
 
