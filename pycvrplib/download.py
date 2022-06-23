@@ -4,9 +4,10 @@ from typing import Union
 import requests
 
 from .constants import MEDIA_URL
-from .cvrp import Instance, parse_cvrp
-from .solution import parse_solution
-from .utils import find_set, is_vrptw, parse_instance_name
+from .cvrp import CVRP, parse_cvrp
+from .parse_instance import parse_instance
+from .parse_solution import parse_solution
+from .utils import find_set, is_vrptw
 from .vrptw import VRPTW, parse_vrptw
 
 
@@ -28,15 +29,7 @@ def download(name: str, solution: bool = False):
 
     lines = [line for line in response.text.splitlines() if line.strip()]
 
-    instance_name = parse_instance_name(lines)
-    set_name = find_set(instance_name)
-
-    instance: Union[VRPTW, Instance]
-
-    if is_vrptw(set_name):
-        instance = parse_vrptw(lines)
-    else:
-        instance = parse_cvrp(lines)
+    instance = parse_instance(lines)
 
     if solution:
         response_sol = requests.get(f"{MEDIA_URL}/{set_name}/{name}.sol")

@@ -40,11 +40,6 @@ def find_set(instance_name: str) -> str:
     raise ValueError(f"Set name not known for instance: {instance_name}.")
 
 
-def parse_instance_name(lines: List[str]) -> str:
-    # First line contains the name
-    return lines[0].split(": ")[-1].strip()
-
-
 def is_vrptw(set_name: str) -> bool:
     """
     Checks if the set name belons to VRPTW; otherwise it belons to CVRP.

@@ -14,7 +14,7 @@ Instance utilities
 """
 
 
-def parse_cvrp(lines: List[str]) -> Instance:
+def parse_cvrp(lines: List[str]) -> CVRP:
     """
     Parse the lines of an instance, consisting of:
     - metadata [dimension, edge_weight_type, etc.]
@@ -27,7 +27,7 @@ def parse_cvrp(lines: List[str]) -> Instance:
     data.update(parse_sections(lines))
     data.update(parse_distances(data))
 
-    return from_dict_to_dataclass(Instance, data)
+    return from_dict_to_dataclass(CVRP, data)
 
 
 def parse_metadata(lines: List[str]) -> Dict[str, Any]:
@@ -158,7 +158,7 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
 
 
 @dataclass
-class Instance:
+class CVRP:
     name: str
     dimension: int
     capacity: int
