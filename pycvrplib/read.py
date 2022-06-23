@@ -1,8 +1,8 @@
 from typing import List, Optional, Union
 
-from ._parse_utils import Instance, parse_instance
+from ._parse_utils import Instance, parse_cvrp
 from .solution import parse_solution
-from .utils import find_set, parse_instance_name
+from .utils import find_set, is_vrptw, parse_instance_name
 from .vrptw import VRPTW, parse_vrptw
 
 
@@ -19,10 +19,10 @@ def read(instance_path: str, solution_path: Optional[str] = None):
 
     instance: Union[VRPTW, Instance]
 
-    if set_name in ["Solomon", "HG"]:
+    if is_vrptw(set_name):
         instance = parse_vrptw(lines)
     else:
-        instance = parse_instance(lines)
+        instance = parse_cvrp(lines)
 
     if solution_path is not None:
         with open(solution_path, "r") as fi:

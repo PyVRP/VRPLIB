@@ -14,7 +14,7 @@ Instance utilities
 """
 
 
-def parse_instance(lines: List[str]) -> Instance:
+def parse_cvrp(lines: List[str]) -> Instance:
     """
     Parse the lines of an instance, consisting of:
     - metadata [dimension, edge_weight_type, etc.]

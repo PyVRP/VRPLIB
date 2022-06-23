@@ -3,10 +3,10 @@ from typing import Union
 
 import requests
 
-from ._parse_utils import Instance, parse_instance
+from ._parse_utils import Instance, parse_cvrp
 from .constants import MEDIA_URL
 from .solution import parse_solution
-from .utils import find_set, parse_instance_name
+from .utils import find_set, is_vrptw, parse_instance_name
 from .vrptw import VRPTW, parse_vrptw
 
 
@@ -33,10 +33,10 @@ def download(name: str, solution: bool = False):
 
     instance: Union[VRPTW, Instance]
 
-    if set_name in ["Solomon", "HG"]:
+    if is_vrptw(set_name):
         instance = parse_vrptw(lines)
     else:
-        instance = parse_instance(lines)
+        instance = parse_cvrp(lines)
 
     if solution:
         response_sol = requests.get(f"{MEDIA_URL}/{set_name}/{name}.sol")

@@ -45,6 +45,13 @@ def parse_instance_name(lines: List[str]) -> str:
     return lines[0].split(": ")[-1].strip()
 
 
+def is_vrptw(set_name: str) -> bool:
+    """
+    Checks if the set name belons to VRPTW; otherwise it belons to CVRP.
+    """
+    return set_name in ["HG", "Solomon"]
+
+
 def from_dict_to_dataclass(cls, data: Dict):
     """
     Creates a class using the passed-in data dictionary.
