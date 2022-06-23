@@ -40,6 +40,11 @@ def find_set(instance_name: str) -> str:
     raise ValueError(f"Set name not known for instance: {instance_name}.")
 
 
+def parse_instance_name(lines: List[str]) -> str:
+    # First line contains the name
+    return lines[0].split(": ")[-1].strip()
+
+
 def from_dict_to_dataclass(cls, data: Dict):
     """
     Creates a class using the passed-in data dictionary.

@@ -2,7 +2,7 @@ from typing import List, Optional, Union
 
 from ._parse_utils import Instance, parse_instance
 from .solution import parse_solution
-from .utils import find_set
+from .utils import find_set, parse_instance_name
 from .vrptw import VRPTW, parse_vrptw
 
 
@@ -32,10 +32,3 @@ def read(instance_path: str, solution_path: Optional[str] = None):
         return instance, solution
 
     return instance
-
-
-def parse_instance_name(lines: List[str]) -> str:
-    """
-    Parse the instance name.
-    """
-    return lines[0].split(": ")[-1].strip()
