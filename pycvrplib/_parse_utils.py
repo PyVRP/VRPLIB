@@ -160,7 +160,6 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
 @dataclass
 class Instance:
     name: str
-    comment: str
     dimension: int
     capacity: int
     distances: List[List[float]]

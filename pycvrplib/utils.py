@@ -5,7 +5,7 @@ import inspect
 import re
 from itertools import combinations
 from math import sqrt
-from typing import List
+from typing import Dict, List
 
 from .constants import CVRP_SETS, DIMACS_names, XXL_names
 
@@ -40,7 +40,10 @@ def find_set(instance_name: str) -> str:
     raise ValueError(f"Set name not known for instance: {instance_name}.")
 
 
-def from_dict_to_dataclass(cls, data):
+def from_dict_to_dataclass(cls, data: Dict):
+    """
+    Creates a class using the passed-in data dictionary.
+    """
     return cls(
         **{
             key: (data[key] if val.default == val.empty else data.get(key, val.default))
