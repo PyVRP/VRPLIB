@@ -3,8 +3,8 @@ from typing import Union
 
 import requests
 
-from ._parse_utils import Instance, parse_cvrp
 from .constants import MEDIA_URL
+from .cvrp import Instance, parse_cvrp
 from .solution import parse_solution
 from .utils import find_set, is_vrptw, parse_instance_name
 from .vrptw import VRPTW, parse_vrptw
