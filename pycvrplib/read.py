@@ -12,15 +12,19 @@ def read(instance_path: str, solution_path: Optional[str] = None):
     provided paths.
     """
     with open(instance_path, "r") as fi:
-        lines = [l for l in (line.strip() for line in fi) if l]
+        lines = _read_nonempty_lines(fi)
 
     instance = parse_instance(lines)
 
     if solution_path is not None:
         with open(solution_path, "r") as fi:
-            lines = list(fi.read().splitlines())
+            lines = _read_nonempty_lines(fi)
             solution = parse_solution(lines)
 
         return instance, solution
 
     return instance
+
+
+def _read_nonempty_lines(fi):
+    return [l for l in (line.strip() for line in fi) if l]
