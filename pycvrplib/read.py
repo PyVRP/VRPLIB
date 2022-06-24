@@ -1,9 +1,7 @@
-from typing import List, Optional, Union
+from typing import Optional
 
-from .cvrp import CVRP, parse_cvrp
 from .parse_instance import parse_instance
 from .parse_solution import parse_solution
-from .vrptw import VRPTW, parse_vrptw
 
 
 def read(instance_path: str, solution_path: Optional[str] = None):
@@ -12,18 +10,16 @@ def read(instance_path: str, solution_path: Optional[str] = None):
     provided paths.
     """
     with open(instance_path, "r") as fi:
-        lines = _read_nonempty_lines(fi)
+        instance = parse_instance(_read_nonempty_lines(fi))
 
-    instance = parse_instance(lines)
+    if solution_path is None:
+        return instance
 
-    if solution_path is not None:
+    else:
         with open(solution_path, "r") as fi:
-            lines = _read_nonempty_lines(fi)
-            solution = parse_solution(lines)
+            solution = parse_solution(_read_nonempty_lines(fi))
 
         return instance, solution
-
-    return instance
 
 
 def _read_nonempty_lines(fi):
