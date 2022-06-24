@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.7"
 requests = "^2.27.1"
+numpy = "^1.15"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
