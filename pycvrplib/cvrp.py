@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from itertools import combinations
 from typing import Any, Dict, List, Optional
 
-from .constants import SHIFT
+from .constants import DEPOT
 from .utils import euclidean, from_dict_to_dataclass
 
 
@@ -31,14 +31,17 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
     Parse the metadata at the beginning of the instance file.
     This data is formatted as KEY : VALUE lines.
     """
-    data: Dict[str, Any] = {}
+    data = {}
     for line in lines:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
             data[k.lower()] = int(v) if v.isnumeric() else v
 
-    data["n_customers"] = data["dimension"] - 1
-    data["customers"] = list(range(1, data["n_customers"]))
+    data["depot"] = DEPOT
+    data["n_customers"] = data["dimension"] - 1  # type: ignore
+    data["customers"] = list(range(1, data["n_customers"]))  # type: ignore
+    data["distance_limit"] = data.get("distance", float("inf"))  # type: ignore
+    data["service_times"] = [data.get("service_time", 0)] * data["n_customers"]  # type: ignore
 
     return data
 
@@ -67,9 +70,6 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
     for name, section in sections.items():
         if name == "DEMAND":
             data["demands"] = [int(row[1]) for row in section]
-
-        elif name == "DEPOT":
-            data["depot"] = int(section[0][0]) + SHIFT
 
         elif name == "NODE_COORD":
             data["coordinates"] = [[int(row[1]), int(row[2])] for row in section]
@@ -165,6 +165,8 @@ class CVRP:
     depot: int
     customers: List[int]
     capacity: int
+    distance_limit: float
     distances: List[List[float]]
     demands: List[int]
+    service_times: List[float]
     coordinates: Optional[List[List[float]]] = None
