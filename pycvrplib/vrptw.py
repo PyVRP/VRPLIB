@@ -5,10 +5,8 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from pycvrplib.utils import euclidean
-
 from .constants import DEPOT
-from .utils import from_dict_to_dataclass
+from .utils import euclidean, from_dict_to_dataclass
 
 
 def parse_vrptw(lines: List[str]) -> VRPTW:
@@ -37,15 +35,15 @@ def parse_customers(lines: List[str]) -> Dict:
     A = np.genfromtxt(lines[6:], dtype=int)
     n_customers = A.shape[0] - 1
 
-    data["coordinates"] = A[:, 1:3].tolist()
-    data["demands"] = A[:, 3]
+    data["coordinates"] = A[:, 1:3]
     data["dimension"] = n_customers + 1
+    data["demands"] = A[:, 3]
     data["n_customers"] = n_customers
-    data["customers"] = list(range(1, n_customers + 1))
+    data["customers"] = np.arange(1, n_customers + 1)
     data["earliest_times"] = A[:, 4]
     data["latest_times"] = A[:, 5]
     data["service_times"] = A[:, 6]
-    data["distances"] = euclidean(data["coordinates"], lambda di: round(di, 1))
+    data["distances"] = euclidean(data["coordinates"].tolist(), lambda di: round(di, 1))
 
     return data
 
@@ -54,14 +52,14 @@ def parse_customers(lines: List[str]) -> Dict:
 class VRPTW:
     name: str
     dimension: int
-    n_vehicles: int
     n_customers: int
+    depot: int
+    customers: List[int]
+    n_vehicles: int
     capacity: int
     distances: List[List[float]]
+    coordinates: List[List[float]]
     demands: List[int]
+    service_times: List[int]
     earliest_times: List[int]
     latest_times: List[int]
-    service_times: List[int]
-    depot: int
-    coordinates: List[List[float]]
-    customers: List[int]

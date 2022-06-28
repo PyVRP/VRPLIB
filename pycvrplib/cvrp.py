@@ -6,12 +6,8 @@ from dataclasses import dataclass
 from itertools import combinations
 from typing import Any, Dict, List, Optional
 
-from .constants import DEPOT, SHIFT
+from .constants import SHIFT
 from .utils import euclidean, from_dict_to_dataclass
-
-"""
-Instance utilities
-"""
 
 
 def parse_cvrp(lines: List[str]) -> CVRP:
@@ -35,11 +31,15 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
     Parse the metadata at the beginning of the instance file.
     This data is formatted as KEY : VALUE lines.
     """
-    data = {}
+    data: Dict[str, Any] = {}
     for line in lines:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
             data[k.lower()] = int(v) if v.isnumeric() else v
+
+    data["n_customers"] = data["dimension"] - 1
+    data["customers"] = list(range(1, data["n_customers"]))
+
     return data
 
 
@@ -161,8 +161,10 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
 class CVRP:
     name: str
     dimension: int
+    n_customers: int
+    depot: int
+    customers: List[int]
     capacity: int
     distances: List[List[float]]
     demands: List[int]
-    depot: int
     coordinates: Optional[List[List[float]]] = None

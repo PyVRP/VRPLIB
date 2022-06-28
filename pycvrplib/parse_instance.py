@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Union
 
 from .cvrp import CVRP, parse_cvrp
 from .utils import find_set
