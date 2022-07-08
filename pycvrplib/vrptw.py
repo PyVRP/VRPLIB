@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any, Dict, List
 
 import numpy as np
 
 from .constants import DEPOT
+from .Instance import VRPTW
 from .utils import euclidean, from_dict_to_dataclass
 
 
@@ -46,20 +46,3 @@ def parse_customers(lines: List[str]) -> Dict:
     data["distances"] = euclidean(data["coordinates"], lambda di: round(di, 2))
 
     return data
-
-
-@dataclass
-class VRPTW:
-    name: str
-    dimension: int
-    n_customers: int
-    depot: int
-    customers: List[int]
-    n_vehicles: int
-    capacity: int
-    coordinates: List[List[float]]
-    distances: List[List[float]]
-    demands: List[int]
-    service_times: List[int]
-    earliest: List[int]
-    latest: List[int]

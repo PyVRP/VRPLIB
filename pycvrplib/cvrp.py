@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
-from dataclasses import dataclass
 from itertools import combinations
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from .constants import DEPOT
+from .Instance import CVRP
 from .utils import euclidean, from_dict_to_dataclass
 
 
@@ -42,6 +42,7 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
     data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
     data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore
     data["service_times"] = [0.0] + [float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])]  # type: ignore
+    data["coordinates"] = None  # type: ignore
 
     return data
 
@@ -155,18 +156,3 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
         distances[j][i] = d_ij
 
     return distances
-
-
-@dataclass
-class CVRP:
-    name: str
-    dimension: int
-    n_customers: int
-    depot: int
-    customers: List[int]
-    capacity: int
-    distance_limit: float
-    distances: List[List[float]]
-    demands: List[int]
-    service_times: List[float]
-    coordinates: Optional[List[List[float]]] = None
