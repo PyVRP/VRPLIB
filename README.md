@@ -7,7 +7,7 @@ This Python package provides functions to read and download instances from the C
 
 # Installation
 
-This library works with Python 3.7+ and be installed using
+This library works with Python 3.7+.
 
 ```shell
 pip install pycvrplib
@@ -15,12 +15,11 @@ pip install pycvrplib
 
 
 # Usage
-
 Using this package is simple. We expose three functions:
 
--   **`read`:** Read an instance (and optionally solution) from a local file.
--   **`download`:** Download an instance (and optionally solution) directly from the CVRPLIB website.
--   **`list_instances`:** Return a list of all instance names that can be passed to `download`. Includes the set names.
+-   `read`: Read an instance (and optionally solution) from a local file.
+-   `download`: Download an instance (and optionally solution) directly from the CVRPLIB website.
+-   `list_instances`: List of all instance names that can be passed to `download`.
 
 
 ## Example
