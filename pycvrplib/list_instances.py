@@ -38,6 +38,11 @@ def get_names() -> List[str]:
                     data = between_a_tags(line)
                     if data.endswith(".vrp"):
                         names.append(set_name + data.rstrip(".vrp"))
+
+                if ".txt" in line:
+                    data = between_a_tags(line)
+                    if data.endswith(".txt"):
+                        names.append(set_name + data.rstrip(".txt"))
     return names
 
 
