@@ -2,7 +2,6 @@ import re
 from dataclasses import dataclass
 from typing import Any, Dict, List
 
-from .constants import SHIFT
 from .utils import from_dict_to_dataclass
 
 
@@ -30,7 +29,7 @@ def parse_solution(lines: List[str]) -> Solution:
             if "route" in line:
                 # TODO Split is not necessary; can match directly
                 route = re.split(r"route #\d+: ", line)[1]
-                route = [int(cust) + (1 + SHIFT) for cust in route.split(" ") if cust]
+                route = [int(cust) for cust in route.split(" ") if cust]
                 routes.append(route)
 
         return routes
