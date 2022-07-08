@@ -39,9 +39,9 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
 
     data["depot"] = DEPOT
     data["n_customers"] = data["dimension"] - 1  # type: ignore
-    data["customers"] = list(range(1, data["n_customers"]))  # type: ignore
-    data["distance_limit"] = data.get("distance", float("inf"))  # type: ignore
-    data["service_times"] = [data.get("service_time", 0)] * data["n_customers"]  # type: ignore
+    data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
+    data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore
+    data["service_times"] = [0.0] + [float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])]  # type: ignore
 
     return data
 

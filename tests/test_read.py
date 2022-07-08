@@ -8,7 +8,7 @@ from ._utils import compute_distance, selected_cases
 @pytest.mark.parametrize("case", selected_cases())
 def test_read(case):
     """
-    Download the A_n32_k5 instance and solution.
+    Read the case and verify a subest of the attributes.
     """
     instance, solution = read(case.instance_path, case.solution_path)
 

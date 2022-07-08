@@ -68,7 +68,7 @@ def euclidean(coords: List[List[int]], round_func=round) -> List[List[int]]:
 
     def dist(p, q):
         """
-        Return the Euclidean distance between to coordinates.
+        Return the Euclidean distance between two coordinates.
         """
         return sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))
 
