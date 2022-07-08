@@ -1,3 +1,3 @@
 from .download import download
-from .list_instances import list_instances
+from .list_names import list_names
 from .read import read
