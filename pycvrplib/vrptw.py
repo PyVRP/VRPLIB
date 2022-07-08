@@ -35,15 +35,15 @@ def parse_customers(lines: List[str]) -> Dict:
     A = np.genfromtxt(lines[6:], dtype=int)
     n_customers = A.shape[0] - 1
 
-    data["coordinates"] = A[:, 1:3]
+    data["coordinates"] = A[:, 1:3].tolist()
     data["dimension"] = n_customers + 1
     data["demands"] = A[:, 3]
     data["n_customers"] = n_customers
-    data["customers"] = np.arange(1, n_customers + 1)
-    data["earliest_times"] = A[:, 4]
-    data["latest_times"] = A[:, 5]
+    data["customers"] = list(range(1, n_customers + 1))
+    data["earliest"] = A[:, 4]
+    data["latest"] = A[:, 5]
     data["service_times"] = A[:, 6]
-    data["distances"] = euclidean(data["coordinates"].tolist(), lambda di: round(di, 1))
+    data["distances"] = euclidean(data["coordinates"], lambda di: round(di, 2))
 
     return data
 
@@ -57,9 +57,9 @@ class VRPTW:
     customers: List[int]
     n_vehicles: int
     capacity: int
-    distances: List[List[float]]
     coordinates: List[List[float]]
+    distances: List[List[float]]
     demands: List[int]
     service_times: List[int]
-    earliest_times: List[int]
-    latest_times: List[int]
+    earliest: List[int]
+    latest: List[int]
