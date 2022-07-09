@@ -5,7 +5,7 @@ from .utils import find_set, is_vrptw
 
 
 def list_names(
-    low: int = 0,
+    low: Optional[int] = None,
     high: Optional[int] = None,
     vrp_type: Optional[str] = None,
 ):
@@ -20,12 +20,13 @@ def list_names(
     - high
         The maximum number of customers
     - vrp_type
-        The vrp_type, one of ['cvrp', 'vrptw']. If unspecified, then
-        both cvrp and vrptw instances are returned.
+        The vrp_type, one of ['cvrp', 'vrptw']. If None, then
+        both type of instances are returned.
     """
     instances = _parse_instance_names()
 
-    instances = [inst for inst in instances if inst["n_customers"] >= low]
+    if low is not None:
+        instances = [inst for inst in instances if inst["n_customers"] >= low]
 
     if high is not None:
         instances = [inst for inst in instances if inst["n_customers"] <= high]
