@@ -15,8 +15,7 @@ def parse_cvrp(lines: List[str]) -> CVRP:
     Parse the lines of an instance, consisting of:
     - metadata [dimension, edge_weight_type, etc.]
     - sections [coords, demands, etc.]
-
-    Moreover, additional data is created, e.g., distances data.
+    - distances
     """
     data = {}
     data.update(parse_metadata(lines))

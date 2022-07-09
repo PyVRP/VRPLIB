@@ -43,6 +43,6 @@ def parse_customers(lines: List[str]) -> Dict:
     data["earliest"] = A[:, 4].tolist()
     data["latest"] = A[:, 5].tolist()
     data["service_times"] = A[:, 6].tolist()
-    data["distances"] = euclidean(data["coordinates"], lambda di: round(di, 2))
+    data["distances"] = euclidean(data["coordinates"])
 
     return data
