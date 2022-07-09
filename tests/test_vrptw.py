@@ -1,4 +1,4 @@
-from pycvrplib import read
+from cvrplib import read
 
 
 def test_C101():

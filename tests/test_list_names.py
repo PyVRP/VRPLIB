@@ -1,6 +1,6 @@
 import pytest
 
-from pycvrplib import list_names
+from cvrplib import list_names
 
 from ._utils import selected_cases
 

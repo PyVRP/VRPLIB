@@ -44,7 +44,7 @@ def list_names(
 
 @lru_cache()
 def _parse_instance_data():
-    with open("pycvrplib/instance_data.csv", "r") as fi:
+    with open("cvrplib/instance_data.csv", "r") as fi:
         instances = [line.strip().split(",") for line in fi.readlines()]
 
     return [{"name": inst[0], "n_customers": int(inst[1])} for inst in instances]

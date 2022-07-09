@@ -1,6 +1,6 @@
 import pytest
 
-from pycvrplib import read
+from cvrplib import read
 
 from ._utils import compute_distance, selected_cases
 

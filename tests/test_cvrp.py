@@ -1,4 +1,4 @@
-from pycvrplib import read
+from cvrplib import read
 
 
 def test_X_n101_k25():

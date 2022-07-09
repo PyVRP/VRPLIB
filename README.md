@@ -1,6 +1,6 @@
-# pyCVRPLIB
-[![PyPI version](https://badge.fury.io/py/pycvrplib.svg)](https://badge.fury.io/py/pycvrplib)
-[![pyCVRPLIB](https://github.com/leonlan/pyCVRPLIB/actions/workflows/pycvrplib.yml/badge.svg)](https://github.com/leonlan/pyCVRPLIB/actions/workflows/pycvrplib.yml)
+# CVRPLIB
+[![PyPI version](https://badge.fury.io/py/cvrplib.svg)](https://badge.fury.io/py/cvrplib)
+[![cvrplib](https://github.com/leonlan/cvrplib/actions/workflows/cvrplib.yml/badge.svg)](https://github.com/leonlan/cvrplib/actions/workflows/cvrplib.yml)
 
 This Python package provides functions to read and download instances from the Capacitated Vehicle Routing Problem Library ([CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/)). CVRPLIB contains a large collection of CVRP and VRPTW benchmark instances and also keeps track of the currently best known solutions.
 
@@ -9,7 +9,7 @@ This Python package provides functions to read and download instances from the C
 This library works with Python 3.7+.
 
 ```shell
-pip install pycvrplib
+pip install cvrplib
 ```
 
 
@@ -23,21 +23,21 @@ Using this package is simple. We expose three functions:
 
 ## Example
 ```python
-import pycvrplib
+import cvrplib
 
 # Read instances
-instance = pycvrplib.read('/path/to/A-n32-k5.vrp')
-instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
+instance = cvrplib.read('/path/to/A-n32-k5.vrp')
+instance, solution = cvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
                                     solution_path='/path/to/A-n32-k5.sol')
 
 # List instance names 
-pycvrplib.list_names()                      # All instance names
-pycvrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
-pycvrplib.list_names(vrp_type='vrptw')      # Only VRPTW instances
+cvrplib.list_names()                      # All instance names
+cvrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
+cvrplib.list_names(vrp_type='vrptw')      # Only VRPTW instances
 
 # Download instances
-instance = pycvrplib.download('A-n32-k5')
-instance, solution = pycvrplib.download('A-n32-k5', solution=True)
+instance = cvrplib.download('A-n32-k5')
+instance, solution = cvrplib.download('A-n32-k5', solution=True)
 ```
 ## Dataclasses
 Instance fields depend on the VRP type of the instance. `Instance` defines the base instance, which is extended by the `CVRP` and `VRPTW` classes. `Solution` defines the solution and is the same for CVRP and VRPTW. 
