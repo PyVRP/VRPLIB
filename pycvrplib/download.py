@@ -5,7 +5,7 @@ import requests
 from .constants import MEDIA_URL
 from .parse_instance import parse_instance
 from .parse_solution import parse_solution
-from .utils import find_set, is_vrptw
+from .utils import find_set, is_vrptw, strip_lines
 
 
 @lru_cache()
@@ -19,7 +19,7 @@ def download(name: str, solution: bool = False):
     if response.status_code != 200:
         response.raise_for_status()
 
-    instance = parse_instance(_read_nonempty_lines(response))
+    instance = parse_instance(strip_lines(response.text.splitlines()))
 
     if not solution:
         return instance
@@ -30,7 +30,7 @@ def download(name: str, solution: bool = False):
         if response_sol.status_code != 200:
             response_sol.raise_for_status()
 
-        sol = parse_solution(_read_nonempty_lines(response_sol))
+        sol = parse_solution(strip_lines(response_sol.text.splitlines()))
         return instance, sol
 
 
@@ -38,15 +38,9 @@ def _make_subpath(name: str, solution: bool = False) -> str:
     """
     Return the path of the passed-in instance name relative to `MEDIA_URL`.
     """
-    set_name = find_set(name)
-
     if solution:
         ext = "sol"
     else:
-        ext = "txt" if is_vrptw(set_name) else "vrp"
+        ext = "txt" if is_vrptw(name) else "vrp"
 
-    return f"{set_name}/{name}.{ext}"
-
-
-def _read_nonempty_lines(response):
-    return [l for l in (line.strip() for line in response.text.splitlines()) if l]
+    return f"{find_set(name)}/{name}.{ext}"

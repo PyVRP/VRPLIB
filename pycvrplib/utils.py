@@ -40,11 +40,12 @@ def find_set(instance_name: str) -> str:
     raise ValueError(f"Set name not known for instance: {instance_name}.")
 
 
-def is_vrptw(set_name: str) -> bool:
+def is_vrptw(name: str) -> bool:
     """
-    Checks if the set name belons to VRPTW; otherwise it belons to CVRP.
+    Checks if the passed-in name is a VRPTW instance or not. Otherwise the instance
+    is a CVRP instance.
     """
-    return set_name in ["HG", "Solomon"]
+    return find_set(name) in ["HG", "Solomon"]
 
 
 def from_dict_to_dataclass(cls, data: Dict):
@@ -81,3 +82,10 @@ def euclidean(coords: List[List[int]], round_func=round) -> List[List[int]]:
         distances[j][i] = d_ij
 
     return distances
+
+
+def strip_lines(lines):
+    """
+    Strip all lines and return the non-empty ones.
+    """
+    return [l for l in (line.strip() for line in lines) if l]

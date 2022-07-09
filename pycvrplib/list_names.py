@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Optional
 
-from .utils import find_set, is_vrptw
+from .utils import is_vrptw
 
 
 def list_names(
@@ -10,8 +10,7 @@ def list_names(
     vrp_type: Optional[str] = None,
 ):
     """
-    Return the names of instances.
-    with n_customers between [low, high].
+    Return the names of instances that can be passed to `download`.
 
     Params
     ------
@@ -37,7 +36,7 @@ def list_names(
         elif vrp_type == "cvrp":
             instances = [inst for inst in instances if not is_vrptw(inst["name"])]
         else:
-            instances = [inst for inst in instances if is_vrptw(find_set(inst["name"]))]
+            instances = [inst for inst in instances if is_vrptw(inst["name"])]
 
     return [inst["name"] for inst in instances]
 
