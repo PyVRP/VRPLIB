@@ -14,23 +14,23 @@ def download(name: str, solution: bool = False):
     Download the instance from CVRPLIB directly. If `solution` is set, then
     also download the corresponding solution.
     """
-    response = requests.get(f"{MEDIA_URL}/{_make_subpath(name)}")
+    inst_resp = requests.get(f"{MEDIA_URL}/{_make_subpath(name)}")
 
-    if response.status_code != 200:
-        response.raise_for_status()
+    if inst_resp.status_code != 200:
+        inst_resp.raise_for_status()
 
-    instance = parse_instance(strip_lines(response.text.splitlines()))
+    instance = parse_instance(strip_lines(inst_resp.text.splitlines()))
 
     if not solution:
         return instance
 
     else:
-        response_sol = requests.get(f"{MEDIA_URL}/{_make_subpath(name, True)}")
+        sol_resp = requests.get(f"{MEDIA_URL}/{_make_subpath(name, True)}")
 
-        if response_sol.status_code != 200:
-            response_sol.raise_for_status()
+        if sol_resp.status_code != 200:
+            sol_resp.raise_for_status()
 
-        sol = parse_solution(strip_lines(response_sol.text.splitlines()))
+        sol = parse_solution(strip_lines(sol_resp.text.splitlines()))
         return instance, sol
 
 

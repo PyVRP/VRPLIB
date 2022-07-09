@@ -1,6 +1,3 @@
-"""
-Shared utility functions.
-"""
 import inspect
 import re
 from itertools import combinations
@@ -12,14 +9,14 @@ from .constants import CVRP_SETS, DIMACS_names, XXL_names
 
 def find_set(instance_name: str) -> str:
     """
-    Find the set name corresponding to an instance.
+    Find the set name of the instance.
 
     Notes
     -----
     - VRPTW instances start with "C, R, RC" directly followed by 1 or 2.
-        HG can be distinguished from Solomon, having underscores ("_") in the name
+        HG instances have underscores ("_") in the name, whereas Solomon instances do not.
     - CVRP instance names and their corresponding set names share the same first letter.
-        The exceptions are XXL and DIMACS instances, which have unique instance names
+        the exceptions are XXL and DIMACS instances, which have unique instance names
     """
     if re.match("(R|C|RC)[12]", instance_name):
         if "_" in instance_name:

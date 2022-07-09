@@ -15,35 +15,36 @@ def list_names(
     Params
     ------
     - low
-        The minimum number of customers
+        The minimum number of customers.
     - high
-        The maximum number of customers
+        The maximum number of customers.
     - vrp_type
-        The vrp_type, one of ['cvrp', 'vrptw']. If None, then
-        both type of instances are returned.
+        The vrp_type, one of ['cvrp', 'vrptw']. If not set, then
+        instances of both types are returned.
     """
-    instances = _parse_instance_names()
+    instances = _parse_instance_data()
 
     if low is not None:
-        instances = [inst for inst in instances if inst["n_customers"] >= low]
+        instances = filter(lambda inst: inst["n_customers"] >= low, instances)
 
     if high is not None:
-        instances = [inst for inst in instances if inst["n_customers"] <= high]
+        instances = filter(lambda inst: inst["n_customers"] <= high, instances)
 
-    if vrp_type is not None:
-        if vrp_type not in ["cvrp", "vrptw"]:
-            raise ValueError("vrp_type must be one of ['cvrp', 'vrptw']")
-        elif vrp_type == "cvrp":
-            instances = [inst for inst in instances if not is_vrptw(inst["name"])]
-        else:
-            instances = [inst for inst in instances if is_vrptw(inst["name"])]
+    if vrp_type not in [None, "cvrp", "vrptw"]:
+        raise ValueError("vrp_type must be one of [None, 'cvrp', 'vrptw']")
+
+    elif vrp_type == "cvrp":
+        instances = filter(lambda inst: not is_vrptw(inst["name"]), instances)
+
+    elif vrp_type == "vrptw":
+        instances = filter(lambda inst: is_vrptw(inst["name"]), instances)
 
     return [inst["name"] for inst in instances]
 
 
 @lru_cache()
-def _parse_instance_names():
-    with open("pycvrplib/instance_names.csv", "r") as fi:
+def _parse_instance_data():
+    with open("pycvrplib/instance_data.csv", "r") as fi:
         instances = [line.strip().split(",") for line in fi.readlines()]
 
     return [{"name": inst[0], "n_customers": int(inst[1])} for inst in instances]

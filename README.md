@@ -18,7 +18,7 @@ Using this package is simple. We expose three functions:
 
 -   `read`: Read an instance (and optionally solution) from a local file.
 -   `download`: Download an instance (and optionally solution) directly from the CVRPLIB website.
--   `list_names`: List of all instance names that can be passed to `download`.
+-   `list_names`: List all instance names that can be passed to `download`.
 
 
 ## Example
@@ -30,17 +30,17 @@ instance = pycvrplib.read('/path/to/A-n32-k5.vrp')
 instance, solution = pycvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
                                     solution_path='/path/to/A-n32-k5.sol')
 
-# List all instance names including set name
+# List instance names 
 pycvrplib.list_names()                      # All instance names
 pycvrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
 pycvrplib.list_names(vrp_type='vrptw')      # Only VRPTW instances
 
 # Download instances
 instance = pycvrplib.download('A-n32-k5')
-instance, solution = pycvrplib.download(A-n32-k5', solution=True)
+instance, solution = pycvrplib.download('A-n32-k5', solution=True)
 ```
 ## Dataclasses
-`Instance` defines the base instance, which is inherited by the `CVRP` and `VRPTW` classes. `Solution` defines the solution and is identical for both CVRP and VRPTW instances. 
+Instance fields depend on the VRP type of the instance. `Instance` defines the base instance, which is extended by the `CVRP` and `VRPTW` classes. `Solution` defines the solution and is the same for CVRP and VRPTW. 
 ```python
 class Instance:
     name: str
@@ -54,17 +54,14 @@ class Instance:
     service_times: List[float]
     coordinates: Optional[List[List[float]]]
 
-@dataclass
 class CVRP(Instance):
     distance_limit: float
 
-@dataclass
 class VRPTW(Instance):
     n_vehicles: int
     earliest: List[int]
     latest: List[int]
 
-@dataclass
 class Solution:
     routes: List[int]
     cost: float
@@ -72,13 +69,13 @@ class Solution:
 
      
 # Conventions
-The instances are parsed according to the CVRPLIB convention. See Section 3.3 in [Uchoa et al. (2014)](http://www.optimization-online.org/DB_FILE/2014/10/4597.pdf).
+All instances are parsed according to the CVRPLIB convention. See Section 3.3 in [Uchoa et al. (2014)](http://www.optimization-online.org/DB_FILE/2014/10/4597.pdf) for more details. In short:
 - The depot has index `0`. Customers are indexed from `1` to `n`.
 - The distances are rounded to the nearest integer. 
-    - Note that some benchmark sets were proposed without rounding. This is the case for the following sets: `CMT`, `Rochat and Taillard (tai)`, `Golden`, `Li`, `Solomon`, `Homberger and Gehring`.
+    - Note that some benchmark sets were originally proposed without integer rounding. This is the case for the following sets: `CMT`, `Rochat and Taillard (tai)`, `Golden`, `Li`, `Solomon`, `Homberger and Gehring`.
     
 # Remarks
 - Downloading instances may take a few seconds. 
-- The `XML100` benchmark set, which contains 10000 CVRP instances for training ML algorithms, is not listed in `list_names` and cannot be downloaded using the `download` function. Please download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/) use the `read` function instead.
+- The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded using `download`. Please download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/) and use the `read` function instead.
 
     

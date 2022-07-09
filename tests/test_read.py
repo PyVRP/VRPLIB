@@ -8,7 +8,7 @@ from ._utils import compute_distance, selected_cases
 @pytest.mark.parametrize("case", selected_cases())
 def test_read(case):
     """
-    Read the case and verify a subest of the attributes.
+    Read the case and verify a subest its attributes.
     """
     instance, solution = read(case.instance_path, case.solution_path)
 
@@ -19,10 +19,10 @@ def test_read(case):
 
 
 @pytest.mark.parametrize("case", selected_cases())
-def test_distances(case):
+def test_solution_cost(case):
     """
-    Test if the cost of the provided solution corresponds to the one
-    computed using the read instance.
+    Test if the proviced cost of the solution is the same as the cost
+    calculated directly from the instance distances.
 
     We only test instances where the convention is to use integral distances.
     """
