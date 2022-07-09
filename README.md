@@ -28,16 +28,16 @@ import cvrplib
 # Read instances
 instance = cvrplib.read('/path/to/A-n32-k5.vrp')
 instance, solution = cvrplib.read(instance_path='/path/to/A-n32-k5.vrp',
-                                    solution_path='/path/to/A-n32-k5.sol')
+                                  solution_path='/path/to/A-n32-k5.sol')
+
+# Download instances
+instance = cvrplib.download('A-n32-k5')
+instance, solution = cvrplib.download('A-n32-k5', solution=True)
 
 # List instance names 
 cvrplib.list_names()                      # All instance names
 cvrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
 cvrplib.list_names(vrp_type='vrptw')      # Only VRPTW instances
-
-# Download instances
-instance = cvrplib.download('A-n32-k5')
-instance, solution = cvrplib.download('A-n32-k5', solution=True)
 ```
 ## Dataclasses
 Instance fields depend on the VRP type of the instance. `Instance` defines the base instance, which is extended by the `CVRP` and `VRPTW` classes. `Solution` defines the solution and is the same for CVRP and VRPTW. 
