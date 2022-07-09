@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pycvrplib"
+name = "cvrplib"
 version = "1.0.0"
 description = "Python library for reading and downloading CVRPLIB instances."
 authors = ["Leon Lan <leon.lanyidong@gmail.com>"]
@@ -22,7 +22,7 @@ types-requests = "^2.27.29"
 pre-commit = "^2.19.0"
 
 [pytest]
-pythonpath = [".", "pycvrplib"]
+pythonpath = [".", "cvrplib"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

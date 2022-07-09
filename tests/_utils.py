@@ -1,7 +1,6 @@
-import glob
 from dataclasses import dataclass
 
-from pycvrplib.utils import find_set
+from cvrplib.utils import find_set
 
 _DATA_DIR = "data/"
 

@@ -1,6 +1,6 @@
 import pytest
 
-from pycvrplib import download
+from cvrplib import download
 
 from ._utils import selected_cases
 

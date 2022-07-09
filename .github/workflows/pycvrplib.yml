@@ -1,4 +1,4 @@
-name: pyCVRPLIB
+name: CVRPLIB
 
 on:
   push:
@@ -28,9 +28,9 @@ jobs:
       - name: Run tests
         run: poetry run pytest
       - name: Black
-        run: poetry run black pycvrplib
+        run: poetry run black cvrplib
       - name: Run static analysis
-        run: poetry run mypy pycvrplib
+        run: poetry run mypy cvrplib
   deploy:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'created'

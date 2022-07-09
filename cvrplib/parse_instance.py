@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union
 
 from .cvrp import CVRP, parse_cvrp
 from .utils import find_set
@@ -9,10 +9,9 @@ def parse_instance(lines):
     """
     Parse the passed-in lines and return the corresponding instance.
     """
-    instance_name = parse_instance_name(lines)
+    # First line contains the name
+    instance_name = lines[0].split(": ")[-1].strip()
     set_name = find_set(instance_name)
-
-    instance: Union[VRPTW, CVRP]
 
     if is_vrptw(set_name):
         instance = parse_vrptw(lines)
@@ -20,11 +19,6 @@ def parse_instance(lines):
         instance = parse_cvrp(lines)
 
     return instance
-
-
-def parse_instance_name(lines: List[str]) -> str:
-    # First line contains the name
-    return lines[0].split(": ")[-1].strip()
 
 
 def is_vrptw(set_name: str) -> bool:

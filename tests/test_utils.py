@@ -1,6 +1,6 @@
 import pytest
 from ._utils import selected_cases
-from pycvrplib.utils import find_set
+from cvrplib.utils import find_set
 
 
 @pytest.mark.parametrize("case", selected_cases())
