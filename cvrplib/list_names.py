@@ -1,3 +1,4 @@
+import importlib.resources as pkg_resource
 from functools import lru_cache
 from typing import Optional
 
@@ -44,7 +45,7 @@ def list_names(
 
 @lru_cache()
 def _parse_instance_data():
-    with open("cvrplib/instance_data.csv", "r") as fi:
-        instances = [line.strip().split(",") for line in fi.readlines()]
+    fi = pkg_resource.read_text(__package__, "instance_data.csv")
+    instances = [line.strip().split(",") for line in fi.split()]
 
     return [{"name": inst[0], "n_customers": int(inst[1])} for inst in instances]
