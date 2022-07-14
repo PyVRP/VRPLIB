@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cvrplib"
-version = "1.0.0"
+version = "0.1.1"
 description = "Python library for reading and downloading CVRPLIB instances."
 authors = ["Leon Lan <leon.lanyidong@gmail.com>"]
 license = "MIT"
