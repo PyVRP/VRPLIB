@@ -8,6 +8,7 @@ on:
   release:
     types: [created]
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,9 +16,9 @@ jobs:
       matrix:
         python-version: [ '3.7', '3.8', '3.9', '3.10' ]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -25,27 +26,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-      - name: Run tests
+          poetry run pre-commit install
+      - name: Run pytest
         run: poetry run pytest
-      - name: Black
-        run: poetry run black cvrplib
-      - name: Run static analysis
-        run: poetry run mypy cvrplib
+      - name: Run pre-commit
+        run: poetry run pre-commit run --all-files
+      - uses: codecov/codecov-action@v3
   deploy:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'created'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.9
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install poetry
-          poetry install
       - name: Deploy to PyPI
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
