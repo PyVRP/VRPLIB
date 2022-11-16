@@ -1,8 +1,6 @@
-from typing import Union
-
-from .cvrp import CVRP, parse_cvrp
+from .cvrp import parse_cvrp
 from .utils import find_set
-from .vrptw import VRPTW, parse_vrptw
+from .vrptw import parse_vrptw
 
 
 def parse_instance(lines):

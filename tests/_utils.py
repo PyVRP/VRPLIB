@@ -66,7 +66,7 @@ def selected_cases():
         M,
         P,
         X,
-        # XXL
+        XXL,
         Solomon,
         HG,
     ]

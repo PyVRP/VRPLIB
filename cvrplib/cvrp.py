@@ -5,8 +5,8 @@ from collections import defaultdict
 from itertools import combinations
 from typing import Any, Dict, List
 
-from .constants import DEPOT
 from .Instance import CVRP
+from .constants import DEPOT
 from .utils import euclidean, from_dict_to_dataclass
 
 
@@ -40,7 +40,10 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
     data["n_customers"] = data["dimension"] - 1  # type: ignore
     data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
     data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore
-    data["service_times"] = [0.0] + [float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])]  # type: ignore
+
+    data["service_times"] = [0.0] + [
+        float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])  # type: ignore # noqa: E501
+    ]  # type: ignore
     data["coordinates"] = None  # type: ignore
 
     return data
@@ -80,7 +83,7 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
     return data
 
 
-def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type: ignore[return]
+def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type: ignore[return] # noqa: E501
     """
     Create distances data.
 
