@@ -26,12 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-          poetry run pre-commit install
       - name: Run pytest
         run: poetry run pytest
-      - name: Run pre-commit
-        run: poetry run pre-commit run --all-files
-      - uses: codecov/codecov-action@v3
   deploy:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'created'
