@@ -13,12 +13,7 @@ requests = "^2.27.1"
 numpy = "^1.15"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^4.0.1"
-flake8-unused-arguments = "^0.0.10"
-black = "^22.3.0"
-isort = "^5.10.1"
 pytest = "^7.1.2"
-mypy = "^0.950"
 ipdb = "^0.13.9"
 types-requests = "^2.27.29"
 pre-commit = "^2.19.0"
@@ -29,3 +24,14 @@ pythonpath = [".", "cvrplib"]
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+case_sensitive = true
+line_length = 79
+profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = true

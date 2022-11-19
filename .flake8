@@ -1,4 +1,5 @@
 [flake8]
-; Minimal configuration for Flake8 to work with Black.
-max-line-length = 88
-extend-ignore = E203, E501
+per-file-ignores = __init__.py:F401
+extend-ignore =
+    # See https://github.com/PyCQA/pycodestyle/issues/373
+    "E203",

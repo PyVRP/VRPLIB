@@ -50,7 +50,7 @@ def selected_cases():
     M = make_case("M", "M-n101-k10", 101, 200, 820)
     P = make_case("P", "P-n16-k8", 16, 35, 450)
     X = make_case("X", "X-n101-k25", 101, 206, 27591)
-    XXL = make_case("XXL", "Antwerp1", 6001, 30, 477277)
+    # XXL = make_case("XXL", "Antwerp1", 6001, 30, 477277) # very large/slow
     Solomon = make_case("Solomon", "C101", 101, 200, 827.3)
     HG = make_case("HG", "C1_2_1", 201, 200, 2698.6)
 
@@ -66,7 +66,7 @@ def selected_cases():
         M,
         P,
         X,
-        # XXL
+        # XXL,
         Solomon,
         HG,
     ]
