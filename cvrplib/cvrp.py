@@ -39,7 +39,7 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
     data["depot"] = DEPOT
     data["n_customers"] = data["dimension"] - 1  # type: ignore
     data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
-    data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore
+    data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore # noqa: E501
 
     data["service_times"] = [0.0] + [
         float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])  # type: ignore # noqa: E501
@@ -75,10 +75,14 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
             data["demands"] = [int(row[1]) for row in section]
 
         elif name == "NODE_COORD":
-            data["coordinates"] = [[int(row[1]), int(row[2])] for row in section]
+            data["coordinates"] = [
+                [int(row[1]), int(row[2])] for row in section
+            ]
 
         elif name == "EDGE_WEIGHT":
-            data["edge_weight"] = [[int(num) for num in row] for row in section]
+            data["edge_weight"] = [
+                [int(num) for num in row] for row in section
+            ]
 
     return data
 
@@ -98,7 +102,9 @@ def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type
 
         elif data["edge_weight_type"] == "EXPLICIT":
             if data["edge_weight_format"] == "LOWER_ROW":
-                lr_repr = get_representation(data["edge_weight"], n=data["dimension"])
+                lr_repr = get_representation(
+                    data["edge_weight"], n=data["dimension"]
+                )
 
                 if lr_repr == "flattened":
                     return {
@@ -149,7 +155,9 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
     (1, 0), (2, 0), (2, 1), (3, 0), (3, 1), (3, 2), (4, 0), ...
     """
     distances = [[0 for _ in range(n)] for _ in range(n)]
-    flattened = [distance for distances in edge_weights for distance in distances]
+    flattened = [
+        distance for distances in edge_weights for distance in distances
+    ]
     indices = sorted([(i, j) for (j, i) in combinations(range(n), r=2)])
 
     for idx, (i, j) in enumerate(indices):

@@ -53,7 +53,11 @@ def from_dict_to_dataclass(cls, data: Dict):
     """
     return cls(
         **{
-            key: (data[key] if val.default == val.empty else data.get(key, val.default))
+            key: (
+                data[key]
+                if val.default == val.empty
+                else data.get(key, val.default)
+            )
             for key, val in inspect.signature(cls).parameters.items()
         }
     )

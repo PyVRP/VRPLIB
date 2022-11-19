@@ -38,6 +38,6 @@ def test_list_names_raise(low, high, vrp_type):
 )
 def test_list_names_n(name, low, high, vrp_type):
     """
-    Check if the passed-in name is in the list of names when low and high are passed.
+    Check if the passed-in name is in the list of names.
     """
     assert name in list_names(low, high, vrp_type)

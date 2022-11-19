@@ -48,4 +48,6 @@ def _parse_instance_data():
     fi = pkg_resource.read_text(__package__, "instance_data.csv")
     instances = [line.strip().split(",") for line in fi.split()]
 
-    return [{"name": inst[0], "n_customers": int(inst[1])} for inst in instances]
+    return [
+        {"name": inst[0], "n_customers": int(inst[1])} for inst in instances
+    ]

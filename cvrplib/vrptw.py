@@ -25,7 +25,9 @@ def parse_vrptw(lines: List[str]) -> VRPTW:
 
 def parse_vehicles(lines: List[str]) -> Dict:
     data = {}
-    data["n_vehicles"], data["capacity"] = [int(num) for num in lines[3].split()]
+    data["n_vehicles"], data["capacity"] = [
+        int(num) for num in lines[3].split()
+    ]
     return data
 
 
