@@ -1,8 +1,10 @@
 from cvrplib import read
 
+from .._utils import CVRPLIB_DATA_DIR
+
 
 def test_X_n101_k25():
-    instance = read("data/X-n101-k25.vrp")
+    instance = read(CVRPLIB_DATA_DIR / "X-n101-k25.vrp")
 
     assert instance["name"] == "X-n101-k25"
     assert instance["dimension"] == 101
@@ -19,7 +21,7 @@ def test_CMT6():
     """
     CMT6 instance contains the fields ``distance_limit`` and ``service_time``.
     """
-    instance = read("data/CMT6.vrp")
+    instance = read(CVRPLIB_DATA_DIR / "CMT6.vrp")
     N = 50
 
     assert instance["name"] == "CMT6"

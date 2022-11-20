@@ -1,8 +1,9 @@
 from dataclasses import dataclass
+from pathlib import Path
 
 from cvrplib.read.utils import find_set
 
-CVRPLIB_DATA_DIR = "data/"
+CVRPLIB_DATA_DIR = Path("data/cvrplib/")
 
 
 @dataclass
@@ -26,9 +27,15 @@ def make_case(set_name, instance_name, dimension, capacity, cost):
         set_name=set_name,
         instance_name=instance_name,
         instance_path=CVRPLIB_DATA_DIR
-        + instance_name
-        + (".txt" if find_set(instance_name) in ["Solomon", "HG"] else ".vrp"),
-        solution_path=CVRPLIB_DATA_DIR + instance_name + ".sol",
+        / (
+            instance_name
+            + (
+                ".txt"
+                if find_set(instance_name) in ["Solomon", "HG"]
+                else ".vrp"
+            )
+        ),
+        solution_path=CVRPLIB_DATA_DIR / (instance_name + ".sol"),
         dimension=dimension,
         capacity=capacity,
         cost=cost,
