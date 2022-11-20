@@ -1,4 +1,3 @@
-import re
 from typing import Any, Dict, List, Union
 
 
@@ -17,9 +16,12 @@ def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
         for line in lines:
             line = line.strip().lower()
 
-            if "route" in line:
-                route = re.split(r"route #\d+: ", line)[1]
-                route = [int(cust) for cust in route.split(" ") if cust]
+            if line.startswith("route"):
+                route = [  # type:ignore
+                    int(cust)
+                    for cust in line.split(":")[1].split(" ")  # type:ignore
+                    if cust
+                ]
                 routes.append(route)
 
         return routes

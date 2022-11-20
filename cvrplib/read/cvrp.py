@@ -5,6 +5,8 @@ from collections import defaultdict
 from itertools import combinations
 from typing import Any, Dict, List
 
+import numpy as np
+
 from .utils import euclidean
 
 
@@ -30,6 +32,7 @@ def parse_specifications(lines: List[str]) -> Dict[str, Any]:
     KEY : VALUE.
     """
     data = {}
+
     for line in lines:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
@@ -64,24 +67,37 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
             continue
 
         elif name:
-            row = [float(num) for num in line.strip().split()]
+            row = [num for num in line.split()]
+            row = [
+                (int(num) if num.isnumeric() else float(num)) for num in row
+            ]
+
+            if name not in ["EDGE_WEIGHT", "DEPOT"]:  # does not have idx
+                row = row[1:]
+
             sections[name].append(row)
 
     data: Dict[str, Any] = {}
 
-    for name, section in sections.items():
-        if name == "DEMAND":
-            data["demands"] = [int(row[1]) for row in section]
+    for section_name, section_data in sections.items():
+        if section_name == "DEPOT":
+            data[section_name.lower()] = section_data[0][0]
+        elif section_name == "EDGE_WEIGHT":
+            data[section_name.lower()] = section_data
+            pass
+        else:
+            array = np.array(section_data)
 
-        elif name == "NODE_COORD":
-            data["coordinates"] = [
-                [int(row[1]), int(row[2])] for row in section
-            ]
+            if array.shape[1] == 1:
+                array = array.reshape(-1)
 
-        elif name == "EDGE_WEIGHT":
-            data["edge_weight"] = [
-                [int(num) for num in row] for row in section
-            ]
+            data[section_name.lower()] = array
+
+    # TODO Next: simplify this function
+    # HACK Temporary to make tests run
+    if "node_coord" in data:
+        data["coordinates"] = data["node_coord"]
+    data["demands"] = data["demand"]
 
     return data
 
@@ -96,7 +112,7 @@ def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type
     """
 
     if "distances" not in data:
-        if data["edge_weight_type"] == "EUC_2D":
+        if data["edge_weight_type"] in ["EUC_2D", "EXACT_2D"]:
             return {"distances": euclidean(data["coordinates"])}
 
         elif data["edge_weight_type"] == "EXPLICIT":
