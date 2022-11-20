@@ -66,13 +66,11 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
         elif "EOF" in line:
             continue
 
-        elif name:
-            row = [num for num in line.split()]
-            row = [
-                (int(num) if num.isnumeric() else float(num)) for num in row
-            ]
+        elif name is not None:
+            row = [_int_or_float(num) for num in line.split()]
 
-            if name not in ["EDGE_WEIGHT", "DEPOT"]:  # does not have idx
+            # Most sections start with an index that we do not want to keep
+            if name not in ["EDGE_WEIGHT", "DEPOT"]:
                 row = row[1:]
 
             sections[name].append(row)
@@ -81,22 +79,19 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
 
     for section_name, section_data in sections.items():
         if section_name == "DEPOT":
-            data[section_name.lower()] = section_data[0][0]
+            data[section_name.lower()] = section_data[0][0] - 1
         elif section_name == "EDGE_WEIGHT":
             data[section_name.lower()] = section_data
-            pass
         else:
             array = np.array(section_data)
-
-            if array.shape[1] == 1:
-                array = array.reshape(-1)
+            array = array.reshape(-1) if array.shape[1] == 1 else array
 
             data[section_name.lower()] = array
 
-    # TODO Next: simplify this function
     # HACK Temporary to make tests run
     if "node_coord" in data:
         data["coordinates"] = data["node_coord"]
+
     data["demands"] = data["demand"]
 
     return data
@@ -181,3 +176,8 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
         distances[j][i] = d_ij
 
     return distances
+
+
+def _int_or_float(num: str):
+    """Return an integer if num is an integer string and float otherwise."""
+    return int(num) if num.isnumeric() else float(num)
