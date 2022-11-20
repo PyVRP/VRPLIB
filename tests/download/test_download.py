@@ -14,10 +14,10 @@ def test_download(case):
     Download the case instance and solution.
     """
     instance, solution = download(case.instance_name, solution=True)
-    assert instance.name == case.instance_name
-    assert instance.dimension == case.dimension
-    assert instance.capacity == case.capacity
-    assert solution.cost == pytest.approx(case.cost, 2)
+    assert instance["name"] == case.instance_name
+    assert instance["dimension"] == case.dimension
+    assert instance["capacity"] == case.capacity
+    assert solution["cost"] == pytest.approx(case.cost, 2)
 
 
 def test_raise_invalid_name():

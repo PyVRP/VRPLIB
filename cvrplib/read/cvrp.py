@@ -7,29 +7,29 @@ from typing import Any, Dict, List
 
 from cvrplib.constants import DEPOT
 
-from .Instance import CVRP
-from .utils import euclidean, from_dict_to_dataclass
+from .utils import euclidean
 
 
-def parse_cvrp(lines: List[str]) -> CVRP:
+def parse_cvrp(lines: List[str]):
     """
     Parse the lines of an instance, consisting of:
-    - metadata [dimension, edge_weight_type, etc.]
-    - sections [coords, demands, etc.]
+    - specifications [dimension, edge_weight_type, etc.]
+    - data sections [coords, demands, etc.]
     - distances
     """
     data = {}
-    data.update(parse_metadata(lines))
+
+    data.update(parse_specifications(lines))
     data.update(parse_sections(lines))
     data.update(parse_distances(data))
 
-    return from_dict_to_dataclass(CVRP, data)
+    return data
 
 
-def parse_metadata(lines: List[str]) -> Dict[str, Any]:
+def parse_specifications(lines: List[str]) -> Dict[str, Any]:
     """
-    Parse the metadata at the beginning of the instance file.
-    This data is formatted as KEY : VALUE lines.
+    Parse the problem specifications. These are lines that are formatted as
+    KEY : VALUE.
     """
     data = {}
     for line in lines:
@@ -37,6 +37,7 @@ def parse_metadata(lines: List[str]) -> Dict[str, Any]:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
             data[k.lower()] = int(v) if v.isnumeric() else v
 
+    # TODO do we want to keep these opinionated entries?
     data["depot"] = DEPOT
     data["n_customers"] = data["dimension"] - 1  # type: ignore
     data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore

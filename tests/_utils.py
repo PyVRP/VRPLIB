@@ -72,7 +72,7 @@ def selected_cases():
     ]
 
 
-def compute_distance(instance, routes):
+def compute_distance(distances, routes):
     """
     Compute the costs of the passed-in routes using the instance data.
     """
@@ -82,6 +82,6 @@ def compute_distance(instance, routes):
         visits = [0] + route + [0]
 
         for idx in range(len(visits) - 1):
-            total += instance.distances[visits[idx]][visits[idx + 1]]
+            total += distances[visits[idx]][visits[idx + 1]]
 
     return total

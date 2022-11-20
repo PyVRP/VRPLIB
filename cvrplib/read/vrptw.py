@@ -6,11 +6,10 @@ import numpy as np
 
 from cvrplib.constants import DEPOT
 
-from .Instance import VRPTW
-from .utils import euclidean, from_dict_to_dataclass
+from .utils import euclidean
 
 
-def parse_vrptw(lines: List[str]) -> VRPTW:
+def parse_vrptw(lines: List[str]):
     """
     Parse the lines of a VRPTW instance.
     """
@@ -21,7 +20,7 @@ def parse_vrptw(lines: List[str]) -> VRPTW:
     data.update(parse_vehicles(lines))
     data.update(parse_customers(lines))
 
-    return from_dict_to_dataclass(VRPTW, data)
+    return data
 
 
 def parse_vehicles(lines: List[str]) -> Dict:
