@@ -2,10 +2,10 @@ from functools import lru_cache
 
 import requests
 
-from .constants import MEDIA_URL
-from .parse_instance import parse_instance
-from .parse_solution import parse_solution
-from .utils import find_set, is_vrptw, strip_lines
+from cvrplib.constants import CVRPLIB_URL
+from cvrplib.read.parse_instance import parse_instance
+from cvrplib.read.parse_solution import parse_solution
+from cvrplib.read.utils import find_set, is_vrptw, strip_lines
 
 
 @lru_cache()
@@ -14,7 +14,7 @@ def download(name: str, solution: bool = False):
     Download the instance from CVRPLIB directly. If `solution` is set, then
     also download the corresponding solution.
     """
-    inst_resp = requests.get(f"{MEDIA_URL}/{_make_subpath(name)}")
+    inst_resp = requests.get(f"{CVRPLIB_URL}/{_make_subpath(name)}")
 
     if inst_resp.status_code != 200:
         inst_resp.raise_for_status()
@@ -25,7 +25,7 @@ def download(name: str, solution: bool = False):
         return instance
 
     else:
-        sol_resp = requests.get(f"{MEDIA_URL}/{_make_subpath(name, True)}")
+        sol_resp = requests.get(f"{CVRPLIB_URL}/{_make_subpath(name, True)}")
 
         if sol_resp.status_code != 200:
             sol_resp.raise_for_status()

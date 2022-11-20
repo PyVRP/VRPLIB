@@ -2,7 +2,7 @@ import importlib.resources as pkg_resource
 from functools import lru_cache
 from typing import Optional
 
-from .utils import is_vrptw
+from cvrplib.read.utils import is_vrptw
 
 
 def list_names(

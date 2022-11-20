@@ -2,7 +2,7 @@ import pytest
 
 from cvrplib import read
 
-from ._utils import compute_distance, selected_cases
+from .._utils import compute_distance, selected_cases
 
 
 @pytest.mark.parametrize("case", selected_cases())
@@ -12,10 +12,10 @@ def test_read(case):
     """
     instance, solution = read(case.instance_path, case.solution_path)
 
-    assert instance.name == case.instance_name
-    assert instance.dimension == case.dimension
-    assert instance.capacity == case.capacity
-    assert solution.cost == case.cost
+    assert instance["name"] == case.instance_name
+    assert instance["dimension"] == case.dimension
+    assert instance["capacity"] == case.capacity
+    assert solution["cost"] == pytest.approx(case.cost, 2)
 
 
 @pytest.mark.parametrize("case", selected_cases())
@@ -28,7 +28,7 @@ def test_solution_cost(case):
     """
     instance, solution = read(case.instance_path, case.solution_path)
 
-    if solution.cost % 1 == 0:
-        assert pytest.approx(solution.cost) == compute_distance(
-            instance, solution.routes
+    if solution["cost"] % 1 == 0:
+        assert pytest.approx(solution["cost"]) == compute_distance(
+            instance["distances"], solution["routes"]
         )

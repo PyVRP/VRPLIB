@@ -4,23 +4,20 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .Instance import VRPTW
-from .constants import DEPOT
-from .utils import euclidean, from_dict_to_dataclass
+from .utils import euclidean
 
 
-def parse_vrptw(lines: List[str]) -> VRPTW:
+def parse_vrptw(lines: List[str]):
     """
     Parse the lines of a VRPTW instance.
     """
     data: Dict[str, Any] = {}
     data["name"] = lines[0]
-    data["depot"] = DEPOT
 
     data.update(parse_vehicles(lines))
     data.update(parse_customers(lines))
 
-    return from_dict_to_dataclass(VRPTW, data)
+    return data
 
 
 def parse_vehicles(lines: List[str]) -> Dict:

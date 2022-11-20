@@ -21,6 +21,7 @@ def parse_instance(lines):
 
 def is_vrptw(set_name: str) -> bool:
     """
-    Checks if the set name belons to VRPTW; otherwise it belons to CVRP.
+    Checks if the set name belongs to VRPTW; otherwise it belons to CVRP.
     """
+    # TODO This is not a foolproof way to differentiate between CVRP and VRPTW
     return set_name in ["HG", "Solomon"]

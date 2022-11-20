@@ -1,17 +1,8 @@
 import re
-from dataclasses import dataclass
-from typing import Any, Dict, List
-
-from .utils import from_dict_to_dataclass
+from typing import Any, Dict, List, Union
 
 
-@dataclass
-class Solution:
-    routes: List[int]
-    cost: float
-
-
-def parse_solution(lines: List[str]) -> Solution:
+def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
     """
     Extract the solution. Solutions contain routes, which are indexed
     from 1 to n.
@@ -27,7 +18,6 @@ def parse_solution(lines: List[str]) -> Solution:
             line = line.strip().lower()
 
             if "route" in line:
-                # TODO Split is not necessary; can match directly
                 route = re.split(r"route #\d+: ", line)[1]
                 route = [int(cust) for cust in route.split(" ") if cust]
                 routes.append(route)
@@ -48,4 +38,4 @@ def parse_solution(lines: List[str]) -> Solution:
     data["routes"] = parse_routes(lines)
     data["cost"] = parse_cost(lines)
 
-    return from_dict_to_dataclass(Solution, data)
+    return data
