@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from cvrplib.read.utils import find_set
 
-_DATA_DIR = "data/"
+CVRPLIB_DATA_DIR = "data/"
 
 
 @dataclass
@@ -25,10 +25,10 @@ def make_case(set_name, instance_name, dimension, capacity, cost):
         name=set_name + "/" + instance_name,
         set_name=set_name,
         instance_name=instance_name,
-        instance_path=_DATA_DIR
+        instance_path=CVRPLIB_DATA_DIR
         + instance_name
         + (".txt" if find_set(instance_name) in ["Solomon", "HG"] else ".vrp"),
-        solution_path=_DATA_DIR + instance_name + ".sol",
+        solution_path=CVRPLIB_DATA_DIR + instance_name + ".sol",
         dimension=dimension,
         capacity=capacity,
         cost=cost,
