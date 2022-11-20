@@ -25,5 +25,5 @@ VRPTW_SETS = [
     "HG",
 ]
 
-XXL_names = ["Antwerp", "Brussels", "Flanders", "Ghent", "Leuven"]
-DIMACS_names = ["Loggi", "ORTEC"]
+XXL_NAMES = ["Antwerp", "Brussels", "Flanders", "Ghent", "Leuven"]
+DIMACS_NAMES = ["Loggi", "ORTEC"]

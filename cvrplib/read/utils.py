@@ -4,7 +4,7 @@ from itertools import combinations
 from math import sqrt
 from typing import Dict, List
 
-from cvrplib.constants import CVRP_SETS, DIMACS_names, XXL_names
+from cvrplib.constants import CVRP_SETS, DIMACS_NAMES, XXL_NAMES
 
 
 def find_set(instance_name: str) -> str:
@@ -26,10 +26,10 @@ def find_set(instance_name: str) -> str:
         else:
             return "Solomon"
 
-    if any([instance_name.startswith(xxl) for xxl in XXL_names]):
+    if any([instance_name.startswith(xxl) for xxl in XXL_NAMES]):
         return "XXL"
 
-    if any([instance_name.startswith(dimacs) for dimacs in DIMACS_names]):
+    if any([instance_name.startswith(dimacs) for dimacs in DIMACS_NAMES]):
         return "D"
 
     for set_name in CVRP_SETS:
