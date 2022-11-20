@@ -2,7 +2,7 @@ import pytest
 
 from cvrplib import list_names
 
-from ._utils import selected_cases
+from .._utils import selected_cases
 
 
 @pytest.mark.parametrize("case", selected_cases())

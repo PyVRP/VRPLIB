@@ -2,7 +2,7 @@ import pytest
 
 from cvrplib import download
 
-from ._utils import selected_cases
+from .._utils import selected_cases
 
 
 # Only test the first two CVRP and VRPTW instances because it takes time

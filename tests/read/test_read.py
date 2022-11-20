@@ -2,7 +2,7 @@ import pytest
 
 from cvrplib import read
 
-from ._utils import compute_distance, selected_cases
+from .._utils import compute_distance, selected_cases
 
 
 @pytest.mark.parametrize("case", selected_cases())
