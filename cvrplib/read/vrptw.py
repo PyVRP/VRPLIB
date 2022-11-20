@@ -34,7 +34,7 @@ def parse_customers(lines: List[str]) -> Dict:
     A = np.genfromtxt(lines[6:], dtype=int)
     n_customers = A.shape[0] - 1
 
-    data["coordinates"] = A[:, 1:3].tolist()
+    data["node_coord"] = A[:, 1:3].tolist()
     data["dimension"] = n_customers + 1
     data["demands"] = A[:, 3].tolist()
     data["n_customers"] = n_customers
@@ -42,6 +42,6 @@ def parse_customers(lines: List[str]) -> Dict:
     data["earliest"] = A[:, 4].tolist()
     data["latest"] = A[:, 5].tolist()
     data["service_times"] = A[:, 6].tolist()
-    data["distances"] = euclidean(data["coordinates"])
+    data["distances"] = euclidean(data["node_coord"])
 
     return data

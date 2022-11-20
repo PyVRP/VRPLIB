@@ -17,9 +17,7 @@ def parse_cvrp(lines: List[str]):
     - data sections [coords, demands, etc.]
     - distances
     """
-    data = {}
-
-    data.update(parse_specifications(lines))
+    data = parse_specifications(lines)
     data.update(parse_sections(lines))
     data.update(parse_distances(data))
 
@@ -37,16 +35,6 @@ def parse_specifications(lines: List[str]) -> Dict[str, Any]:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
             data[k.lower()] = int(v) if v.isnumeric() else v
-
-    # TODO do we want to keep these opinionated entries?
-    data["n_customers"] = data["dimension"] - 1  # type: ignore
-    data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
-    data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore # noqa: E501
-
-    data["service_times"] = [0.0] + [
-        float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])  # type: ignore # noqa: E501
-    ]  # type: ignore
-    data["coordinates"] = None  # type: ignore
 
     return data
 
@@ -88,10 +76,6 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
 
             data[section_name.lower()] = array
 
-    # HACK Temporary to make tests run
-    if "node_coord" in data:
-        data["coordinates"] = data["node_coord"]
-
     data["demands"] = data["demand"]
 
     return data
@@ -101,14 +85,14 @@ def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type
     """
     Create distances data.
 
-    Using the metadata "edge_weight_type" we can infer how to construct the
-    distances: 1) either by computing the pairwise Euclidan distances
+    Using the specification "edge_weight_type" we can infer how to construct
+    the distances: 1) either by computing the pairwise Euclidan distances
     using the provided coordinates or by 2) using the triangular matrix.
     """
 
     if "distances" not in data:
         if data["edge_weight_type"] in ["EUC_2D", "EXACT_2D"]:
-            return {"distances": euclidean(data["coordinates"])}
+            return {"distances": euclidean(data["node_coord"])}
 
         elif data["edge_weight_type"] == "EXPLICIT":
             if data["edge_weight_format"] == "LOWER_ROW":
