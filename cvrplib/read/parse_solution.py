@@ -1,8 +1,8 @@
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Union
 
 
-def parse_solution(lines: List[str]):
+def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
     """
     Extract the solution. Solutions contain routes, which are indexed
     from 1 to n.
@@ -18,7 +18,6 @@ def parse_solution(lines: List[str]):
             line = line.strip().lower()
 
             if "route" in line:
-                # TODO Split is not necessary; can match directly
                 route = re.split(r"route #\d+: ", line)[1]
                 route = [int(cust) for cust in route.split(" ") if cust]
                 routes.append(route)
