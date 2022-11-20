@@ -1,4 +1,4 @@
-MEDIA_URL = "http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/"
+CVRPLIB_URL = "http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/"
 
 
 CVRP_SETS = [
