@@ -7,7 +7,6 @@ def test_X_n101_k25():
     assert instance["name"] == "X-n101-k25"
     assert instance["dimension"] == 101
     assert instance["n_customers"] == 100
-    assert instance["depot"] == 0
     assert instance["customers"] == list(range(1, 101))
     assert instance["capacity"] == 206
     assert instance["distance_limit"] == float("inf")
@@ -26,7 +25,6 @@ def test_CMT6():
     assert instance["name"] == "CMT6"
     assert instance["dimension"] == N + 1
     assert instance["n_customers"] == N
-    assert instance["depot"] == 0
     assert instance["customers"] == list(range(1, N + 1))
     assert instance["capacity"] == 160
     assert instance["distance_limit"] == 200

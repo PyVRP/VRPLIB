@@ -8,7 +8,6 @@ def test_C101():
     assert instance["name"] == "C101"
     assert instance["dimension"] == N + 1
     assert instance["n_customers"] == N
-    assert instance["depot"] == 0
     assert instance["customers"] == list(range(1, N + 1))
     assert instance["n_vehicles"] == 25
     assert instance["capacity"] == 200

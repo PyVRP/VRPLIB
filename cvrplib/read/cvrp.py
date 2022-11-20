@@ -5,8 +5,6 @@ from collections import defaultdict
 from itertools import combinations
 from typing import Any, Dict, List
 
-from cvrplib.constants import DEPOT
-
 from .utils import euclidean
 
 
@@ -38,7 +36,6 @@ def parse_specifications(lines: List[str]) -> Dict[str, Any]:
             data[k.lower()] = int(v) if v.isnumeric() else v
 
     # TODO do we want to keep these opinionated entries?
-    data["depot"] = DEPOT
     data["n_customers"] = data["dimension"] - 1  # type: ignore
     data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
     data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore # noqa: E501

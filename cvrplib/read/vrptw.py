@@ -4,8 +4,6 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from cvrplib.constants import DEPOT
-
 from .utils import euclidean
 
 
@@ -15,7 +13,6 @@ def parse_vrptw(lines: List[str]):
     """
     data: Dict[str, Any] = {}
     data["name"] = lines[0]
-    data["depot"] = DEPOT
 
     data.update(parse_vehicles(lines))
     data.update(parse_customers(lines))
