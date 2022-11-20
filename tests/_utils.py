@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from cvrplib.utils import find_set
+from cvrplib.read.utils import find_set
 
 _DATA_DIR = "data/"
 

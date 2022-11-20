@@ -2,10 +2,10 @@ from functools import lru_cache
 
 import requests
 
-from .constants import MEDIA_URL
-from .parse_instance import parse_instance
-from .parse_solution import parse_solution
-from .utils import find_set, is_vrptw, strip_lines
+from cvrplib.constants import MEDIA_URL
+from cvrplib.read.parse_instance import parse_instance
+from cvrplib.read.parse_solution import parse_solution
+from cvrplib.read.utils import find_set, is_vrptw, strip_lines
 
 
 @lru_cache()

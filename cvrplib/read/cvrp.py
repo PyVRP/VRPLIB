@@ -5,8 +5,9 @@ from collections import defaultdict
 from itertools import combinations
 from typing import Any, Dict, List
 
+from cvrplib.constants import DEPOT
+
 from .Instance import CVRP
-from .constants import DEPOT
 from .utils import euclidean, from_dict_to_dataclass
 
 

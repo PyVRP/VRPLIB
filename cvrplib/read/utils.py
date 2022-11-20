@@ -4,7 +4,7 @@ from itertools import combinations
 from math import sqrt
 from typing import Dict, List
 
-from .constants import CVRP_SETS, DIMACS_names, XXL_names
+from cvrplib.constants import CVRP_SETS, DIMACS_names, XXL_names
 
 
 def find_set(instance_name: str) -> str:

@@ -4,8 +4,9 @@ from typing import Any, Dict, List
 
 import numpy as np
 
+from cvrplib.constants import DEPOT
+
 from .Instance import VRPTW
-from .constants import DEPOT
 from .utils import euclidean, from_dict_to_dataclass
 
 
