@@ -3,7 +3,8 @@ from functools import lru_cache
 import requests
 
 from cvrplib.constants import CVRPLIB_URL
-from cvrplib.read.parse_instance import parse_instance
+from cvrplib.read.parse_solomon import parse_solomon
+from cvrplib.read.parse_vrplib import parse_vrplib
 from cvrplib.read.utils import find_set, is_vrptw, strip_lines
 
 
@@ -24,4 +25,9 @@ def download_instance(name: str):
     if response.status_code != 200:
         response.raise_for_status()
 
-    return parse_instance(strip_lines(response.text.splitlines()))
+    lines = strip_lines(response.text.splitlines())
+
+    if is_vrptw(name):
+        return parse_solomon(lines)
+    else:
+        return parse_vrplib(lines)

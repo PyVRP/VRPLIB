@@ -4,10 +4,10 @@ from numpy.testing import assert_array_equal, assert_equal
 
 from cvrplib.read import read_instance
 
-from .._utils import CVRPLIB_DATA_DIR
+from .._utils import CVRPLIB_DATA_DIR, selected_cases
 
 # TODO Rename "cvrp" to VRPLIB
-# TODO Add more tests to this
+# TODO Add more tests to this - maybe make a csv?
 
 instances = [
     (
@@ -57,6 +57,14 @@ def test_read_instance_vrplib(path, specifications, sections):
             assert_array_equal(instance[k][0], v)
 
 
-# def test_read_instance_solomon(path, specifications, sections):
-#     # instance = read(path)
-#     pass
+@pytest.mark.parametrize("case", selected_cases())
+def test_read(case):
+    """
+    # TODO refactor this?
+    Read the case and verify a subest its attributes.
+    """
+    instance = read_instance(case.instance_path, "vrplib")
+
+    assert instance["name"] == case.instance_name
+    assert instance["dimension"] == case.dimension
+    assert instance["capacity"] == case.capacity
