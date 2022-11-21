@@ -11,17 +11,17 @@ def list_names(
     vrp_type: Optional[str] = None,
 ):
     """
-    Return the names of instances that can be passed to `download`.
+    Return the names of instances that can be downloaded.
 
     Params
     ------
-    - low
+    low
         The minimum number of customers.
-    - high
+    high
         The maximum number of customers.
-    - vrp_type
-        The vrp_type, one of ['cvrp', 'vrptw']. If not set, then
-        instances of both types are returned.
+    vrp_type
+        The vrp_type, one of ['cvrp', 'vrptw']. If not set, then instances
+        of both types are returned.
     """
     instances = _parse_instance_data()
 
