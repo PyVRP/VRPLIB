@@ -10,7 +10,7 @@ import numpy as np
 from .utils import euclidean
 
 
-def parse_cvrp(lines: List[str]):
+def parse_vrplib(lines: List[str]):
     """
     Parse the lines of an instance, consisting of:
     - specifications [dimension, edge_weight_type, etc.]

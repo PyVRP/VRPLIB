@@ -1,10 +1,10 @@
-from cvrplib import read
+from cvrplib import read_instance
 
 from .._utils import CVRPLIB_DATA_DIR
 
 
 def test_C101():
-    instance = read(CVRPLIB_DATA_DIR / "C101.txt")
+    instance = read_instance(CVRPLIB_DATA_DIR / "C101.txt", "solomon")
     N = 100
 
     assert instance["name"] == "C101"

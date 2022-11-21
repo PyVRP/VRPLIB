@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Dict, List, Union
 
 
 def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
@@ -18,9 +18,7 @@ def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
 
             if line.startswith("route"):
                 route = [  # type:ignore
-                    int(cust)
-                    for cust in line.split(":")[1].split(" ")  # type:ignore
-                    if cust
+                    int(cust) for cust in line.split(":")[1].split(" ") if cust
                 ]
                 routes.append(route)
 
@@ -36,7 +34,7 @@ def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
 
         return int(cost) if cost.isdigit() else float(cost)
 
-    data: Dict[str, Any] = {}
+    data: Dict[str, Union[List, float]] = {}
     data["routes"] = parse_routes(lines)
     data["cost"] = parse_cost(lines)
 
