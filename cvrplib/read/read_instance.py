@@ -4,6 +4,20 @@ from .utils import strip_lines
 
 
 def read_instance(path, style="vrplib"):
+    """
+    Reads the instance from the passed-in file path.
+
+    Parameters
+    ----------
+    path
+        The file path.
+    style
+        The instance format style, one of ['vrplib', 'solomon'].
+
+    Returns
+    -------
+    An dictionary that contains the instance data.
+    """
     with open(path, "r") as fi:
         lines = strip_lines(fi)
 

@@ -8,15 +8,20 @@ from cvrplib.read.parse_vrplib import parse_vrplib
 from cvrplib.read.utils import find_set, is_vrptw, strip_lines
 
 
+# TODO Change here to IOStream
 @lru_cache()
 def download_instance(name: str):
     """
-    Download a instance from CVRPLIB.
+    Downloads an instance from CVRPLIB.
 
-    Params
-    ------
+    Parameters
+    ----------
     name
-        The instance name. See `cvrp.list_instances` for all eligible names.
+        The instance name. See `cvrplib.list_instances` for all eligible names.
+
+    Returns
+    -------
+    A dictionary that contains the instance data.
 
     """
     ext = "txt" if is_vrptw(name) else "vrp"
@@ -25,9 +30,5 @@ def download_instance(name: str):
     if response.status_code != 200:
         response.raise_for_status()
 
-    lines = strip_lines(response.text.splitlines())
-
-    if is_vrptw(name):
-        return parse_solomon(lines)
-    else:
-        return parse_vrplib(lines)
+    parser = parse_solomon if is_vrptw(name) else parse_vrplib
+    return parser(strip_lines(response.text.splitlines()))
