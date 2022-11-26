@@ -3,8 +3,18 @@ from typing import Dict, List, Union
 
 def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
     """
-    Parses the line of a solution file formatted in VRPLIB style. A solution
-    consists of routes, which are indexed from 1 to n.
+    Parses the text of a solution file formatted in VRPLIB style. A solution
+    consists of routes, which are indexed from 1 to n, and possibly other data.
+
+    Parameters
+    ----------
+    lines
+        The lines of a solution text file.
+
+    Returns
+    -------
+    A dictionary that contains solution data.
+
     """
     data: Dict[str, Union[List, float]] = {}
 

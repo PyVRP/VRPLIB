@@ -8,7 +8,6 @@ from cvrplib.read.parse_vrplib import parse_vrplib
 from cvrplib.read.utils import find_set, is_vrptw, strip_lines
 
 
-# TODO Change here to IOStream
 @lru_cache()
 def download_instance(name: str):
     """

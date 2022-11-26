@@ -10,7 +10,7 @@ def read_instance(path, style="vrplib"):
     Parameters
     ----------
     path
-        The file path.
+        The path to the instance file.
     style
         The instance format style, one of ['vrplib', 'solomon'].
 
