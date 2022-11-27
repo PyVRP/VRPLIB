@@ -1,10 +1,12 @@
+from pathlib import Path
+
 import numpy as np
 import pytest
 from numpy.testing import assert_array_equal, assert_equal
 
 from cvrplib.read import read_instance
 
-from .._utils import CVRPLIB_DATA_DIR, selected_cases
+from .._utils import CVRPLIB_DATA_DIR, LKH_3_DATA_DIR, selected_cases
 
 # TODO Rename "cvrp" to VRPLIB
 # TODO Add more tests to this - maybe make a csv?
@@ -86,3 +88,14 @@ def test_C101():
     assert instance["service_times"][N] == 90
     assert instance["earliest"][N] == 647
     assert instance["latest"][N] == 726
+
+
+@pytest.mark.parametrize(
+    "path", Path(LKH_3_DATA_DIR).glob("*/INSTANCES/*vrp*")
+)
+def test_lkh_3_vrplib(path):
+    """
+    TODO Maybe add more instances
+    TODO Test for instance values
+    """
+    read_instance(path)

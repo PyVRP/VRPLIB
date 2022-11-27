@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import re
 from collections import defaultdict
 from itertools import combinations
@@ -91,8 +92,14 @@ def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type
     """
 
     if "distances" not in data:
-        if data["edge_weight_type"] in ["EUC_2D", "EXACT_2D"]:
+        if data["edge_weight_type"] in ["EUC_2D"]:
             return {"distances": euclidean(data["node_coord"])}
+
+        elif data["edge_weight_type"] in ["FLOOR_2D"]:
+            return {"distances": euclidean(data["node_coord"], math.floor)}
+
+        elif data["edge_weight_type"] in ["EXACT_2D"]:
+            return {"distances": euclidean(data["node_coord"], lambda n: n)}
 
         elif data["edge_weight_type"] == "EXPLICIT":
             if data["edge_weight_format"] == "LOWER_ROW":
