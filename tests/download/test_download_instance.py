@@ -1,6 +1,6 @@
 import pytest
 
-from cvrplib import download
+from cvrplib import download_instance
 
 from .._utils import selected_cases
 
@@ -9,15 +9,14 @@ from .._utils import selected_cases
 @pytest.mark.parametrize(
     "case", [selected_cases()[num] for num in [0, 1, -2, -1]]
 )
-def test_download(case):
+def test_download_instance(case):
     """
-    Download the case instance and solution.
+    Download the case instance.
     """
-    instance, solution = download(case.instance_name, solution=True)
+    instance = download_instance(case.instance_name)
     assert instance["name"] == case.instance_name
     assert instance["dimension"] == case.dimension
     assert instance["capacity"] == case.capacity
-    assert solution["cost"] == pytest.approx(case.cost, 2)
 
 
 def test_raise_invalid_name():
@@ -25,4 +24,4 @@ def test_raise_invalid_name():
     Raise an error if the passed-in name is invalid.
     """
     with pytest.raises(ValueError):
-        instance, solution = download("invalid_name", solution=True)
+        download_instance("invalid_name")

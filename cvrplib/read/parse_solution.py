@@ -1,41 +1,43 @@
-import re
-from typing import Any, Dict, List, Union
+from typing import Dict, List, Union
 
 
 def parse_solution(lines: List[str]) -> Dict[str, Union[List, float]]:
     """
-    Extract the solution. Solutions contain routes, which are indexed
-    from 1 to n.
+    Parses the text of a solution file formatted in VRPLIB style. A solution
+    consists of routes, which are indexed from 1 to n, and possibly other data.
+
+    Parameters
+    ----------
+    lines
+        The lines of a solution text file.
+
+    Returns
+    -------
+    A dictionary that contains solution data.
+
     """
+    data: Dict[str, Union[List, float]] = {}
 
-    def parse_routes(lines: List[str]) -> List[List[int]]:
-        """
-        Parse the lines to obtain the routes.
-        """
-        routes = []
+    routes = []
 
-        for line in lines:
-            line = line.strip().lower()
+    for line in lines:
+        line = line.strip().lower()
 
-            if "route" in line:
-                route = re.split(r"route #\d+: ", line)[1]
-                route = [int(cust) for cust in route.split(" ") if cust]
-                routes.append(route)
+        if not line.startswith("route"):
+            continue
 
-        return routes
+        route = [int(cust) for cust in line.split(":")[1].split(" ") if cust]
+        routes.append(route)
 
-    def parse_cost(lines: List[str]) -> float:
-        for line in lines:
-            line = line.strip().lower()
+    data["routes"] = routes
 
-            if "cost" in line:
-                cost = line.lstrip("cost ")
-                break
+    # Find the cost
+    for line in lines:
+        line = line.strip().lower()
 
-        return int(cost) if cost.isdigit() else float(cost)
-
-    data: Dict[str, Any] = {}
-    data["routes"] = parse_routes(lines)
-    data["cost"] = parse_cost(lines)
+        if "cost" in line:
+            cost = line.lstrip("cost ")
+            data["cost"] = int(cost) if cost.isdigit() else float(cost)
+            break
 
     return data

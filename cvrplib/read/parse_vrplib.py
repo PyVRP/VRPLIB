@@ -1,23 +1,24 @@
 from __future__ import annotations
 
+import math
 import re
 from collections import defaultdict
 from itertools import combinations
 from typing import Any, Dict, List
 
+import numpy as np
+
 from .utils import euclidean
 
 
-def parse_cvrp(lines: List[str]):
+def parse_vrplib(lines: List[str]):
     """
     Parse the lines of an instance, consisting of:
     - specifications [dimension, edge_weight_type, etc.]
     - data sections [coords, demands, etc.]
     - distances
     """
-    data = {}
-
-    data.update(parse_specifications(lines))
+    data = parse_specifications(lines)
     data.update(parse_sections(lines))
     data.update(parse_distances(data))
 
@@ -30,20 +31,11 @@ def parse_specifications(lines: List[str]) -> Dict[str, Any]:
     KEY : VALUE.
     """
     data = {}
+
     for line in lines:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
             data[k.lower()] = int(v) if v.isnumeric() else v
-
-    # TODO do we want to keep these opinionated entries?
-    data["n_customers"] = data["dimension"] - 1  # type: ignore
-    data["customers"] = list(range(1, data["n_customers"] + 1))  # type: ignore
-    data["distance_limit"] = float(data.get("distance", float("inf")))  # type: ignore # noqa: E501
-
-    data["service_times"] = [0.0] + [
-        float(data.get("service_time", 0.0)) for _ in range(data["n_customers"])  # type: ignore # noqa: E501
-    ]  # type: ignore
-    data["coordinates"] = None  # type: ignore
 
     return data
 
@@ -63,25 +55,29 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
         elif "EOF" in line:
             continue
 
-        elif name:
-            row = [float(num) for num in line.strip().split()]
+        elif name is not None:
+            row = [_int_or_float(num) for num in line.split()]
+
+            # Most sections start with an index that we do not want to keep
+            if name not in ["EDGE_WEIGHT", "DEPOT"]:
+                row = row[1:]
+
             sections[name].append(row)
 
     data: Dict[str, Any] = {}
 
-    for name, section in sections.items():
-        if name == "DEMAND":
-            data["demands"] = [int(row[1]) for row in section]
+    for section_name, section_data in sections.items():
+        section_name = section_name.lower()
 
-        elif name == "NODE_COORD":
-            data["coordinates"] = [
-                [int(row[1]), int(row[2])] for row in section
-            ]
+        if section_name == "depot":
+            data[section_name] = section_data[0][0] - 1
+        elif section_name == "edge_weight":
+            data[section_name] = section_data
+        else:
+            array = np.array(section_data)
+            array = array.reshape(-1) if array.shape[1] == 1 else array
 
-        elif name == "EDGE_WEIGHT":
-            data["edge_weight"] = [
-                [int(num) for num in row] for row in section
-            ]
+            data[section_name] = array
 
     return data
 
@@ -90,14 +86,20 @@ def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type
     """
     Create distances data.
 
-    Using the metadata "edge_weight_type" we can infer how to construct the
-    distances: 1) either by computing the pairwise Euclidan distances
+    Using the specification "edge_weight_type" we can infer how to construct
+    the distances: 1) either by computing the pairwise Euclidan distances
     using the provided coordinates or by 2) using the triangular matrix.
     """
 
     if "distances" not in data:
-        if data["edge_weight_type"] == "EUC_2D":
-            return {"distances": euclidean(data["coordinates"])}
+        if data["edge_weight_type"] in ["EUC_2D"]:
+            return {"distances": euclidean(data["node_coord"])}
+
+        elif data["edge_weight_type"] in ["FLOOR_2D"]:
+            return {"distances": euclidean(data["node_coord"], math.floor)}
+
+        elif data["edge_weight_type"] in ["EXACT_2D"]:
+            return {"distances": euclidean(data["node_coord"], lambda n: n)}
 
         elif data["edge_weight_type"] == "EXPLICIT":
             if data["edge_weight_format"] == "LOWER_ROW":
@@ -165,3 +167,8 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
         distances[j][i] = d_ij
 
     return distances
+
+
+def _int_or_float(num: str):
+    """Return an integer if num is an integer string and float otherwise."""
+    return int(num) if num.isnumeric() else float(num)
