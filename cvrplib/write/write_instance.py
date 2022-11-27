@@ -33,15 +33,14 @@ def write_instance(path: str, instance: Dict[str, Any]):
 
 def write_section(f, name: str, data: Iterable):
     """
-    Write a data section to file. A data section starts with the section name
-    in all uppercase. It is then followed by rows corresponding to the data
-    entries. Each row starts with the index (starting at 1) and the data
-    elements are separated by tabs.
+    Writes a data section to file.
+
+    A data section starts with the section name in all uppercase. It is then
+    followed by row entries consisting of one or multiple values.
     """
-    # Sections that have a different format
-    if name == "EDGE_WEIGHT":
+    if name == "EDGE_WEIGHT":  # no index
         write_edge_weight_section(f, data)
-    elif name == "DEPOT":
+    elif name == "DEPOT":  # no index
         write_depot_section(f, data)
     else:
         f.write(f"{name}_SECTION\n")
@@ -58,6 +57,9 @@ def write_section(f, name: str, data: Iterable):
 
 
 def write_edge_weight_section(f, duration_matrix):
+    """
+    Writes the edge weight section. Rows do not start with index.
+    """
     f.write("EDGE_WEIGHT_SECTION\n")
 
     for row in duration_matrix:
@@ -66,6 +68,10 @@ def write_edge_weight_section(f, duration_matrix):
 
 
 def write_depot_section(f, depots):
+    """
+    Writes the depot section. Rows correspond to the index of the depot(s),
+    where the final row -1 to indicate termination.
+    """
     f.write("DEPOT_SECTION\n")
 
     for idx in depots[:-1].flatten():
