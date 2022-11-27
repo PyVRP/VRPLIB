@@ -1,8 +1,10 @@
 from dataclasses import dataclass
+from pathlib import Path
 
-from cvrplib.utils import find_set
+from cvrplib.read.utils import find_set
 
-_DATA_DIR = "data/"
+CVRPLIB_DATA_DIR = Path("data/cvrplib/")
+LKH_3_DATA_DIR = Path("data/lkh-3/")
 
 
 @dataclass
@@ -25,10 +27,16 @@ def make_case(set_name, instance_name, dimension, capacity, cost):
         name=set_name + "/" + instance_name,
         set_name=set_name,
         instance_name=instance_name,
-        instance_path=_DATA_DIR
-        + instance_name
-        + (".txt" if find_set(instance_name) in ["Solomon", "HG"] else ".vrp"),
-        solution_path=_DATA_DIR + instance_name + ".sol",
+        instance_path=CVRPLIB_DATA_DIR
+        / (
+            instance_name
+            + (
+                ".txt"
+                if find_set(instance_name) in ["Solomon", "HG"]
+                else ".vrp"
+            )
+        ),
+        solution_path=CVRPLIB_DATA_DIR / (instance_name + ".sol"),
         dimension=dimension,
         capacity=capacity,
         cost=cost,
@@ -50,9 +58,7 @@ def selected_cases():
     M = make_case("M", "M-n101-k10", 101, 200, 820)
     P = make_case("P", "P-n16-k8", 16, 35, 450)
     X = make_case("X", "X-n101-k25", 101, 206, 27591)
-    # XXL = make_case("XXL", "Antwerp1", 6001, 30, 477277) # very large/slow
-    Solomon = make_case("Solomon", "C101", 101, 200, 827.3)
-    HG = make_case("HG", "C1_2_1", 201, 200, 2698.6)
+    # XXL = make_case("XXL", "Antwerp1", 6001, 30, 477277)  # very large/slow
 
     return [
         A,
@@ -67,12 +73,10 @@ def selected_cases():
         P,
         X,
         # XXL,
-        Solomon,
-        HG,
     ]
 
 
-def compute_distance(instance, routes):
+def compute_distance(distances, routes):
     """
     Compute the costs of the passed-in routes using the instance data.
     """
@@ -82,6 +86,6 @@ def compute_distance(instance, routes):
         visits = [0] + route + [0]
 
         for idx in range(len(visits) - 1):
-            total += instance.distances[visits[idx]][visits[idx + 1]]
+            total += distances[visits[idx]][visits[idx + 1]]
 
     return total

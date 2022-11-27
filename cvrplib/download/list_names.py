@@ -2,7 +2,7 @@ import importlib.resources as pkg_resource
 from functools import lru_cache
 from typing import Optional
 
-from .utils import is_vrptw
+from cvrplib.read.utils import is_vrptw
 
 
 def list_names(
@@ -11,19 +11,19 @@ def list_names(
     vrp_type: Optional[str] = None,
 ):
     """
-    Return the names of instances that can be passed to `download`.
+    Returns the names of the instances that can be downloaded from CVRPLIB.
 
-    Params
-    ------
-    - low
-        The minimum number of customers.
-    - high
-        The maximum number of customers.
-    - vrp_type
-        The vrp_type, one of ['cvrp', 'vrptw']. If not set, then
-        instances of both types are returned.
+    Parameters
+    ----------
+    low
+        The minimum number of customers of the listed instances.
+    high
+        The maximum number of customers of the listed instances.
+    vrp_type
+        The vrp_type, one of ['cvrp', 'vrptw']. If not set, then instances
+        of both types are returned.
     """
-    instances = _parse_instance_data()
+    instances = _read_instance_data()
 
     if low is not None:
         instances = filter(lambda inst: inst["n_customers"] >= low, instances)
@@ -44,7 +44,11 @@ def list_names(
 
 
 @lru_cache()
-def _parse_instance_data():
+def _read_instance_data():
+    """
+    Reads the instance data. All CVRPLIB instance names are stored in the
+    `instance_data.csv` file.
+    """
     fi = pkg_resource.read_text(__package__, "instance_data.csv")
     instances = [line.strip().split(",") for line in fi.split()]
 

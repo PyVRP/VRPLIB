@@ -1,10 +1,9 @@
-import inspect
 import re
 from itertools import combinations
 from math import sqrt
-from typing import Dict, List
+from typing import List
 
-from .constants import CVRP_SETS, DIMACS_names, XXL_names
+from cvrplib.constants import CVRP_SETS, DIMACS_NAMES, XXL_NAMES
 
 
 def find_set(instance_name: str) -> str:
@@ -26,10 +25,10 @@ def find_set(instance_name: str) -> str:
         else:
             return "Solomon"
 
-    if any([instance_name.startswith(xxl) for xxl in XXL_names]):
+    if any([instance_name.startswith(xxl) for xxl in XXL_NAMES]):
         return "XXL"
 
-    if any([instance_name.startswith(dimacs) for dimacs in DIMACS_names]):
+    if any([instance_name.startswith(dimacs) for dimacs in DIMACS_NAMES]):
         return "D"
 
     for set_name in CVRP_SETS:
@@ -45,22 +44,6 @@ def is_vrptw(name: str) -> bool:
     instance is a CVRP instance.
     """
     return find_set(name) in ["HG", "Solomon"]
-
-
-def from_dict_to_dataclass(cls, data: Dict):
-    """
-    Creates a class using the passed-in data dictionary.
-    """
-    return cls(
-        **{
-            key: (
-                data[key]
-                if val.default == val.empty
-                else data.get(key, val.default)
-            )
-            for key, val in inspect.signature(cls).parameters.items()
-        }
-    )
 
 
 def euclidean(coords: List[List[int]], round_func=round) -> List[List[int]]:
