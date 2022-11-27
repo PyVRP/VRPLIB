@@ -42,6 +42,10 @@ def parse_customers(lines: List[str], distance_rounding=None) -> Dict:
     data["earliest"] = A[:, 4].tolist()
     data["latest"] = A[:, 5].tolist()
     data["service_times"] = A[:, 6].tolist()
-    data["distances"] = euclidean(data["node_coord"], distance_rounding)
+
+    round_func = (
+        distance_rounding if callable(distance_rounding) else lambda x: x
+    )
+    data["distances"] = euclidean(data["node_coord"], round_func)
 
     return data
