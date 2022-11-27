@@ -10,22 +10,25 @@ import numpy as np
 
 from .utils import euclidean
 
+Instance = Dict[str, Any]
+Lines = List[str]
 
-def parse_vrplib(lines: List[str]):
+
+def parse_vrplib(lines: Lines, distance_rounding=None):
     """
     Parse the lines of an instance, consisting of:
     - specifications [dimension, edge_weight_type, etc.]
     - data sections [coords, demands, etc.]
     - distances
     """
-    data = parse_specifications(lines)
-    data.update(parse_sections(lines))
-    data.update(parse_distances(data))
+    instance = parse_specifications(lines)
+    instance.update(parse_sections(lines))
+    instance.update(parse_distances(instance, distance_rounding))
 
-    return data
+    return instance
 
 
-def parse_specifications(lines: List[str]) -> Dict[str, Any]:
+def parse_specifications(lines: Lines) -> Instance:
     """
     Parse the problem specifications. These are lines that are formatted as
     KEY : VALUE.
@@ -40,7 +43,7 @@ def parse_specifications(lines: List[str]) -> Dict[str, Any]:
     return data
 
 
-def parse_sections(lines: List[str]) -> Dict[str, Any]:
+def parse_sections(lines: Lines) -> Instance:
     """
     Parse the sections data of the instance file. Sections start with a row
     containing NAME_SECTION followed by a number of lines with data.
@@ -64,7 +67,7 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
 
             sections[name].append(row)
 
-    data: Dict[str, Any] = {}
+    data: Instance = {}
 
     for section_name, section_data in sections.items():
         section_name = section_name.lower()
@@ -82,40 +85,45 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
     return data
 
 
-def parse_distances(data: Dict[str, Any]) -> Dict[str, List[List[int]]]:  # type: ignore[return] # noqa: E501
+def parse_distances(instance: Instance, distance_rounding):
     """
-    Create distances data.
+    Creates the distances data.
 
     Using the specification "edge_weight_type" we can infer how to construct
     the distances: 1) either by computing the pairwise Euclidan distances
     using the provided coordinates or by 2) using the triangular matrix.
     """
+    edge_weight_type = instance["edge_weight_type"]
 
-    if "distances" not in data:
-        if data["edge_weight_type"] in ["EUC_2D"]:
-            return {"distances": euclidean(data["node_coord"])}
+    if "2D" in edge_weight_type:
+        if callable(distance_rounding):  # custom rounding function
+            round_func = distance_rounding
+        elif edge_weight_type == "FLOOR_2D":
+            round_func = math.floor
+        elif edge_weight_type == "EXACT_2D":
+            round_func = lambda n: n  # noqa
+        elif edge_weight_type == "EUC_2D":
+            round_func = round
+        else:  # default is to round to nearest integer
+            round_func = round
 
-        elif data["edge_weight_type"] in ["FLOOR_2D"]:
-            return {"distances": euclidean(data["node_coord"], math.floor)}
+        return {"distances": euclidean(instance["node_coord"], round_func)}
 
-        elif data["edge_weight_type"] in ["EXACT_2D"]:
-            return {"distances": euclidean(data["node_coord"], lambda n: n)}
+    if edge_weight_type == "EXPLICIT":
+        if instance["edge_weight_format"] == "LOWER_ROW":
+            lr_repr = get_representation(
+                instance["edge_weight"], n=instance["dimension"]
+            )
 
-        elif data["edge_weight_type"] == "EXPLICIT":
-            if data["edge_weight_format"] == "LOWER_ROW":
-                lr_repr = get_representation(
-                    data["edge_weight"], n=data["dimension"]
-                )
+            if lr_repr == "flattened":
+                return {
+                    "distances": from_flattened(
+                        instance["edge_weight"], n=instance["dimension"]
+                    )
+                }
 
-                if lr_repr == "flattened":
-                    return {
-                        "distances": from_flattened(
-                            data["edge_weight"], n=data["dimension"]
-                        )
-                    }
-
-                elif lr_repr == "triangular":
-                    return {"distances": from_triangular(data["edge_weight"])}
+            elif lr_repr == "triangular":
+                return {"distances": from_triangular(instance["edge_weight"])}
 
 
 def get_representation(edge_weights: List[List[int]], n: int) -> str:

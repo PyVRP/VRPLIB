@@ -7,7 +7,7 @@ import numpy as np
 from .utils import euclidean
 
 
-def parse_solomon(lines: List[str]):
+def parse_solomon(lines: List[str], distance_rounding=None):
     """
     Parse the lines of a VRPTW instance.
     """
@@ -15,7 +15,7 @@ def parse_solomon(lines: List[str]):
     data["name"] = lines[0]
 
     data.update(parse_vehicles(lines))
-    data.update(parse_customers(lines))
+    data.update(parse_customers(lines, distance_rounding))
 
     return data
 
@@ -28,7 +28,7 @@ def parse_vehicles(lines: List[str]) -> Dict:
     return data
 
 
-def parse_customers(lines: List[str]) -> Dict:
+def parse_customers(lines: List[str], distance_rounding=None) -> Dict:
     data = {}
 
     A = np.genfromtxt(lines[6:], dtype=int)
@@ -42,6 +42,6 @@ def parse_customers(lines: List[str]) -> Dict:
     data["earliest"] = A[:, 4].tolist()
     data["latest"] = A[:, 5].tolist()
     data["service_times"] = A[:, 6].tolist()
-    data["distances"] = euclidean(data["node_coord"])
+    data["distances"] = euclidean(data["node_coord"], distance_rounding)
 
     return data
