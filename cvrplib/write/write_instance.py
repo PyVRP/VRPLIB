@@ -5,7 +5,7 @@ import numpy as np
 
 def write_instance(path: str, instance: Dict[str, Any]):
     """
-    Write a VRP instance to file following the LKH-3 VRPLIB format [1].
+    Writes a VRP instance to file following the VRPLIB format [1].
 
     path
         The path of the file.
