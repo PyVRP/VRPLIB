@@ -3,7 +3,7 @@ from typing import Dict, Iterable, Union
 import numpy as np
 
 
-def write(
+def write_instance(
     path: str,
     specifications: Dict[str, Union[str, int]],
     sections: Dict[str, Iterable],
@@ -58,9 +58,15 @@ def write_section(f, name: str, data: Iterable):
     else:
         f.write(f"{name}_SECTION\n")
 
-        for idx, elts in enumerate(data, 1):
-            row = f"{idx}\t" + "\t".join(str(elt) for elt in elts)
-            f.write(row + "\n")
+        # TODO Refactor this
+        if len(np.shape(data)) == 1:
+            for idx, elt in enumerate(data, 1):
+                row = f"{idx}\t{elt}"
+                f.write(row + "\n")
+        else:
+            for idx, elts in enumerate(data, 1):
+                row = f"{idx}\t" + "\t".join(str(elt) for elt in elts)
+                f.write(row + "\n")
 
 
 def write_edge_weight_section(f, duration_matrix):
@@ -74,6 +80,7 @@ def write_edge_weight_section(f, duration_matrix):
 def write_depot_section(f, depots):
     f.write("DEPOT_SECTION\n")
 
-    for i in np.flatnonzero(depots):
-        f.write(f"{i+1}\n")
-        f.write("-1\n")
+    for idx in depots[:-1].flatten():
+        f.write(f"{idx + 1}\n")
+
+    f.write("-1\n")  # terminate section

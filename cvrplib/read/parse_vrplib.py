@@ -20,7 +20,9 @@ def parse_vrplib(lines: List[str]):
     """
     data = parse_specifications(lines)
     data.update(parse_sections(lines))
-    data.update(parse_distances(data))
+
+    distances = parse_distances(data)
+    data.update(distances if distances else {})
 
     return data
 
@@ -53,7 +55,7 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
             name = line.split("_SECTION")[0].strip()
 
         elif "EOF" in line:
-            continue
+            break
 
         elif name is not None:
             row = [_int_or_float(num) for num in line.split()]
@@ -70,7 +72,9 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
         section_name = section_name.lower()
 
         if section_name == "depot":
-            data[section_name] = section_data[0][0] - 1
+            depot_data = np.array(section_data)
+            depot_data[:-1] -= 1  # normalize to zero-based indices
+            data[section_name] = depot_data
         elif section_name == "edge_weight":
             data[section_name] = section_data
         else:
