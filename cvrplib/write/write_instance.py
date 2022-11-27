@@ -1,28 +1,16 @@
-from typing import Dict, Iterable, Union
+from typing import Any, Dict, Iterable
 
 import numpy as np
 
 
-def write_instance(
-    path: str,
-    specifications: Dict[str, Union[str, int]],
-    sections: Dict[str, Iterable],
-):
+def write_instance(path: str, instance: Dict[str, Any]):
     """
     Write a VRP instance to file following the LKH-3 VRPLIB format [1].
 
     path
         The path of the file.
-    specfications
-        A dictionary of key value pairs, which will be written to file as
-        KEY : VALUE.
-    sections
-        A dictionary of key value pairs, which will be written as sections.
-
-        <KEY>_SECTION
-        1   a   b   c
-        2   d   e   f
-        ...
+    instance
+        The instance dictionary, containing problem specifications and data.
 
     References
     ----------
@@ -32,15 +20,15 @@ def write_instance(
            http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf
 
     """
-    with open(path, "w") as f:
-        rows = [f"{k.upper()} : {v}" for k, v in specifications.items()]
-        f.write("\n".join(rows))
-        f.write("\n")
+    with open(path, "w") as fi:
+        for k, v in instance.items():
+            if isinstance(v, (np.ndarray, list)):
+                write_section(fi, k.upper(), v)
+            else:
+                fi.write(f"{k.upper()} : {v}")
+                fi.write("\n")
 
-        for section_name, data in sections.items():
-            write_section(f, section_name.upper(), data)
-
-        f.write("EOF\n")
+        fi.write("EOF\n")
 
 
 def write_section(f, name: str, data: Iterable):
