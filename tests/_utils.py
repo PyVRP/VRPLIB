@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Optional
 
 from cvrplib.read.utils import find_set
 
@@ -18,12 +17,9 @@ class Case:
     dimension: int
     capacity: int
     cost: float
-    round_func: Optional[Callable]
 
 
-def make_case(
-    set_name, instance_name, dimension, capacity, cost, round_func=None
-):
+def make_case(set_name, instance_name, dimension, capacity, cost):
     """
     Return a test case based on the passed-in arguments.
     """
@@ -44,7 +40,6 @@ def make_case(
         dimension=dimension,
         capacity=capacity,
         cost=cost,
-        round_func=round_func,
     )
 
 
@@ -54,12 +49,12 @@ def selected_cases():
     """
     A = make_case("A", "A-n32-k5", 32, 100, 784)
     B = make_case("B", "B-n31-k5", 31, 100, 672)
-    C = make_case("CMT", "CMT6", 51, 160, 555.43, lambda x: x)
+    C = make_case("CMT", "CMT6", 51, 160, 555.43)
     D = make_case("D", "ORTEC-n242-k12", 242, 125, 123750)
     E = make_case("E", "E-n13-k4", 13, 6000, 247)
     F = make_case("F", "F-n72-k4", 72, 30000, 237)
-    G = make_case("Golden", "Golden_1", 241, 550, 5623.47, lambda x: x)
-    L = make_case("Li", "Li_21", 561, 1200, 16212.82548, lambda x: x)
+    G = make_case("Golden", "Golden_1", 241, 550, 5623.47)
+    L = make_case("Li", "Li_21", 561, 1200, 16212.82548)
     M = make_case("M", "M-n101-k10", 101, 200, 820)
     P = make_case("P", "P-n16-k8", 16, 35, 450)
     X = make_case("X", "X-n101-k25", 101, 206, 27591)

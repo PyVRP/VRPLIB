@@ -9,7 +9,7 @@ from cvrplib.read.utils import find_set, is_vrptw, strip_lines
 
 
 @lru_cache()
-def download_instance(name: str, distance_rounding=None):
+def download_instance(name: str):
     """
     Downloads an instance from CVRPLIB.
 
@@ -30,4 +30,4 @@ def download_instance(name: str, distance_rounding=None):
         response.raise_for_status()
 
     parser = parse_solomon if is_vrptw(name) else parse_vrplib
-    return parser(strip_lines(response.text.splitlines()), distance_rounding)
+    return parser(strip_lines(response.text.splitlines()))

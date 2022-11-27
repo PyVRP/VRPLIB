@@ -3,7 +3,7 @@ from .parse_vrplib import parse_vrplib
 from .utils import strip_lines
 
 
-def read_instance(path, style="vrplib", distance_rounding=None):
+def read_instance(path, style="vrplib"):
     """
     Reads the instance from the passed-in file path.
 
@@ -13,9 +13,6 @@ def read_instance(path, style="vrplib", distance_rounding=None):
         The path to the instance file.
     style
         The instance format style, one of ['vrplib', 'solomon'].
-    distance_rounding
-        The rouding function to round distances. The default is to use the
-        specifications of the instance file.
 
     Returns
     -------
@@ -25,7 +22,7 @@ def read_instance(path, style="vrplib", distance_rounding=None):
         lines = strip_lines(fi)
 
         if style == "vrplib":
-            return parse_vrplib(lines, distance_rounding=distance_rounding)
+            return parse_vrplib(lines)
         elif style == "solomon":
             return parse_solomon(lines)
 
