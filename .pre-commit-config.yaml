@@ -5,6 +5,8 @@ repos:
     rev: v4.4.0
     hooks:
     -   id: debug-statements
+        id: trailing-whitespace
+        id: end-of-file-fixer
 
 -   repo: https://github.com/psf/black
     rev: 22.10.0
@@ -26,4 +28,3 @@ repos:
     rev: v0.991
     hooks:
     -   id: mypy
-        additional_dependencies: ['types-requests']
