@@ -58,7 +58,7 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
             break
 
         elif name is not None:
-            row = [_int_or_float(num) for num in line.split()]
+            row = [infer_type(num) for num in line.split()]
 
             # Most sections start with an index that we do not want to keep
             if name not in ["EDGE_WEIGHT", "DEPOT"]:
@@ -171,8 +171,3 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
         distances[j][i] = d_ij
 
     return distances
-
-
-def _int_or_float(num: str):
-    """Return an integer if num is an integer string and float otherwise."""
-    return int(num) if num.isnumeric() else float(num)
