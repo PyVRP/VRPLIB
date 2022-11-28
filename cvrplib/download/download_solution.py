@@ -25,4 +25,4 @@ def download_solution(name: str):
     url = CVRPLIB_URL + f"{find_set(name)}/{name}.sol"
     response = urlopen(url).read().decode("utf-8")
 
-    return parse_solution(strip_lines(response.split("\n")))
+    return parse_solution(strip_lines(response.splitlines()))

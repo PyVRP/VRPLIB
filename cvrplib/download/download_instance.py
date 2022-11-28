@@ -29,4 +29,4 @@ def download_instance(name: str):
 
     parser = parse_solomon if is_vrptw(name) else parse_vrplib
 
-    return parser(strip_lines(response.split("\n")))
+    return parser(strip_lines(response.splitlines()))
