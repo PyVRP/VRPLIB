@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import math
 import re
 from collections import defaultdict
@@ -8,19 +6,21 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .parse_utils import euclidean, infer_type
+from .parse_utils import euclidean, infer_type, text2lines
 
 Instance = Dict[str, Any]
 Lines = List[str]
 
 
-def parse_vrplib(lines: Lines, distance_rounding=None):
+def parse_vrplib(text: str, distance_rounding=None):
     """
     Parse the lines of an instance, consisting of:
     - specifications [dimension, edge_weight_type, etc.]
     - data sections [coords, demands, etc.]
     - distances
     """
+    lines = text2lines(text)
+
     instance = parse_specifications(lines)
     instance.update(parse_sections(lines))
 

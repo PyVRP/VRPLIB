@@ -1,19 +1,20 @@
-from __future__ import annotations
-
 from typing import Any, Dict, List
 
 import numpy as np
 
-from .parse_utils import euclidean
+from .parse_utils import euclidean, text2lines
 
 
-def parse_solomon(lines: List[str], distance_rounding=None):
+def parse_solomon(text: str, distance_rounding=None):
     """
-    Parse the lines of a Solomon VRPTW instance.
-    """
-    data: Dict[str, Any] = {}
-    data["name"] = lines[0]
+    Parse the text of a Solomon VRPTW instance.
 
+    text
+        The instance text.
+    """
+    lines = text2lines(text)
+
+    data: Dict[str, Any] = {"name": lines[0]}
     data.update(parse_vehicles(lines))
     data.update(parse_customers(lines, distance_rounding))
 

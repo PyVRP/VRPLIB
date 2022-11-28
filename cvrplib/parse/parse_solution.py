@@ -1,38 +1,47 @@
 from typing import Dict, List, Union
 
-from .parse_utils import infer_type
-
-Solution = Dict[str, Union[int, float, str, List]]
+from .parse_utils import text2lines
 
 
-def parse_solution(lines: List[str]) -> Solution:
+def parse_solution(text: str) -> Dict[str, Union[List, float]]:
     """
     Parses the text of a solution file formatted in VRPLIB style. A solution
     consists of routes, which are indexed from 1 to n, and possibly other data.
 
     Parameters
     ----------
-    lines
-        The lines of a solution text file.
+    text
+        The solution text.
 
     Returns
     -------
     A dictionary that contains solution data.
 
     """
-    solution: Solution = {"routes": []}
+    lines = text2lines(text)
+
+    data: Dict[str, Union[List, float]] = {}
+
+    routes = []
 
     for line in lines:
         line = line.strip().lower()
 
-        if "route" in line:
-            route = [int(idx) for idx in line.split(":")[1].split(" ") if idx]
-            solution["routes"].append(route)  # type: ignore
-        elif ":" in line or " " in line:  # Split at first colon or whitespace
-            split_at = ":" if ":" in line else " "
-            k, v = [word.strip() for word in line.split(split_at, 1)]
-            solution[k] = infer_type(v)
-        else:  # Ignore lines without keyword-value pairs
+        if not line.startswith("route"):
             continue
 
-    return solution
+        route = [int(cust) for cust in line.split(":")[1].split(" ") if cust]
+        routes.append(route)
+
+    data["routes"] = routes
+
+    # Find the cost
+    for line in lines:
+        line = line.strip().lower()
+
+        if "cost" in line:
+            cost = line.lstrip("cost ")
+            data["cost"] = int(cost) if cost.isdigit() else float(cost)
+            break
+
+    return data

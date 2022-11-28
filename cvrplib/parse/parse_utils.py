@@ -27,11 +27,11 @@ def euclidean(coords: List[List[int]], round_func=round) -> List[List[int]]:
     return distances
 
 
-def strip_lines(lines):
+def text2lines(text: str) -> List[str]:
     """
-    Strip all lines and return the non-empty ones.
+    Takes a text and returns a list of non-empty, stripped lines.
     """
-    return [line1 for line1 in (line.strip() for line in lines) if line1]
+    return [line.strip() for line in text.splitlines() if line.strip()]
 
 
 def infer_type(s):
