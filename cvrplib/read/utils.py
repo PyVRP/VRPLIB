@@ -75,3 +75,13 @@ def strip_lines(lines):
     Strip all lines and return the non-empty ones.
     """
     return [line1 for line1 in (line.strip() for line in lines) if line1]
+
+
+def infer_type(s):
+    try:
+        return int(s)
+    except ValueError:
+        try:
+            return float(s)
+        except ValueError:
+            return s

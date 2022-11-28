@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .utils import euclidean
+from .utils import euclidean, infer_type
 
 
 def parse_vrplib(lines: List[str]):
@@ -37,7 +37,7 @@ def parse_specifications(lines: List[str]) -> Dict[str, Any]:
     for line in lines:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
-            data[k.lower()] = int(v) if v.isnumeric() else v
+            data[k.lower()] = infer_type(v)
 
     return data
 
