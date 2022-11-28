@@ -93,7 +93,6 @@ def test_C101():
 )
 def test_lkh_3_vrplib(path):
     """
-    TODO Maybe add more instances
     TODO Test for instance values
     """
     read_instance(path)

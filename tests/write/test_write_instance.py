@@ -1,12 +1,14 @@
+from pathlib import Path
+
 import pytest
 from numpy.testing import assert_equal
 
 from cvrplib import read_instance, write_instance
 
-from .._utils import selected_cases
+from .._utils import LKH_3_DATA_DIR, selected_cases
 
 
-def test_dummy_instance(tmp_path):
+def test_dummy(tmp_path):
     """
     Tests if writing a small dummy instance yields the correct result.
     """
@@ -48,9 +50,9 @@ def test_dummy_instance(tmp_path):
 
 
 @pytest.mark.parametrize("case", selected_cases())
-def test_write_read_vrplib_instance(tmp_path, case):
+def test_cvrplib(tmp_path, case):
     """
-    Tests if writing a VRPLIB instance and reading it yields the same result.
+    Tests if writing a CVRPLIB instance and reading it yields the same result.
     """
     desired = read_instance(case.instance_path)
 
@@ -60,4 +62,23 @@ def test_write_read_vrplib_instance(tmp_path, case):
     assert_equal(actual, desired)
 
 
-# TODO Test LKH-3 instances
+@pytest.mark.parametrize(
+    "instance_path", Path(LKH_3_DATA_DIR).glob("*/INSTANCES/*vrp*")
+)
+def test_lkh_3(tmp_path, instance_path):
+    """
+    Tests if writing an LKH-3 instance and reading it yields the same result.
+    """
+    # These instances are incorrectly formatted, because the depot section
+    # does not terminate with -1.
+    invalid = ["S-E016-03m", "D022-04g", "R-E016-03m"]
+
+    if any(name in str(instance_path) for name in invalid):
+        return
+
+    desired = read_instance(instance_path)
+
+    write_instance(tmp_path / "test.vrp", desired)
+    actual = read_instance(tmp_path / "test.vrp")
+
+    assert_equal(actual, desired)
