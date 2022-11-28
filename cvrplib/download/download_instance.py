@@ -22,8 +22,7 @@ def download_instance(name: str, distance_rounding=None):
     A dictionary that contains the instance data.
     """
     ext = "txt" if is_vrptw(name) else "vrp"
-    url = CVRPLIB_URL + f"{find_set(name)}/{name}.{ext}"
-    response = urlopen(url).read().decode("utf-8")
+    response = urlopen(CVRPLIB_URL + f"{find_set(name)}/{name}.{ext}")
 
     parser = parse_solomon if is_vrptw(name) else parse_vrplib
-    return parser(response, distance_rounding)
+    return parser(response.read().decode("utf-8"), distance_rounding)

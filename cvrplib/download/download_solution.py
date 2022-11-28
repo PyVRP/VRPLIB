@@ -21,7 +21,6 @@ def download_solution(name: str):
     -------
     A dictionary containing the solution data.
     """
-    url = CVRPLIB_URL + f"{find_set(name)}/{name}.sol"
-    response = urlopen(url)
+    response = urlopen(CVRPLIB_URL + f"{find_set(name)}/{name}.sol")
 
     return parse_solution(response.read().decode("utf-8"))
