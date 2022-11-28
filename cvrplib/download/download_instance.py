@@ -4,7 +4,9 @@ from urllib.request import urlopen
 from cvrplib.constants import CVRPLIB_URL
 from cvrplib.read.parse_solomon import parse_solomon
 from cvrplib.read.parse_vrplib import parse_vrplib
-from cvrplib.read.utils import find_set, is_vrptw, strip_lines
+from cvrplib.read.utils import strip_lines
+
+from .download_utils import find_set, is_vrptw
 
 
 @lru_cache()

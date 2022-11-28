@@ -3,7 +3,9 @@ from urllib.request import urlopen
 
 from cvrplib.constants import CVRPLIB_URL
 from cvrplib.read.parse_solution import parse_solution
-from cvrplib.read.utils import find_set, strip_lines
+from cvrplib.read.utils import strip_lines
+
+from .download_utils import find_set
 
 
 @lru_cache()
