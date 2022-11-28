@@ -1,6 +1,6 @@
 import pytest
 
-from cvrplib.read.utils import find_set
+from cvrplib.download.download_utils import find_set
 
 from .._utils import selected_cases
 

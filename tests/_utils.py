@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from cvrplib.read.utils import find_set
+from cvrplib.download.download_utils import find_set
 
 CVRPLIB_DATA_DIR = Path("data/cvrplib/")
 LKH_3_DATA_DIR = Path("data/lkh-3/")
