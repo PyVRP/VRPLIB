@@ -9,13 +9,11 @@ repository = "https://github.com/leonlan/CVRPLIB"
 
 [tool.poetry.dependencies]
 python = "^3.7"
-requests = "^2.27.1"
 numpy = "^1.15"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
 ipdb = "^0.13.9"
-types-requests = "^2.27.29"
 pre-commit = "^2.19.0"
 
 [pytest]
