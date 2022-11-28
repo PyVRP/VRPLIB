@@ -73,7 +73,7 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
 
         if section_name == "depot":
             depot_data = np.array(section_data)
-            depot_data[:-1] -= 1  # normalize to zero-based indices
+            depot_data[:-1] -= 1  # Normalize depot indices to start at zero
             data[section_name] = depot_data
         elif section_name == "edge_weight":
             data[section_name] = section_data

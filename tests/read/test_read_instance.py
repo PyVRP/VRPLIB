@@ -8,7 +8,6 @@ from cvrplib.read import read_instance
 
 from .._utils import CVRPLIB_DATA_DIR, LKH_3_DATA_DIR, selected_cases
 
-# TODO Rename "cvrp" to VRPLIB
 # TODO Add more tests to this - maybe make a csv?
 
 instances = [
