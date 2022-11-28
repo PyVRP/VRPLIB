@@ -31,50 +31,50 @@ def write_instance(path: str, instance: Dict[str, Any]):
         fi.write("EOF\n")
 
 
-def write_section(f, name: str, data: Iterable):
+def write_section(fi, name: str, data: Iterable):
     """
     Writes a data section to file.
 
     A data section starts with the section name in all uppercase. It is then
     followed by row entries consisting of one or multiple values.
     """
-    if name == "EDGE_WEIGHT":  # no index
-        write_edge_weight_section(f, data)
-    elif name == "DEPOT":  # no index
-        write_depot_section(f, data)
+    if name == "EDGE_WEIGHT":
+        write_edge_weight_section(fi, data)
+    elif name == "DEPOT":
+        write_depot_section(fi, data)
     else:
-        f.write(f"{name}_SECTION\n")
+        fi.write(f"{name}_SECTION\n")
 
         # TODO Refactor this
         if len(np.shape(data)) == 1:
             for idx, elt in enumerate(data, 1):
                 row = f"{idx}\t{elt}"
-                f.write(row + "\n")
+                fi.write(row + "\n")
         else:
             for idx, elts in enumerate(data, 1):
                 row = f"{idx}\t" + "\t".join(str(elt) for elt in elts)
-                f.write(row + "\n")
+                fi.write(row + "\n")
 
 
-def write_edge_weight_section(f, duration_matrix):
+def write_edge_weight_section(fi, duration_matrix):
     """
     Writes the edge weight section. Rows do not start with index.
     """
-    f.write("EDGE_WEIGHT_SECTION\n")
+    fi.write("EDGE_WEIGHT_SECTION\n")
 
     for row in duration_matrix:
-        f.write("\t".join(map(str, row)))
-        f.write("\n")
+        fi.write("\t".join(map(str, row)))
+        fi.write("\n")
 
 
-def write_depot_section(f, depots):
+def write_depot_section(fi, depots):
     """
     Writes the depot section. Rows correspond to the index of the depot(s),
-    where the final row -1 to indicate termination.
+    where the final value is -1 to indicate termination.
     """
-    f.write("DEPOT_SECTION\n")
+    fi.write("DEPOT_SECTION\n")
 
     for idx in depots[:-1].flatten():
-        f.write(f"{idx + 1}\n")
+        fi.write(f"{idx + 1}\n")
 
-    f.write("-1\n")  # terminate section
+    fi.write("-1\n")

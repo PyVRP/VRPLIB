@@ -51,11 +51,11 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
     sections = defaultdict(list)
 
     for line in lines:
-        if "_SECTION" in line:
-            name = line.split("_SECTION")[0].strip()
-
-        elif "EOF" in line:
+        if "EOF" in line:
             break
+
+        elif "_SECTION" in line:
+            name = line.split("_SECTION")[0].strip()
 
         elif name is not None:
             row = [infer_type(num) for num in line.split()]
@@ -73,6 +73,7 @@ def parse_sections(lines: List[str]) -> Dict[str, Any]:
 
         if section_name == "depot":
             depot_data = np.array(section_data)
+            # TODO Keep this or remove?
             depot_data[:-1] -= 1  # Normalize depot indices to start at zero
             data[section_name] = depot_data
         elif section_name == "edge_weight":
