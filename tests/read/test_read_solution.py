@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+from numpy.testing import assert_equal
 
 from cvrplib import read_solution
 
@@ -13,7 +14,7 @@ def test_read_solution(case):
     Read the case solution and verify its cost.
     """
     solution = read_solution(case.solution_path)
-    assert solution["cost"] == pytest.approx(case.cost, 2)
+    assert_equal(solution["cost"], case.cost)
 
 
 @pytest.mark.parametrize(

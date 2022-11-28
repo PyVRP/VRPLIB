@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .utils import euclidean
+from .utils import euclidean, infer_type
 
 Instance = Dict[str, Any]
 Lines = List[str]
@@ -23,7 +23,9 @@ def parse_vrplib(lines: Lines, distance_rounding=None):
     """
     instance = parse_specifications(lines)
     instance.update(parse_sections(lines))
-    instance.update(parse_distances(instance, distance_rounding))
+
+    distances = parse_distances(instance, distance_rounding)
+    instance.update(distances if distances else {})
 
     return instance
 
@@ -38,7 +40,7 @@ def parse_specifications(lines: Lines) -> Instance:
     for line in lines:
         if ": " in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
-            data[k.lower()] = int(v) if v.isnumeric() else v
+            data[k.lower()] = infer_type(v)
 
     return data
 
@@ -52,14 +54,14 @@ def parse_sections(lines: Lines) -> Instance:
     sections = defaultdict(list)
 
     for line in lines:
-        if "_SECTION" in line:
+        if "EOF" in line:
+            break
+
+        elif "_SECTION" in line:
             name = line.split("_SECTION")[0].strip()
 
-        elif "EOF" in line:
-            continue
-
         elif name is not None:
-            row = [_int_or_float(num) for num in line.split()]
+            row = [infer_type(num) for num in line.split()]
 
             # Most sections start with an index that we do not want to keep
             if name not in ["EDGE_WEIGHT", "DEPOT"]:
@@ -73,7 +75,10 @@ def parse_sections(lines: Lines) -> Instance:
         section_name = section_name.lower()
 
         if section_name == "depot":
-            data[section_name] = section_data[0][0] - 1
+            depot_data = np.array(section_data)
+            # TODO Keep this or remove?
+            depot_data[:-1] -= 1  # Normalize depot indices to start at zero
+            data[section_name] = depot_data
         elif section_name == "edge_weight":
             data[section_name] = section_data
         else:
@@ -175,8 +180,3 @@ def from_flattened(edge_weights: List[List[int]], n: int) -> List[List[int]]:
         distances[j][i] = d_ij
 
     return distances
-
-
-def _int_or_float(num: str):
-    """Return an integer if num is an integer string and float otherwise."""
-    return int(num) if num.isnumeric() else float(num)
