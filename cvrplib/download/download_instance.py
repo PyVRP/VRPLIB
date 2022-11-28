@@ -2,9 +2,7 @@ from functools import lru_cache
 from urllib.request import urlopen
 
 from cvrplib.constants import CVRPLIB_URL
-from cvrplib.read.parse_solomon import parse_solomon
-from cvrplib.read.parse_vrplib import parse_vrplib
-from cvrplib.read.utils import strip_lines
+from cvrplib.parse import parse_solomon, parse_vrplib
 
 from .download_utils import find_set, is_vrptw
 
@@ -28,4 +26,4 @@ def download_instance(name: str, distance_rounding=None):
     response = urlopen(url).read().decode("utf-8")
 
     parser = parse_solomon if is_vrptw(name) else parse_vrplib
-    return parser(strip_lines(response.splitlines()), distance_rounding)
+    return parser(response, distance_rounding)

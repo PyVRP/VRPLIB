@@ -1,6 +1,4 @@
-from .parse_solomon import parse_solomon
-from .parse_vrplib import parse_vrplib
-from .utils import strip_lines
+from cvrplib.parse import parse_solomon, parse_vrplib
 
 
 def read_instance(path, style="vrplib", distance_rounding=None):
@@ -22,11 +20,9 @@ def read_instance(path, style="vrplib", distance_rounding=None):
     An dictionary that contains the instance data.
     """
     with open(path, "r") as fi:
-        lines = strip_lines(fi)
-
         if style == "vrplib":
-            return parse_vrplib(lines, distance_rounding=distance_rounding)
+            return parse_vrplib(fi.read(), distance_rounding=distance_rounding)
         elif style == "solomon":
-            return parse_solomon(lines)
+            return parse_solomon(fi.read())
 
         raise ValueError(f"Format style {style} not known.")

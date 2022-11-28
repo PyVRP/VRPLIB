@@ -2,8 +2,7 @@ from functools import lru_cache
 from urllib.request import urlopen
 
 from cvrplib.constants import CVRPLIB_URL
-from cvrplib.read.parse_solution import parse_solution
-from cvrplib.read.utils import strip_lines
+from cvrplib.parse import parse_solution
 
 from .download_utils import find_set
 
@@ -23,6 +22,6 @@ def download_solution(name: str):
     A dictionary containing the solution data.
     """
     url = CVRPLIB_URL + f"{find_set(name)}/{name}.sol"
-    response = urlopen(url).read().decode("utf-8")
+    response = urlopen(url)
 
-    return parse_solution(strip_lines(response.splitlines()))
+    return parse_solution(response.read().decode("utf-8"))

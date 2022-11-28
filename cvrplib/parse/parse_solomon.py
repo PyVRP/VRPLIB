@@ -4,12 +4,12 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .utils import euclidean
+from .parse_utils import euclidean
 
 
 def parse_solomon(lines: List[str], distance_rounding=None):
     """
-    Parse the lines of a VRPTW instance.
+    Parse the lines of a Solomon VRPTW instance.
     """
     data: Dict[str, Any] = {}
     data["name"] = lines[0]

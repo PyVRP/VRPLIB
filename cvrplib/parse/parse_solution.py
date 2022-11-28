@@ -1,6 +1,6 @@
 from typing import Dict, List, Union
 
-from .utils import infer_type
+from .parse_utils import infer_type
 
 Solution = Dict[str, Union[int, float, str, List]]
 

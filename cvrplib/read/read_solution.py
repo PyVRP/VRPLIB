@@ -1,5 +1,4 @@
-from .parse_solution import parse_solution
-from .utils import strip_lines
+from cvrplib.parse import parse_solution
 
 
 def read_solution(path: str):
@@ -17,6 +16,4 @@ def read_solution(path: str):
 
     """
     with open(path, "r") as fi:
-        solution = parse_solution(strip_lines(fi))
-
-    return solution
+        return parse_solution(fi.read())

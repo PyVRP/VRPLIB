@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .utils import euclidean, infer_type
+from .parse_utils import euclidean, infer_type
 
 Instance = Dict[str, Any]
 Lines = List[str]
