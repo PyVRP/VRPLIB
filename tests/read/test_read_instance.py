@@ -8,7 +8,6 @@ from cvrplib.read import read_instance
 
 from .._utils import CVRPLIB_DATA_DIR, LKH_3_DATA_DIR, selected_cases
 
-# TODO Rename "cvrp" to VRPLIB
 # TODO Add more tests to this - maybe make a csv?
 
 instances = [
@@ -83,7 +82,6 @@ def test_C101():
     assert instance["n_vehicles"] == 25
     assert instance["capacity"] == 200
     assert instance["node_coord"][N] == [55, 85]
-    assert instance["distances"][0][1] == 19
     assert instance["demands"][N] == 20
     assert instance["service_times"][N] == 90
     assert instance["earliest"][N] == 647
@@ -95,7 +93,6 @@ def test_C101():
 )
 def test_lkh_3_vrplib(path):
     """
-    TODO Maybe add more instances
     TODO Test for instance values
     """
     read_instance(path)
