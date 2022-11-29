@@ -8,8 +8,7 @@ from .._utils import selected_cases
 
 @pytest.mark.parametrize("case", selected_cases())
 def test_list_names(case):
-    names = list_names()
-    assert_(case.instance_name in names)
+    assert_(case.instance_name in list_names())
 
 
 @pytest.mark.parametrize(
