@@ -2,7 +2,8 @@ from typing import Any, Dict, List
 
 import numpy as np
 
-from .parse_utils import euclidean, text2lines
+from .parse_distances import euclidean
+from .parse_utils import text2lines
 
 
 def parse_solomon(text: str, distance_rounding=None):
