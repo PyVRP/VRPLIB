@@ -15,6 +15,8 @@ def parse_solomon(
     """
     Parses the text of a Solomon VRPTW instance.
 
+    Parameters
+    ----------
     text
         The instance text.
     distance_rounding

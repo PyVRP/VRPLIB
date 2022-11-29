@@ -26,7 +26,7 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
 
     Returns
     -------
-    A dictionary containg the instance data.
+    A dictionary containing the instance data.
     """
     instance = {}
     sections = defaultdict(list)  # Store and parse section data later

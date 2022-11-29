@@ -8,10 +8,8 @@ from .._utils import selected_cases
 @pytest.mark.parametrize("case", selected_cases())
 def test_solution_cost(case):
     """
-    Test if the proviced cost of the solution is the same as the cost
+    Tests if the proviced cost of the solution is the same as the cost
     calculated directly from the instance distances.
-
-    We only test instances where the convention is to use integral distances.
     """
     instance = read_instance(
         case.instance_path, distance_rounding=case.round_func
