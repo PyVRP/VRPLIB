@@ -5,7 +5,6 @@ from cvrplib.read import read_instance, read_solution
 from .._utils import selected_cases
 
 
-@pytest.mark.filterwarnings("ignore:cvrplib.read")
 @pytest.mark.parametrize("case", selected_cases())
 def test_solution_cost(case):
     """

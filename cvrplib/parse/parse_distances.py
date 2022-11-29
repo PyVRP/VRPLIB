@@ -9,7 +9,7 @@ Instance = Dict[str, Any]
 
 def parse_distances(
     instance: Instance, distance_rounding: Optional[Callable] = None
-):
+) -> Dict[str, np.ndarray]:
     """
     Parses the distances. The specification "edge_weight_type" describes how
     the distances should be parsed. The two main ways are to calculate the
@@ -63,11 +63,11 @@ def parse_distances(
 
 def euclidean(coords: np.ndarray, round_func: Callable) -> np.ndarray:
     """
-    Compute the pairwise Euclidean distances using the passed-in coordinates.
+    Computes the pairwise Euclidean distances using the passed-in coordinates.
     `round_func` specifies how to round the computed distances.
 
     coords
-        An (n-by-2) array of location coordinates.
+        An n-by-2 array of location coordinates.
     round_func
         A rounding function.
     """
@@ -85,11 +85,17 @@ def euclidean(coords: np.ndarray, round_func: Callable) -> np.ndarray:
 def get_representation(edge_weights: np.ndarray, n: int) -> str:
     """
     Returns the representation type in which the lower row data is given.
+    This assumes that the instance has an explicit edge weight representation.
+    In such a case, some instances have a flattened representation (e.g.,
+    E-n13-k4), whereas others have a triangular one (e.g., ORTEC-n242-k12).
 
-    Notes
-    -----
-    - Some instances have a flattened representation, e.g., E-n13-k4,
-      whereas others have a triangular repr, e.g., ORTEC-n242-k12.
+
+    Parameters
+    ----------
+    edge_weights
+        The edge weights data.
+    n
+        The instance dimension.
     """
     if len(edge_weights) == n - 1:
         return "triangular"
@@ -99,7 +105,7 @@ def get_representation(edge_weights: np.ndarray, n: int) -> str:
 
 def from_triangular(triangular: np.ndarray) -> np.ndarray:
     """
-    Compute a full distances matrix from a triangular matrix.
+    Computes a full distances matrix from a triangular matrix.
     """
     n = len(triangular) + 1
     distances = np.zeros((n, n))
@@ -114,16 +120,14 @@ def from_triangular(triangular: np.ndarray) -> np.ndarray:
 
 def from_flattened(edge_weights: np.ndarray, n: int) -> np.ndarray:
     """
-    Compute a full distances matrix from a flattened lower row representation.
+    Computes a full distances matrix from a flattened lower row representation.
 
     The numbers in a flattened list correspond the matrix element indices
     (1, 0), (2, 0), (2, 1), (3, 0), (3, 1), (3, 2), (4, 0), ...
     """
     distances = np.zeros((n, n))
 
-    flattened = [
-        distance for distances in edge_weights for distance in distances
-    ]
+    flattened = [dist for row in edge_weights for dist in row]
     indices = sorted([(i, j) for (j, i) in combinations(range(n), r=2)])
 
     for idx, (i, j) in enumerate(indices):
