@@ -1,4 +1,5 @@
 import pytest
+from numpy.testing import assert_almost_equal
 
 from cvrplib import download_solution
 
@@ -14,7 +15,7 @@ def test_download_solution(case):
     Download the case solution.
     """
     solution = download_solution(case.instance_name)
-    assert solution["cost"] == pytest.approx(case.cost, 2)
+    assert_almost_equal(case.cost, solution["cost"], 2)
 
 
 def test_raise_invalid_name():
