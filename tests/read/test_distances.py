@@ -1,4 +1,5 @@
 import pytest
+from numpy.testing import assert_almost_equal
 
 from cvrplib.read import read_instance, read_solution
 
@@ -25,4 +26,7 @@ def test_solution_cost(case):
         for idx in range(len(route) + 1):
             cost += dist[visits[idx]][visits[idx + 1]]
 
-    assert pytest.approx(solution["cost"]) == cost
+    assert_almost_equal(cost, solution["cost"], decimal=2)
+
+
+# TODO Add more tests!

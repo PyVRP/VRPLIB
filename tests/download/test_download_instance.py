@@ -1,4 +1,5 @@
 import pytest
+from numpy.testing import assert_equal
 
 from cvrplib import download_instance
 
@@ -14,9 +15,9 @@ def test_download_instance(case):
     Download the case instance.
     """
     instance = download_instance(case.instance_name)
-    assert instance["name"] == case.instance_name
-    assert instance["dimension"] == case.dimension
-    assert instance["capacity"] == case.capacity
+    assert_equal(instance["name"], case.instance_name)
+    assert_equal(instance["dimension"], case.dimension)
+    assert_equal(instance["capacity"], case.capacity)
 
 
 def test_raise_invalid_name():

@@ -61,28 +61,27 @@ def test_read_instance_vrplib(path, specifications, sections):
 @pytest.mark.parametrize("case", selected_cases())
 def test_read(case):
     """
-    # TODO refactor this?
     Read the case and verify a subest its attributes.
     """
     instance = read_instance(case.instance_path, "vrplib")
 
-    assert instance["name"] == case.instance_name
-    assert instance["dimension"] == case.dimension
-    assert instance["capacity"] == case.capacity
+    assert_equal(instance["name"], case.instance_name)
+    assert_equal(instance["dimension"], case.dimension)
+    assert_equal(instance["capacity"], case.capacity)
 
 
 def test_C101():
     instance = read_instance(CVRPLIB_DATA_DIR / "C101.txt", "solomon")
     N = 100
 
-    assert instance["name"] == "C101"
-    assert instance["n_vehicles"] == 25
-    assert instance["capacity"] == 200
+    assert_equal(instance["name"], "C101")
+    assert_equal(instance["n_vehicles"], 25)
+    assert_equal(instance["capacity"], 200)
     assert_equal(instance["node_coord"][N], [55, 85])
-    assert instance["demands"][N] == 20
-    assert instance["service_times"][N] == 90
-    assert instance["earliest"][N] == 647
-    assert instance["latest"][N] == 726
+    assert_equal(instance["demands"][N], 20)
+    assert_equal(instance["service_times"][N], 90)
+    assert_equal(instance["earliest"][N], 647)
+    assert_equal(instance["latest"][N], 726)
 
 
 @pytest.mark.parametrize(

@@ -1,4 +1,5 @@
 import pytest
+from numpy.testing import assert_
 
 from cvrplib import list_names
 
@@ -7,8 +8,7 @@ from .._utils import selected_cases
 
 @pytest.mark.parametrize("case", selected_cases())
 def test_list_names(case):
-    names = list_names()
-    assert case.instance_name in names
+    assert_(case.instance_name in list_names())
 
 
 @pytest.mark.parametrize(
@@ -40,4 +40,4 @@ def test_list_names_n(name, low, high, vrp_type):
     """
     Check if the passed-in name is in the list of names.
     """
-    assert name in list_names(low, high, vrp_type)
+    assert_(name in list_names(low, high, vrp_type))
