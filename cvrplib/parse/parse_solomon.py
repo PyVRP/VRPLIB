@@ -12,6 +12,9 @@ def parse_solomon(text: str, distance_rounding=None):
 
     text
         The instance text.
+    distance_rounding
+        A custom distance rounding function. The default is to follow the
+        VRPLIB convention, see ... # TODO
     """
     lines = text2lines(text)
 
@@ -36,14 +39,14 @@ def parse_customers(lines: List[str], distance_rounding=None) -> Dict:
     A = np.genfromtxt(lines[6:], dtype=int)
     n_customers = A.shape[0] - 1
 
-    data["node_coord"] = A[:, 1:3].tolist()
+    data["node_coord"] = A[:, 1:3]
     data["dimension"] = n_customers + 1
-    data["demands"] = A[:, 3].tolist()
+    data["demands"] = A[:, 3]
     data["n_customers"] = n_customers
     data["customers"] = list(range(1, n_customers + 1))
-    data["earliest"] = A[:, 4].tolist()
-    data["latest"] = A[:, 5].tolist()
-    data["service_times"] = A[:, 6].tolist()
+    data["earliest"] = A[:, 4]
+    data["latest"] = A[:, 5]
+    data["service_times"] = A[:, 6]
 
     round_func = (
         distance_rounding if callable(distance_rounding) else lambda x: x

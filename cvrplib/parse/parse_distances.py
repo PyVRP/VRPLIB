@@ -61,28 +61,25 @@ def parse_distances(
     raise ValueError(f"Edge weight type {edge_weight_type} unknown.")
 
 
-def euclidean(coords: np.ndarray, round_func=round) -> np.ndarray:
+def euclidean(coords: np.ndarray, round_func: Callable) -> np.ndarray:
     """
     Compute the pairwise Euclidean distances using the passed-in coordinates.
-    `round_func` can be used to specify the rouding function. Default is to
-    round to the nearest integer.
+    `round_func` specifies how to round the computed distances.
+
+    coords
+        An (n-by-2) array of location coordinates.
+    round_func
+        A rounding function.
     """
-
-    def dist(p, q):
-        """
-        Return the Euclidean distance between two coordinates.
-        """
-        return math.sqrt(sum((px - qx) ** 2.0 for px, qx in zip(p, q)))
-
     n = len(coords)
-    distances = [[0 for _ in range(n)] for _ in range(n)]
+    distances = np.zeros((n, n))
 
-    for (i, coord_i), (j, coord_j) in combinations(enumerate(coords), r=2):
-        d_ij = round_func(dist(coord_i, coord_j))
-        distances[i][j] = d_ij
-        distances[j][i] = d_ij
+    for (i, j) in combinations(range(n), r=2):
+        d_ij = round_func(np.linalg.norm(coords[i] - coords[j]))
+        distances[i, j] = d_ij
+        distances[j, i] = d_ij
 
-    return np.array(distances)
+    return distances
 
 
 def get_representation(edge_weights: np.ndarray, n: int) -> str:
@@ -105,14 +102,14 @@ def from_triangular(triangular: np.ndarray) -> np.ndarray:
     Compute a full distances matrix from a triangular matrix.
     """
     n = len(triangular) + 1
-    distances = [[0 for _ in range(n)] for _ in range(n)]
+    distances = np.zeros((n, n))
 
     for j, i in combinations(range(n), r=2):
         t_ij = triangular[i - 1][j]
-        distances[i][j] = t_ij
-        distances[j][i] = t_ij
+        distances[i, j] = t_ij
+        distances[j, i] = t_ij
 
-    return np.array(distances)
+    return distances
 
 
 def from_flattened(edge_weights: np.ndarray, n: int) -> np.ndarray:
@@ -122,7 +119,8 @@ def from_flattened(edge_weights: np.ndarray, n: int) -> np.ndarray:
     The numbers in a flattened list correspond the matrix element indices
     (1, 0), (2, 0), (2, 1), (3, 0), (3, 1), (3, 2), (4, 0), ...
     """
-    distances = [[0 for _ in range(n)] for _ in range(n)]
+    distances = np.zeros((n, n))
+
     flattened = [
         distance for distances in edge_weights for distance in distances
     ]
@@ -130,7 +128,7 @@ def from_flattened(edge_weights: np.ndarray, n: int) -> np.ndarray:
 
     for idx, (i, j) in enumerate(indices):
         d_ij = flattened[idx]
-        distances[i][j] = d_ij
-        distances[j][i] = d_ij
+        distances[i, j] = d_ij
+        distances[j, i] = d_ij
 
-    return np.array(distances)
+    return distances
