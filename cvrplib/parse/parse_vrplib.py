@@ -13,48 +13,40 @@ Lines = List[str]
 
 def parse_vrplib(text: str, distance_rounding=None):
     """
-    Parse the lines of an instance, consisting of:
-    - specifications [dimension, edge_weight_type, etc.]
-    - data sections [coords, demands, etc.]
-    - distances
+    Parses the instance text. An instance consists of two main parts:
+    - Problem specifications [name, dimension, edge_weight_type, ...]
+    - Data sections [node coords, demands, time windows, ...]
+
+    Parameters
+    ----------
+    text
+        The instance text.
+    distance_rounding
+        An optional function for custom distance rounding.
     """
     lines = text2lines(text)
+    instance = parse_lines(lines)
 
-    instance = parse_specifications(lines)
-    instance.update(parse_sections(lines))
-
+    # We post-process distances (e.g., compute Euclidean distances from coords,
+    # or create a full matrix from an upper-triangular one).
     distances = parse_distances(instance, distance_rounding)
     instance.update(distances if distances else {})
 
     return instance
 
 
-def parse_specifications(lines: Lines) -> Instance:
-    """
-    Parse the problem specifications. These are lines that are formatted as
-    KEY : VALUE.
-    """
+def parse_lines(lines: Lines) -> Instance:
     data = {}
-
-    for line in lines:
-        if ": " in line:
-            k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
-            data[k.lower()] = infer_type(v)
-
-    return data
-
-
-def parse_sections(lines: Lines) -> Instance:
-    """
-    Parse the sections data of the instance file. Sections start with a row
-    containing NAME_SECTION followed by a number of lines with data.
-    """
-    name = None  # Used as key to store data
     sections = defaultdict(list)
+    name = None  # Used as key to store section data
 
     for line in lines:
         if "EOF" in line:
             break
+
+        if ": " in line:
+            k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
+            data[k.lower()] = infer_type(v)
 
         elif "_SECTION" in line:
             name = line.split("_SECTION")[0].strip()
@@ -68,8 +60,7 @@ def parse_sections(lines: Lines) -> Instance:
 
             sections[name].append(row)
 
-    data: Instance = {}
-
+    # Parse the sections separately to deal with
     for section_name, section_data in sections.items():
         section_name = section_name.lower()
 
