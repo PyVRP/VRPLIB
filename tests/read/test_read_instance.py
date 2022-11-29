@@ -76,9 +76,6 @@ def test_C101():
     N = 100
 
     assert instance["name"] == "C101"
-    assert instance["dimension"] == N + 1
-    assert instance["n_customers"] == N
-    assert_equal(instance["customers"], list(range(1, N + 1)))
     assert instance["n_vehicles"] == 25
     assert instance["capacity"] == 200
     assert_equal(instance["node_coord"][N], [55, 85])

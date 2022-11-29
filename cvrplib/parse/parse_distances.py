@@ -61,7 +61,13 @@ def parse_distances(
     raise ValueError(f"Edge weight type {edge_weight_type} unknown.")
 
 
-def euclidean(coords: np.ndarray, round_func: Callable) -> np.ndarray:
+def _identity(num):
+    return num
+
+
+def euclidean(
+    coords: np.ndarray, round_func: Callable = _identity
+) -> np.ndarray:
     """
     Computes the pairwise Euclidean distances using the passed-in coordinates.
     `round_func` specifies how to round the computed distances.
@@ -69,7 +75,7 @@ def euclidean(coords: np.ndarray, round_func: Callable) -> np.ndarray:
     coords
         An n-by-2 array of location coordinates.
     round_func
-        A rounding function.
+        A rounding function. Default is the identity function.
     """
     n = len(coords)
     distances = np.zeros((n, n))

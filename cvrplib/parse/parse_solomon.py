@@ -1,14 +1,19 @@
-from typing import Any, Dict, List
+from typing import Callable, Dict, Optional, Union, no_type_check
 
 import numpy as np
 
 from .parse_distances import euclidean
 from .parse_utils import text2lines
 
+Instance = Dict[str, Union[str, int, float, np.ndarray]]
 
-def parse_solomon(text: str, distance_rounding=None):
+
+@no_type_check  # typing bug in mypy, see below
+def parse_solomon(
+    text: str, distance_rounding: Optional[Callable] = None
+) -> Instance:
     """
-    Parse the text of a Solomon VRPTW instance.
+    Parses the text of a Solomon VRPTW instance.
 
     text
         The instance text.
@@ -18,39 +23,27 @@ def parse_solomon(text: str, distance_rounding=None):
     """
     lines = text2lines(text)
 
-    data: Dict[str, Any] = {"name": lines[0]}
-    data.update(parse_vehicles(lines))
-    data.update(parse_customers(lines, distance_rounding))
-
-    return data
-
-
-def parse_vehicles(lines: List[str]) -> Dict:
-    data = {}
-    data["n_vehicles"], data["capacity"] = [
+    instance: Instance = {"name": lines[0]}
+    instance["n_vehicles"], instance["capacity"] = [
         int(num) for num in lines[3].split()
     ]
-    return data
 
+    data = np.genfromtxt(lines[6:], dtype=int)
 
-def parse_customers(lines: List[str], distance_rounding=None) -> Dict:
-    data = {}
+    instance["node_coord"] = data[:, 1:3]
+    instance["demands"] = data[:, 3]
+    instance["earliest"] = data[:, 4]
+    instance["latest"] = data[:, 5]
+    instance["service_times"] = data[:, 6]
 
-    A = np.genfromtxt(lines[6:], dtype=int)
-    n_customers = A.shape[0] - 1
-
-    data["node_coord"] = A[:, 1:3]
-    data["dimension"] = n_customers + 1
-    data["demands"] = A[:, 3]
-    data["n_customers"] = n_customers
-    data["customers"] = list(range(1, n_customers + 1))
-    data["earliest"] = A[:, 4]
-    data["latest"] = A[:, 5]
-    data["service_times"] = A[:, 6]
-
-    round_func = (
-        distance_rounding if callable(distance_rounding) else lambda x: x
+    # Bug in mypy: https://github.com/python/mypy/issues/4134
+    instance["distances"] = euclidean(
+        instance["node_coord"],
+        distance_rounding if distance_rounding is not None else _identity,
     )
-    data["distances"] = euclidean(data["node_coord"], round_func)
 
-    return data
+    return instance
+
+
+def _identity(x):
+    return x
