@@ -92,3 +92,11 @@ def test_lkh_3_vrplib(path):
     TODO Test for instance values
     """
     read_instance(path)
+
+
+@pytest.mark.parametrize("path", Path("data/euro-neurips/").glob("*.txt"))
+def test_euro_neurips_vrplib(path):
+    """
+    TODO Test for instance values
+    """
+    read_instance(path)

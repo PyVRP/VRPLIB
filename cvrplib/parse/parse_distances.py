@@ -56,6 +56,9 @@ def parse_distances(
             else:
                 raise ValueError(f"Lower row represention {lr_repr} unkown.")
 
+        if edge_weight_format == "FULL_MATRIX":
+            return {"distances": np.array(instance["edge_weight"])}
+
         raise ValueError(f"Edge weight format {edge_weight_format} unknown.")
 
     raise ValueError(f"Edge weight type {edge_weight_type} unknown.")

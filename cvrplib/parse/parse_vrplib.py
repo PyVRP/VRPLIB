@@ -28,7 +28,7 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
     -------
     A dictionary containing the instance data.
     """
-    instance = {}
+    instance: Instance = {}
     sections = defaultdict(list)  # Store and parse section data later
     section_name = None  # Used as key to store section data
 
@@ -59,9 +59,7 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
             depot_data[:-1] -= 1  # Normalize depot indices to start at zero
             instance[section_name] = depot_data
         elif section_name == "edge_weight":
-            # Explicit triangular distances are ragged nested lists, so we
-            # need to add dtype=object here.
-            instance[section_name] = np.array(section_data, dtype=object)
+            instance[section_name] = section_data
         else:
             instance[section_name] = np.array(section_data)
 
