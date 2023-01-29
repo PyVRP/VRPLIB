@@ -12,7 +12,7 @@ def read_solution(path: str):
 
     Returns
     -------
-    A dictionary that contains solution data.
+    A dictionary that contains the solution data.
 
     """
     with open(path, "r") as fi:
