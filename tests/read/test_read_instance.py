@@ -75,13 +75,14 @@ def test_C101():
     N = 100
 
     assert_equal(instance["name"], "C101")
-    assert_equal(instance["n_vehicles"], 25)
-    assert_equal(instance["capacity"], 200)
-    assert_equal(instance["node_coord"][N], [55, 85])
-    assert_equal(instance["demands"][N], 20)
-    assert_equal(instance["service_times"][N], 90)
-    assert_equal(instance["earliest"][N], 647)
-    assert_equal(instance["latest"][N], 726)
+    assert_equal(instance["vehicle_number"], 25)
+    assert_equal(instance["vehicle_capacity"], 200)
+    assert_equal(instance["xcoord"][N], 55)
+    assert_equal(instance["ycoord"][N], 85)
+    assert_equal(instance["demand"][N], 20)
+    assert_equal(instance["ready_time"][N], 647)
+    assert_equal(instance["due_date"][N], 726)
+    assert_equal(instance["service_time"][N], 90)
 
 
 @pytest.mark.parametrize(
