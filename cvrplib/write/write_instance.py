@@ -3,14 +3,26 @@ from typing import Any, Dict, Iterable
 import numpy as np
 
 
-def write_instance(path: str, instance: Dict[str, Any]):
+def write_instance(path: str, **kwargs):
     """
     Writes a VRP instance to file following the VRPLIB format [1].
 
+    Parameters
+    ---------
     path
-        The path of the file.
-    instance
-        The instance dictionary, containing problem specifications and data.
+        The file path.
+    **kwargs
+        Optional keyword arguments. Each keyword-value pair is written to the
+        instance file following convention:
+        1) If `value` is a string, integer or float, then it is considered a
+           problem specification and written as "{keyword}: {value}".
+        2) If `value` is an n-by-m dimensional array, then it is considered a
+           a data section and written as "{keyword}_SECTION" followed by `n`
+           lines, each line containing the tab-separated `m` values.
+
+        Otherwise, a ValueError is raised.
+
+        # TODO I think
 
     References
     ----------
