@@ -39,7 +39,7 @@ def parse_distances(
                 f"2D edge weight type {edge_weight_type} unknown."
             )
 
-        return {"distances": euclidean(instance["node_coord"], round_func)}
+        return {"distance": euclidean(instance["node_coord"], round_func)}
 
     if edge_weight_type == "EXPLICIT":
         edge_weight_format = instance["edge_weight_format"]
@@ -50,14 +50,14 @@ def parse_distances(
             lr_repr = get_representation(instance["edge_weight"], n=dimension)
 
             if lr_repr == "flattened":
-                return {"distances": from_flattened(edge_weight, n=dimension)}
+                return {"distance": from_flattened(edge_weight, n=dimension)}
             elif lr_repr == "triangular":
-                return {"distances": from_triangular(edge_weight)}
+                return {"distance": from_triangular(edge_weight)}
             else:
                 raise ValueError(f"Lower row represention {lr_repr} unkown.")
 
         if edge_weight_format == "FULL_MATRIX":
-            return {"distances": np.array(instance["edge_weight"])}
+            return {"distance": np.array(instance["edge_weight"])}
 
         raise ValueError(f"Edge weight format {edge_weight_format} unknown.")
 

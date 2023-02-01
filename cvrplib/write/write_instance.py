@@ -86,7 +86,7 @@ def write_depot_section(fi, depots):
     """
     fi.write("DEPOT_SECTION\n")
 
-    for idx in depots[:-1].flatten():
+    for idx in depots:
         fi.write(f"{idx + 1}\n")
 
     fi.write("-1\n")

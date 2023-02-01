@@ -60,7 +60,10 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
         elif section_name == "edge_weight":
             instance[section_name] = section_data
         else:
-            instance[section_name] = np.array(section_data)
+            section_data = np.array(section_data)
+            if section_data.ndim > 1 and section_data.shape[-1] == 1:
+                section_data = section_data.squeeze(-1)
+            instance[section_name] = section_data
 
     # We post-process distances (e.g., compute Euclidean distances from coords,
     # or create a full matrix from an upper-triangular one).

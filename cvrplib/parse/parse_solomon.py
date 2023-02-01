@@ -26,20 +26,19 @@ def parse_solomon(
     lines = text2lines(text)
 
     instance: Instance = {"name": lines[0]}
-    instance["n_vehicles"], instance["capacity"] = [
+    instance["vehicles"], instance["capacity"] = [
         int(num) for num in lines[3].split()
     ]
 
     data = np.genfromtxt(lines[6:], dtype=int)
 
     instance["node_coord"] = data[:, 1:3]
-    instance["demands"] = data[:, 3]
-    instance["earliest"] = data[:, 4]
-    instance["latest"] = data[:, 5]
-    instance["service_times"] = data[:, 6]
+    instance["demand"] = data[:, 3]
+    instance["time_window"] = data[:, 4:6]
+    instance["service_time"] = data[:, 6]
 
     # Bug in mypy: https://github.com/python/mypy/issues/4134
-    instance["distances"] = euclidean(
+    instance["distance"] = euclidean(
         instance["node_coord"],
         distance_rounding if distance_rounding is not None else _identity,
     )
