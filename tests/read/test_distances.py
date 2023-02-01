@@ -12,9 +12,7 @@ def test_solution_cost(case):
     Tests if the proviced cost of the solution is the same as the cost
     calculated directly from the instance distances.
     """
-    instance = read_instance(
-        case.instance_path, distance_rounding=case.round_func
-    )
+    instance = read_instance(case.instance_path)
     solution = read_solution(case.solution_path)
 
     # Manually compute the distance from the instance and solution

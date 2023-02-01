@@ -1,15 +1,12 @@
-import math
 from itertools import combinations
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict
 
 import numpy as np
 
 Instance = Dict[str, Any]
 
 
-def parse_distances(
-    instance: Instance, distance_rounding: Optional[Callable] = None
-) -> Dict[str, np.ndarray]:
+def parse_distances(instance: Instance) -> Dict[str, np.ndarray]:
     """
     Parses the distances. The specification "edge_weight_type" describes how
     the distances should be parsed. The two main ways are to calculate the
@@ -19,27 +16,22 @@ def parse_distances(
     instance
         The instance parsed so far. We assume that all VRPLIB specifications
         and data sections are already inside `instance`.
-    distance_rounding
-        A custom distance rounding function. The default is to follow the
-        VRPLIB convention, see ... # TODO
     """
     edge_weight_type = instance["edge_weight_type"]
 
-    if "2D" in edge_weight_type:  # Calculate using node coordinates
-        if callable(distance_rounding):
-            round_func = distance_rounding
-        elif edge_weight_type == "FLOOR_2D":
-            round_func = math.floor
-        elif edge_weight_type == "EXACT_2D":
-            round_func = lambda x: x  # noqa
-        elif edge_weight_type == "EUC_2D":
-            round_func = round
-        else:
-            raise ValueError(
-                f"2D edge weight type {edge_weight_type} unknown."
-            )
+    if "2D" in edge_weight_type:  # Euclidean distance on node coordinates
+        dists = euclidean(instance["node_coord"])
 
-        return {"distance": euclidean(instance["node_coord"], round_func)}
+        if edge_weight_type == "EUC_2D":
+            dists = np.round(dists)
+        elif edge_weight_type == "FLOOR_2D":
+            dists = np.floor(dists)
+        elif edge_weight_type == "EXACT_2D":
+            pass
+        else:
+            raise ValueError(f"Edge weight type {edge_weight_type} unknown.")
+
+        return {"distance": dists}
 
     if edge_weight_type == "EXPLICIT":
         edge_weight_format = instance["edge_weight_format"]
@@ -68,23 +60,18 @@ def _identity(num):
     return num
 
 
-def euclidean(
-    coords: np.ndarray, round_func: Callable = _identity
-) -> np.ndarray:
+def euclidean(coords: np.ndarray) -> np.ndarray:
     """
     Computes the pairwise Euclidean distances using the passed-in coordinates.
-    `round_func` specifies how to round the computed distances.
 
     coords
         An n-by-2 array of location coordinates.
-    round_func
-        A rounding function. Default is the identity function.
     """
     n = len(coords)
     distances = np.zeros((n, n))
 
     for (i, j) in combinations(range(n), r=2):
-        d_ij = round_func(np.linalg.norm(coords[i] - coords[j]))
+        d_ij = np.linalg.norm(coords[i] - coords[j])
         distances[i, j] = d_ij
         distances[j, i] = d_ij
 

@@ -11,7 +11,7 @@ Instance = Dict[str, Any]
 Lines = List[str]
 
 
-def parse_vrplib(text: str, distance_rounding=None) -> Instance:
+def parse_vrplib(text: str) -> Instance:
     """
     Parses the instance text. An instance consists of two main parts:
     - Problem specifications (name, dimension, edge_weight_type, ...)
@@ -21,8 +21,6 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
     ----------
     text
         The instance text.
-    distance_rounding
-        An optional function for custom distance rounding.
 
     Returns
     -------
@@ -69,7 +67,7 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
 
     # We post-process distances (e.g., compute Euclidean distances from coords,
     # or create a full matrix from an upper-triangular one).
-    distances = parse_distances(instance, distance_rounding)
+    distances = parse_distances(instance)
     instance.update(distances if distances else {})
 
     return instance
