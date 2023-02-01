@@ -56,12 +56,16 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
         if section_name == "depot":
             depot_data = np.array(section_data)
             # TODO Keep this convention of keep the original indices?
-            depot_data[:-1] -= 1  # Normalize depot indices to start at zero
-            instance[section_name] = depot_data
+            # Normalize depot indices to start at zero, strip end token and
+            # squeeze
+            instance[section_name] = depot_data[:-1].squeeze(-1) - 1
         elif section_name == "edge_weight":
             instance[section_name] = section_data
         else:
-            instance[section_name] = np.array(section_data)
+            section_data = np.array(section_data)
+            if section_data.ndim > 1 and section_data.shape[-1] == 1:
+                section_data = section_data.squeeze(-1)
+            instance[section_name] = section_data
 
     # We post-process distances (e.g., compute Euclidean distances from coords,
     # or create a full matrix from an upper-triangular one).
