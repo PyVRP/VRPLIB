@@ -2,7 +2,7 @@ from typing import Dict, Union
 
 import numpy as np
 
-from .parse_distances import euclidean
+from .parse_distances import pairwise_euclidean
 from .parse_utils import text2lines
 
 Instance = Dict[str, Union[str, int, float, np.ndarray]]
@@ -16,6 +16,10 @@ def parse_solomon(text: str) -> Instance:
     ----------
     text
         The instance text.
+
+    Returns
+    -------
+    The instance data as dictionary.
     """
     lines = text2lines(text)
 
@@ -30,6 +34,6 @@ def parse_solomon(text: str) -> Instance:
     instance["demand"] = data[:, 3]
     instance["time_window"] = data[:, 4:6]
     instance["service_time"] = data[:, 6]
-    instance["distance"] = euclidean(instance["node_coord"])
+    instance["distance"] = pairwise_euclidean(instance["node_coord"])
 
     return instance

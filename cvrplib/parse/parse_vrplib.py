@@ -24,7 +24,7 @@ def parse_vrplib(text: str) -> Instance:
 
     Returns
     -------
-    A dictionary containing the instance data.
+    The instance data as dictionary.
     """
     instance: Instance = {}
     sections = defaultdict(list)  # Store and parse section data later
@@ -61,8 +61,10 @@ def parse_vrplib(text: str) -> Instance:
             instance[section_name] = section_data
         else:
             section_data = np.array(section_data)
+
             if section_data.ndim > 1 and section_data.shape[-1] == 1:
                 section_data = section_data.squeeze(-1)
+
             instance[section_name] = section_data
 
     # We post-process distances (e.g., compute Euclidean distances from coords,

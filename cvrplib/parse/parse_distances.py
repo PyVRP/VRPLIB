@@ -13,14 +13,20 @@ def parse_distances(instance: Instance) -> Dict[str, np.ndarray]:
     Euclidean distances using the the node coordinates or by parsing an
     explicit distance matrix.
 
+    Parameters
+    ----------
     instance
-        The instance parsed so far. We assume that all VRPLIB specifications
-        and data sections are already inside `instance`.
+        The (partially) parsed instance. We assume that all VRPLIB
+        specifications and data are already stored in `instance`.
+
+    Returns
+    -------
+    An n-by-n distances matrix.
     """
     edge_weight_type = instance["edge_weight_type"]
 
     if "2D" in edge_weight_type:  # Euclidean distance on node coordinates
-        dists = euclidean(instance["node_coord"])
+        dists = pairwise_euclidean(instance["node_coord"])
 
         if edge_weight_type == "EUC_2D":
             dists = np.round(dists)
@@ -56,16 +62,18 @@ def parse_distances(instance: Instance) -> Dict[str, np.ndarray]:
     raise ValueError(f"Edge weight type {edge_weight_type} unknown.")
 
 
-def _identity(num):
-    return num
-
-
-def euclidean(coords: np.ndarray) -> np.ndarray:
+def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
     """
     Computes the pairwise Euclidean distances using the passed-in coordinates.
 
+    Parameters
+    ----------
     coords
         An n-by-2 array of location coordinates.
+
+    Returns
+    -------
+    An n-by-n distance matrix.
     """
     n = len(coords)
     distances = np.zeros((n, n))
