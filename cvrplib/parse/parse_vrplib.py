@@ -55,8 +55,10 @@ def parse_vrplib(text: str, distance_rounding=None) -> Instance:
 
         if section_name == "depot":
             depot_data = np.array(section_data)
-            depot_data[:-1] -= 1  # Normalize depot indices to start at zero
-            instance[section_name] = depot_data
+            # TODO Keep this convention of keep the original indices?
+            # Normalize depot indices to start at zero, strip end token and
+            # squeeze
+            instance[section_name] = depot_data[:-1].squeeze(-1) - 1
         elif section_name == "edge_weight":
             instance[section_name] = section_data
         else:
