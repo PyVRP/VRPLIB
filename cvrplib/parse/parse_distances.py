@@ -30,13 +30,13 @@ def parse_distances(instance: Instance) -> np.ndarray:
         distance = pairwise_euclidean(instance["node_coord"])
 
         if edge_type == "EUC_2D":
-            return np.round(distance)
+            return distance
 
         if edge_type == "FLOOR_2D":
             return np.floor(distance)
 
         if edge_type == "EXACT_2D":
-            return distance
+            return np.round(distance * 1000)
 
     if edge_type == "EXPLICIT":
         fmt = instance["edge_weight_format"]
