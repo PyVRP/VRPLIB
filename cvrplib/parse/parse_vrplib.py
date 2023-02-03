@@ -61,7 +61,7 @@ def parse_vrplib(text: str) -> Instance:
         instance[name] = data
 
     # Post-process edge weights (e.g., compute Euclidean distances from
-    # node coords, or create a full matrix from an upper-triangular one).
+    # node coords, or create a full distance matrix from a triangular one).
     instance["edge_weight"] = parse_distances(instance)
 
     return instance
