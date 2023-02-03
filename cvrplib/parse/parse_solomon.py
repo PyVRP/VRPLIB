@@ -1,17 +1,14 @@
-from typing import Callable, Dict, Optional, Union, no_type_check
+from typing import Dict, Union
 
 import numpy as np
 
-from .parse_distances import euclidean
+from .parse_distances import pairwise_euclidean
 from .parse_utils import text2lines
 
 Instance = Dict[str, Union[str, int, float, np.ndarray]]
 
 
-@no_type_check  # typing bug in mypy, see below
-def parse_solomon(
-    text: str, distance_rounding: Optional[Callable] = None
-) -> Instance:
+def parse_solomon(text: str) -> Instance:
     """
     Parses the text of a Solomon VRPTW instance.
 
@@ -19,9 +16,10 @@ def parse_solomon(
     ----------
     text
         The instance text.
-    distance_rounding
-        A custom distance rounding function. The default is to follow the
-        VRPLIB convention, see ... # TODO
+
+    Returns
+    -------
+    The instance data as dictionary.
     """
     lines = text2lines(text)
 
@@ -36,15 +34,6 @@ def parse_solomon(
     instance["demand"] = data[:, 3]
     instance["time_window"] = data[:, 4:6]
     instance["service_time"] = data[:, 6]
-
-    # Bug in mypy: https://github.com/python/mypy/issues/4134
-    instance["distance"] = euclidean(
-        instance["node_coord"],
-        distance_rounding if distance_rounding is not None else _identity,
-    )
+    instance["edge_weight"] = pairwise_euclidean(instance["node_coord"])
 
     return instance
-
-
-def _identity(x):
-    return x
