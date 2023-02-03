@@ -1,120 +1,89 @@
-import math
 from itertools import combinations
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict
 
 import numpy as np
 
 Instance = Dict[str, Any]
 
 
-def parse_distances(
-    instance: Instance, distance_rounding: Optional[Callable] = None
-) -> Dict[str, np.ndarray]:
+def parse_distances(instance: Instance) -> np.ndarray:
     """
     Parses the distances. The specification "edge_weight_type" describes how
     the distances should be parsed. The two main ways are to calculate the
     Euclidean distances using the the node coordinates or by parsing an
     explicit distance matrix.
 
+    Parameters
+    ----------
     instance
-        The instance parsed so far. We assume that all VRPLIB specifications
-        and data sections are already inside `instance`.
-    distance_rounding
-        A custom distance rounding function. The default is to follow the
-        VRPLIB convention, see ... # TODO
+        The (partially) parsed instance. We assume that all VRPLIB
+        specifications and data are already contained in ``instance``.
+
+    Returns
+    -------
+    np.ndarray
+        An n-by-n distances matrix.
     """
-    edge_weight_type = instance["edge_weight_type"]
+    edge_type = instance["edge_weight_type"]
 
-    if "2D" in edge_weight_type:  # Calculate using node coordinates
-        if callable(distance_rounding):
-            round_func = distance_rounding
-        elif edge_weight_type == "FLOOR_2D":
-            round_func = math.floor
-        elif edge_weight_type == "EXACT_2D":
-            round_func = lambda x: x  # noqa
-        elif edge_weight_type == "EUC_2D":
-            round_func = round
-        else:
-            raise ValueError(
-                f"2D edge weight type {edge_weight_type} unknown."
-            )
+    if "2D" in edge_type:  # Euclidean distance on node coordinates
+        distance = pairwise_euclidean(instance["node_coord"])
 
-        return {"distance": euclidean(instance["node_coord"], round_func)}
+        if edge_type == "EUC_2D":
+            return np.round(distance)
 
-    if edge_weight_type == "EXPLICIT":
-        edge_weight_format = instance["edge_weight_format"]
-        edge_weight = instance["edge_weight"]
+        if edge_type == "FLOOR_2D":
+            return np.floor(distance)
+
+        if edge_type == "EXACT_2D":
+            return distance
+
+    if edge_type == "EXPLICIT":
+        fmt = instance["edge_weight_format"]
+        weights = instance["edge_weight"]
         dimension = instance["dimension"]
 
-        if edge_weight_format == "LOWER_ROW":
-            lr_repr = get_representation(instance["edge_weight"], n=dimension)
-
-            if lr_repr == "flattened":
-                return {"distance": from_flattened(edge_weight, n=dimension)}
-            elif lr_repr == "triangular":
-                return {"distance": from_triangular(edge_weight)}
+        if fmt == "LOWER_ROW":
+            # The Eilon instances with are not correctly specified.
+            if "Eilon" in instance["comment"].lower():
+                return from_eilon(weights, n=dimension)
             else:
-                raise ValueError(f"Lower row represention {lr_repr} unkown.")
+                return from_lower_row(weights)
 
-        if edge_weight_format == "FULL_MATRIX":
-            return {"distance": np.array(instance["edge_weight"])}
+        if fmt == "FULL_MATRIX":
+            return np.array(instance["edge_weight"])
 
-        raise ValueError(f"Edge weight format {edge_weight_format} unknown.")
-
-    raise ValueError(f"Edge weight type {edge_weight_type} unknown.")
+    raise ValueError("Edge weight type or format unknown.")
 
 
-def _identity(num):
-    return num
-
-
-def euclidean(
-    coords: np.ndarray, round_func: Callable = _identity
-) -> np.ndarray:
+def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
     """
     Computes the pairwise Euclidean distances using the passed-in coordinates.
-    `round_func` specifies how to round the computed distances.
 
+    Parameters
+    ----------
     coords
         An n-by-2 array of location coordinates.
-    round_func
-        A rounding function. Default is the identity function.
+
+    Returns
+    -------
+    An n-by-n distance matrix.
     """
     n = len(coords)
     distances = np.zeros((n, n))
 
     for (i, j) in combinations(range(n), r=2):
-        d_ij = round_func(np.linalg.norm(coords[i] - coords[j]))
+        d_ij = np.linalg.norm(coords[i] - coords[j])
         distances[i, j] = d_ij
         distances[j, i] = d_ij
 
     return distances
 
 
-def get_representation(edge_weights: np.ndarray, n: int) -> str:
+def from_lower_row(triangular: np.ndarray) -> np.ndarray:
     """
-    Returns the representation type in which the lower row data is given.
-    This assumes that the instance has an explicit edge weight representation.
-    In such a case, some instances have a flattened representation (e.g.,
-    E-n13-k4), whereas others have a triangular one (e.g., ORTEC-n242-k12).
-
-
-    Parameters
-    ----------
-    edge_weights
-        The edge weights data.
-    n
-        The instance dimension.
-    """
-    if len(edge_weights) == n - 1:
-        return "triangular"
-    else:
-        return "flattened"
-
-
-def from_triangular(triangular: np.ndarray) -> np.ndarray:
-    """
-    Computes a full distances matrix from a triangular matrix.
+    Computes a full distances matrix from a lower row triangular matrix.
+    The triangular matrix does not contain the diagonal.
     """
     n = len(triangular) + 1
     distances = np.zeros((n, n))
@@ -127,17 +96,18 @@ def from_triangular(triangular: np.ndarray) -> np.ndarray:
     return distances
 
 
-def from_flattened(edge_weights: np.ndarray, n: int) -> np.ndarray:
+def from_eilon(edge_weights: np.ndarray, n: int) -> np.ndarray:
     """
-    Computes a full distances matrix from a flattened lower row representation.
+    Computes a full distances matrix from the Eilon instances with "LOWER_ROW"
+    edge weight format. The specification is incorrect, instead the edge weight
+    section needs to be parsed as a flattend, column-wise matrix.
 
-    The numbers in a flattened list correspond the matrix element indices
-    (1, 0), (2, 0), (2, 1), (3, 0), (3, 1), (3, 2), (4, 0), ...
+    See https://github.com/leonlan/CVRPLIB/issues/40.
     """
     distances = np.zeros((n, n))
 
     flattened = [dist for row in edge_weights for dist in row]
-    indices = sorted([(i, j) for (j, i) in combinations(range(n), r=2)])
+    indices = sorted([(i, j) for (i, j) in combinations(range(n), r=2)])
 
     for idx, (i, j) in enumerate(indices):
         d_ij = flattened[idx]

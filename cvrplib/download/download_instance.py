@@ -8,7 +8,7 @@ from .download_utils import find_set, is_vrptw
 
 
 @lru_cache()
-def download_instance(name: str, distance_rounding=None):
+def download_instance(name: str):
     """
     Downloads an instance from CVRPLIB.
 
@@ -25,4 +25,4 @@ def download_instance(name: str, distance_rounding=None):
     response = urlopen(CVRPLIB_URL + f"{find_set(name)}/{name}.{ext}")
 
     parser = parse_solomon if is_vrptw(name) else parse_vrplib
-    return parser(response.read().decode("utf-8"), distance_rounding)
+    return parser(response.read().decode("utf-8"))
