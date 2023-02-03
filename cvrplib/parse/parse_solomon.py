@@ -34,6 +34,6 @@ def parse_solomon(text: str) -> Instance:
     instance["demand"] = data[:, 3]
     instance["time_window"] = data[:, 4:6]
     instance["service_time"] = data[:, 6]
-    instance["distance"] = pairwise_euclidean(instance["node_coord"])
+    instance["edge_weight"] = pairwise_euclidean(instance["node_coord"])
 
     return instance

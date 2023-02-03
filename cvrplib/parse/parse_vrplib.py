@@ -1,13 +1,13 @@
 import re
 from collections import defaultdict
-from typing import Any, Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
 
 from .parse_distances import parse_distances
 from .parse_utils import infer_type, text2lines
 
-Instance = Dict[str, Any]
+Instance = Dict[str, Union[str, int, float, np.ndarray]]
 Lines = List[str]
 
 
@@ -34,7 +34,7 @@ def parse_vrplib(text: str) -> Instance:
         if "EOF" in line:
             break
 
-        if ": " in line:
+        if ":" in line:
             k, v = [x.strip() for x in re.split("\\s*: ", line, maxsplit=1)]
             instance[k.lower()] = infer_type(v)
         elif "_SECTION" in line:
@@ -46,30 +46,22 @@ def parse_vrplib(text: str) -> Instance:
             if section_name not in ["EDGE_WEIGHT", "DEPOT"]:
                 row = row[1:]
 
-            sections[section_name].append(row)
+            sections[section_name.lower()].append(row)
 
-    for section_name, section_data in sections.items():
-        section_name = section_name.lower()
+    for name, data_ in sections.items():
+        data = np.array(data_)
 
-        if section_name == "depot":
-            depot_data = np.array(section_data)
-            # TODO Keep this convention of keep the original indices?
-            # Normalize depot indices to start at zero, strip end token and
-            # squeeze
-            instance[section_name] = depot_data[:-1].squeeze(-1) - 1
-        elif section_name == "edge_weight":
-            instance[section_name] = section_data
-        else:
-            section_data = np.array(section_data)
+        if data.ndim > 1 and data.shape[-1] == 1:
+            data = data.squeeze(-1)
 
-            if section_data.ndim > 1 and section_data.shape[-1] == 1:
-                section_data = section_data.squeeze(-1)
+        if name == "depot":
+            # Normalize to start at zero and strip end token
+            data = data[:-1] - 1
 
-            instance[section_name] = section_data
+        instance[name] = data
 
-    # We post-process distances (e.g., compute Euclidean distances from coords,
-    # or create a full matrix from an upper-triangular one).
-    distances = parse_distances(instance)
-    instance.update(distances if distances else {})
+    # Post-process edge weights (e.g., compute Euclidean distances from
+    # node coords, or create a full matrix from an upper-triangular one).
+    instance["edge_weight"] = parse_distances(instance)
 
     return instance

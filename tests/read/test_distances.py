@@ -16,7 +16,7 @@ def test_solution_cost(case):
     solution = read_solution(case.solution_path)
 
     # Manually compute the distance from the instance and solution
-    dist = instance["distance"]
+    dist = instance["edge_weight"]
     cost = 0
 
     for route in solution["routes"]:

@@ -25,8 +25,7 @@ def write_instance(path: str, instance: Dict[str, Any]):
             if isinstance(v, (np.ndarray, list)):
                 write_section(fi, k.upper(), v)
             else:
-                fi.write(f"{k.upper()} : {v}")
-                fi.write("\n")
+                fi.write(f"{k.upper()} : {v}" + "\n")
 
         fi.write("EOF\n")
 
@@ -35,8 +34,8 @@ def write_section(fi, name: str, data: Iterable):
     """
     Writes a data section to file.
 
-    A data section starts with the section name in all uppercase. It is then
-    followed by row entries consisting of one or multiple values.
+    A data section starts with the section name in all uppercase, followed by
+    row entries consisting of one or multiple values.
     """
     if name == "EDGE_WEIGHT":
         write_edge_weight_section(fi, data)
