@@ -1,16 +1,24 @@
-from typing import Any, Dict, Iterable
+from typing import Iterable
 
 import numpy as np
 
 
-def write_instance(path: str, instance: Dict[str, Any]):
+def write_instance(path: str, **kwargs):
     """
     Writes a VRP instance to file following the VRPLIB format [1].
 
+    Parameters
+    ---------
     path
-        The path of the file.
-    instance
-        The instance dictionary, containing problem specifications and data.
+        The file path.
+    **kwargs
+        Optional keyword arguments. Each keyword-value pair is written to the
+        instance file following convention:
+        1) If ``value`` is a string, integer or float, then it is considered a
+           problem specification and written as "{keyword}: {value}".
+        2) If ``value`` is an n-by-m dimensional array, then it is considered a
+           a data section and written as "{keyword}_SECTION" followed by `n`
+           lines, each line containing the tab-separated `m` values.
 
     References
     ----------
@@ -21,7 +29,7 @@ def write_instance(path: str, instance: Dict[str, Any]):
 
     """
     with open(path, "w") as fi:
-        for k, v in instance.items():
+        for k, v in kwargs.items():
             if isinstance(v, (np.ndarray, list)):
                 write_section(fi, k.upper(), v)
             else:
@@ -30,7 +38,7 @@ def write_instance(path: str, instance: Dict[str, Any]):
         fi.write("EOF\n")
 
 
-def write_section(fi, name: str, data: Iterable):
+def write_section(fi, name: str, data_: Iterable):
     """
     Writes a data section to file.
 
@@ -38,21 +46,20 @@ def write_section(fi, name: str, data: Iterable):
     row entries consisting of one or multiple values.
     """
     if name == "EDGE_WEIGHT":
-        write_edge_weight_section(fi, data)
+        write_edge_weight_section(fi, data_)
     elif name == "DEPOT":
-        write_depot_section(fi, data)
+        write_depot_section(fi, data_)
     else:
+        data = np.array(data_)
+
+        if data.ndim == 1:
+            data = np.expand_dims(data, axis=1)
+
         fi.write(f"{name}_SECTION\n")
 
-        # TODO Refactor this
-        if len(np.shape(data)) == 1:
-            for idx, elt in enumerate(data, 1):
-                row = f"{idx}\t{elt}"
-                fi.write(row + "\n")
-        else:
-            for idx, elts in enumerate(data, 1):
-                row = f"{idx}\t" + "\t".join(str(elt) for elt in elts)
-                fi.write(row + "\n")
+        for idx, elts in enumerate(data, 1):
+            row = f"{idx}\t" + "\t".join(str(elt) for elt in elts)
+            fi.write(row + "\n")
 
 
 def write_edge_weight_section(fi, duration_matrix):

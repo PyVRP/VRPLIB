@@ -9,9 +9,6 @@ def text2lines(text: str) -> List[str]:
 
 
 def infer_type(s: str) -> Union[int, float, str]:
-    """
-    TODO this should not be called infer?
-    """
     try:
         return int(s)
     except ValueError:

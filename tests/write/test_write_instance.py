@@ -22,7 +22,7 @@ def test_dummy(tmp_path):
         demand=[0, 10, 30, 10],
     )
 
-    write_instance(tmp_path / name, instance)
+    write_instance(tmp_path / name, **instance)
 
     target = "\n".join(
         [
@@ -56,7 +56,7 @@ def test_cvrplib(tmp_path, case):
     """
     desired = read_instance(case.instance_path)
 
-    write_instance(tmp_path / case.instance_name, desired)
+    write_instance(tmp_path / case.instance_name, **desired)
     actual = read_instance(tmp_path / case.instance_name)
 
     assert_equal(actual, desired)
@@ -78,7 +78,7 @@ def test_lkh_3(tmp_path, instance_path):
 
     desired = read_instance(instance_path)
 
-    write_instance(tmp_path / "test.vrp", desired)
+    write_instance(tmp_path / "test.vrp", **desired)
     actual = read_instance(tmp_path / "test.vrp")
 
     assert_equal(actual, desired)

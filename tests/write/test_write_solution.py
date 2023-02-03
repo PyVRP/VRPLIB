@@ -13,24 +13,23 @@ def test_dummy(tmp_path):
     Tests if writing a dummy solution yields the correct result.
     """
     name = "test.sol"
-
-    solution = dict(
+    data = dict(
         routes=[[1, 2], [3, 4], [5]],
         cost=100,
         time=123.45,
         name=name,
     )
 
-    write_solution(tmp_path / name, solution)
+    write_solution(tmp_path / name, **data)
 
     target = "\n".join(
         [
-            "Route 1 : 1 2",
-            "Route 2 : 3 4",
-            "Route 3 : 5",
-            "Cost : 100",
-            "Time : 123.45",
-            "Name : test.sol",
+            "Route #1: 1 2",
+            "Route #2: 3 4",
+            "Route #3: 5",
+            "cost: 100",
+            "time: 123.45",
+            "name: test.sol",
             "",
         ]
     )
@@ -46,7 +45,7 @@ def test_cvrplib(tmp_path, case):
     """
     desired = read_solution(case.solution_path)
 
-    write_solution(tmp_path / "test.sol", desired)
+    write_solution(tmp_path / "test.sol", **desired)
     actual = read_solution(tmp_path / "test.sol")
 
     assert_equal(actual, desired)
@@ -61,7 +60,7 @@ def test_lkh_3(tmp_path, solution_path):
     """
     desired = read_solution(solution_path)
 
-    write_solution(tmp_path / "test.sol", desired)
+    write_solution(tmp_path / "test.sol", **desired)
     actual = read_solution(tmp_path / "test.sol")
 
     assert_equal(actual, desired)

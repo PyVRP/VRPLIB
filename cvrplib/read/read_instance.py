@@ -14,7 +14,7 @@ def read_instance(path, style="vrplib"):
 
     Returns
     -------
-    An dictionary that contains the instance data.
+    A dictionary that contains the instance data.
     """
     with open(path, "r") as fi:
         if style == "vrplib":
