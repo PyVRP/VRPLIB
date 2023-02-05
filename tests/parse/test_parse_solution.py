@@ -15,6 +15,10 @@ from cvrplib.parse.parse_solution import parse_solution
             "Route #1: 1 \n Route #2: 6\n comment: VRPLIB",
             {"routes": [[1], [6]], "comment": "VRPLIB"},
         ),
+        (
+            "Route #1: 1 \n Route #2: 6\n time 180.23",
+            {"routes": [[1], [6]], "time": 180.23},
+        ),
     ],
 )
 def test_parse_solution(text, data):
