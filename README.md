@@ -1,10 +1,7 @@
 # DEPRECATED
-This package has been renamed. Use `pip install vrplib` instead.
+This package has been renamed to [`vrplib`](https://github.com/leonlan/VRPLIB). Use `pip install vrplib` instead.
 
 # CVRPLIB
-[![PyPI version](https://badge.fury.io/py/cvrplib.svg)](https://badge.fury.io/py/cvrplib)
-[![cvrplib](https://github.com/leonlan/cvrplib/actions/workflows/cvrplib.yml/badge.svg)](https://github.com/leonlan/cvrplib/actions/workflows/cvrplib.yml)
-
 This Python package provides functions to read and download instances from the Capacitated Vehicle Routing Problem Library ([CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/)). CVRPLIB contains a large collection of CVRP and VRPTW benchmark instances and also keeps track of the currently best known solutions.
 
 
