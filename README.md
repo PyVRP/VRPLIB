@@ -82,4 +82,3 @@ All instances are parsed according to the CVRPLIB convention. See Section 3.3 in
 - The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded using `download`. Please download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/) and use the `read` function instead.
 
     
-
