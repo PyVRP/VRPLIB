@@ -2,7 +2,7 @@ from typing import Dict, List, Union
 
 from .parse_utils import infer_type, text2lines
 
-Solution = Dict[str, Union[int, float, str, List]]
+Solution = Dict[str, Union[float, str, List]]
 
 
 def parse_solution(text: str) -> Solution:
@@ -17,13 +17,12 @@ def parse_solution(text: str) -> Solution:
 
     Returns
     -------
-    A dictionary that contains solution data.
+    dict
+        The soluion data.
     """
-    lines = text2lines(text)
-
     solution: Solution = {"routes": []}
 
-    for line in lines:
+    for line in text2lines(text):
         if "Route" in line:
             route = [int(idx) for idx in line.split(":")[1].split(" ") if idx]
             solution["routes"].append(route)  # type: ignore
