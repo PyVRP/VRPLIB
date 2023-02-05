@@ -2,13 +2,24 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from numpy.testing import assert_array_equal, assert_equal
+from numpy.testing import assert_array_equal, assert_equal, assert_raises
 
 from cvrplib.read import read_instance
 
 from .._utils import CVRPLIB_DATA_DIR, LKH_3_DATA_DIR, selected_cases
 
-# TODO Add more tests to this - maybe make a csv?
+
+@pytest.mark.parametrize("instance_format", ["CVRPLIB", "LKH", "VRP"])
+def test_raise_unknown_instance_format(tmp_path, instance_format):
+    """
+    Tests if a ValueError is raised when an unknown instance format is passed.
+    """
+    path = tmp_path / "tmp.txt"
+    path.write_text("test")
+
+    with assert_raises(ValueError):
+        read_instance(path, instance_format)
+
 
 instances = [
     (
