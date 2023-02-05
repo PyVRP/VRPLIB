@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ '3.7', '3.8', '3.9', '3.10' ]
+        python-version: [ '3.8', '3.9', '3.10', '3.11' ]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -28,6 +28,7 @@ jobs:
           poetry install
       - name: Run pytest
         run: poetry run pytest
+      - uses: codecov/codecov-action@v3
   deploy:
     needs: build
     if: github.event_name == 'release' && github.event.action == 'created'
