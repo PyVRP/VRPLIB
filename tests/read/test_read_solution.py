@@ -8,9 +8,9 @@ from cvrplib import read_solution
 from .._utils import LKH_3_DATA_DIR, selected_cases
 
 
-def test_dummy(tmp_path):
+def test_read_dummy_solution(tmp_path):
     """
-    Tests if writing a dummy solution yields the correct result.
+    Tests if a dummy solution is correctly read and parsed.
     """
     name = "test.sol"
 

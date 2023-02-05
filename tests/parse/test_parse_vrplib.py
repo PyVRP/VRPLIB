@@ -74,6 +74,10 @@ def test_parse_specification(line, key, value):
             ["DEPOT_SECTION", "1", "-1"],
             ["depot", np.array([0])],
         ),
+        (
+            ["UNKNOWN_SECTION", "1 1", "1 -1"],
+            ["unknown", np.array([1, -1])],
+        ),
     ],
 )
 def test_parse_section(lines, desired):
