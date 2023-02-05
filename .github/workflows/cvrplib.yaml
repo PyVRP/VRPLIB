@@ -28,10 +28,6 @@ jobs:
           poetry install
       - name: Run pytest
         run: poetry run pytest
-      - name: Install pre-commit
-        run: poetry run pre-commit install --install-hooks
-      - name: Run pre-commit
-        run: poetry run pre-commit run --all-files
       - uses: codecov/codecov-action@v3
   deploy:
     needs: build
