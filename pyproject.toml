@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "cvrplib"
-version = "0.1.1"
-description = "Python library for reading and downloading CVRPLIB instances."
+name = "vrplib"
+version = "1.0.0"
+description = "Python library for reading vehicle routing problem instances."
 authors = ["Leon Lan <leon.lanyidong@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/leonlan/CVRPLIB"
+repository = "https://github.com/leonlan/VRPLIB"
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -19,7 +19,7 @@ pytest-cov = "^4.0.0"
 pre-commit = "^2.19.0"
 
 [pytest]
-pythonpath = [".", "cvrplib"]
+pythonpath = [".", "vrplib"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

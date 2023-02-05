@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_equal
 
-from cvrplib.parse.parse_vrplib import (
+from vrplib.parse.parse_vrplib import (
     group_specifications_and_sections,
     parse_section,
     parse_specification,

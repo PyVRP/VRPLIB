@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_equal, assert_raises
 
-from cvrplib.read import read_instance
+from vrplib.read import read_instance
 
 
 @pytest.mark.parametrize("instance_format", ["CVRPLIB", "LKH", "VRP"])

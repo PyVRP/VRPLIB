@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal, assert_raises
 
-from cvrplib.parse.parse_distances import (
+from vrplib.parse.parse_distances import (
     from_eilon,
     from_lower_row,
     is_triangular_number,

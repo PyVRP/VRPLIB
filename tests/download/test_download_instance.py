@@ -1,7 +1,7 @@
 import pytest
 from numpy.testing import assert_equal
 
-from cvrplib import download_instance
+from vrplib import download_instance
 
 from .._utils import selected_cases
 

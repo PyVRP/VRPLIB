@@ -1,6 +1,6 @@
 from numpy.testing import assert_equal
 
-from cvrplib import read_solution
+from vrplib import read_solution
 
 
 def test_read_dummy_solution(tmp_path):

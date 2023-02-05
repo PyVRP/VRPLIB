@@ -1,4 +1,4 @@
-from cvrplib.parse import parse_solomon, parse_vrplib
+from vrplib.parse import parse_solomon, parse_vrplib
 
 
 def read_instance(path, instance_format="vrplib"):

@@ -1,7 +1,7 @@
 import pytest
 from numpy.testing import assert_equal
 
-from cvrplib.parse.parse_solution import parse_solution
+from vrplib.parse.parse_solution import parse_solution
 
 
 @pytest.mark.parametrize(
