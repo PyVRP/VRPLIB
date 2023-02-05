@@ -59,15 +59,19 @@ def test_parse_specification(line, key, value):
     "lines, desired",
     [
         (
-            ["SERVICE_TIME_SECTION", [1, 2], [2, 3], [3, 100]],
+            ["SERVICE_TIME_SECTION", "1  2", "2  3", "3  100"],
             ["service_time", np.array([2, 3, 100])],
         ),
         (
-            ["TIME_WINDOW_SECTION", [1, 2, 3], [2, 1, 2]],
+            ["TIME_WINDOW_SECTION", "1  2  3", "2  1  2"],
             ["time_window", np.array([[2, 3], [1, 2]])],
         ),
         (
-            ["DEPOT_SECTION", [1], [-1]],
+            ["DEMAND_SECTION", "1  1.1", "2  2.2", "3  3.3"],
+            ["demand", np.array([1.1, 2.2, 3.3])],
+        ),
+        (
+            ["DEPOT_SECTION", "1", "-1"],
             ["depot", np.array([0])],
         ),
     ],

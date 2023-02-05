@@ -7,7 +7,6 @@ from .parse_distances import parse_distances
 from .parse_utils import infer_type, text2lines
 
 Instance = Dict[str, Union[str, float, np.ndarray]]
-Lines = List[str]
 
 
 def parse_vrplib(text: str) -> Instance:
@@ -31,7 +30,7 @@ def parse_vrplib(text: str) -> Instance:
     dict
         The instance data.
     """
-    instance: Instance = {}
+    instance = {}
 
     specs, sections = group_specifications_and_sections(text2lines(text))
 
@@ -42,6 +41,11 @@ def parse_vrplib(text: str) -> Instance:
     for section in sections:
         section, data = parse_section(section, instance)
         instance[section] = data
+
+    if "edge_weight" not in instance:
+        # Compute edge weights if there was no explicit edge weight section
+        edge_weights = parse_distances([], **instance)  # type: ignore
+        instance["edge_weight"] = edge_weights
 
     return instance
 
@@ -95,12 +99,13 @@ def parse_section(lines: List, instance: Dict) -> np.ndarray:
     Parses the data section into numpy arrays.
     """
     section = _remove_suffix(lines[0].strip(), "_SECTION").lower()
+    data_ = [[infer_type(n) for n in line.split()] for line in lines[1:]]
 
     if section == "edge_weight":
         # Parse separately because it may require additional processing
-        return section, parse_distances(lines[:1], instance)
+        return section, parse_distances(data_, **instance)
 
-    data = np.array(lines[1:])
+    data = np.array(data_)
 
     if section == "depot":
         # Remove end token and renormalize depots to start at zero
