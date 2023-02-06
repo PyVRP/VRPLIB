@@ -1,6 +1,6 @@
 import re
 
-from cvrplib.constants import CVRP_SETS, DIMACS_NAMES, XXL_NAMES
+from vrplib.constants import CVRP_SETS, DIMACS_NAMES, XXL_NAMES
 
 
 def find_set(instance_name: str) -> str:

@@ -1,7 +1,7 @@
 import pytest
 from numpy.testing import assert_
 
-from cvrplib import list_names
+from vrplib import list_names
 
 from .._utils import selected_cases
 

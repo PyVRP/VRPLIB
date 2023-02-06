@@ -1,7 +1,7 @@
 import pytest
 from numpy.testing import assert_equal
 
-from cvrplib.download.download_utils import find_set
+from vrplib.download.download_utils import find_set
 
 from .._utils import selected_cases
 

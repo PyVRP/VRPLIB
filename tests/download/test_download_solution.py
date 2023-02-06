@@ -1,7 +1,7 @@
 import pytest
 from numpy.testing import assert_almost_equal
 
-from cvrplib import download_solution
+from vrplib import download_solution
 
 from .._utils import selected_cases
 

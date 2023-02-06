@@ -1,4 +1,4 @@
-from cvrplib.parse import parse_solution
+from vrplib.parse import parse_solution
 
 
 def read_solution(path: str):

@@ -122,7 +122,7 @@ def from_eilon(edge_weights: np.ndarray) -> np.ndarray:
     edge weight format. The specification is incorrect, instead the edge weight
     section needs to be parsed as a flattend, column-wise triangular matrix.
 
-    See https://github.com/leonlan/CVRPLIB/issues/40.
+    See https://github.com/leonlan/VRPLIB/issues/40.
     """
     flattened = [dist for row in edge_weights for dist in row]
     n = int((2 * len(flattened)) ** 0.5) + 1  # The (n+1)-th triangular number
