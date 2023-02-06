@@ -15,27 +15,23 @@ pip install vrplib
 ```
 
 # Example usage
-## Reading VRPLIB instances and solutions
-```{python, prompt=TRUE}
+## Reading instances and solutions
+```python
 import vrplib
 
+# Read VRPLIB formatted instances
 instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
 solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
 
-instance.keys()
-dict_keys(['name', 'comment', 'type', 'dimension', 'edge_weight_type', 'capacity', 'node_coord', 'demand', 'depot', 'edge_weight'])
+# Both instance and solution are dictionaries
+# >>> instance.keys()
+# dict_keys(['name', 'comment', 'type', 'dimension', 'edge_weight_type', 'capacity', 'node_coord', 'demand', 'depot', 'edge_weight'])
+# >>> solutions.keys()
+# dict_keys(['routes', 'cost'])
 
-solutions.keys()
-dict_keys(['routes', 'cost'])
-```
-
-
-## Reading Solomon instances and solutions
-``` python
+# Read Solomon formatted instances
 instance = vrplib.read_instance("/path/to/C101.txt", instance_format="solomon")
-solution = vrplib.read_solution("/path/to/C101.sol") # only VRPLIB solution format
-
-
+solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
 ```
 
 ## Downloading instances from CVRPLIB 
@@ -66,16 +62,8 @@ This section contains additional notes about the `vrplib` package.
 - Problem specifications, which may contain metadata or problem-specific information such as the max number of vehicles. 
 - Problem data, which are often arrays of values describing, for example, customer service times and time windows. 
 
-### VRPLIB
-A VRPLIB instance consists of two parts, one part for problem specifications (as keyword-value pairs) and one part for problem data sections (as arrays).
-
-### Solomon
-A Solomon instance contains a section for vehicle data and a section for customer data.
-
-The keywords of a Solomon instance are modified in the returned `instance` object. 
-
-## On distances 
-The VRP literature uses a number of different conventions for how the distances matrix are computed. The `vrplib` library tries to follow the instance specifications as strictly as possible to compute the distances. 
+## On parsing distances 
+The `vrplib` library tries to follow the instance specifications as strictly as possible to compute the distances. 
 
 For VRPLIB instances, the distances computation is determined by the `EDGE_WEIGHT_TYPE` and possibly the `EDGE_WEIGHT_FORMAT` specifications. We currently support two categories of edge weight types:
 - `*_2D`: compute the Euclidean distances using the node coordinate data.
@@ -88,9 +76,9 @@ For VRPLIB instances, the distances computation is determined by the `EDGE_WEIGH
   
 More information about how VRPLIB specifications can be found [here](  http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) and [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
 
-Note that there are VRPLIB instances that use different rounding conventions in the literature, which are not necessarily specified in the instance. For example, the X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read this instance, the distances are not rounded because it uses the `EUC_2D` edge weight type specification, which does not assume rounding. But this can be easily solved by round the distances matrix manually.
+Note that there are VRPLIB instances that use different rounding conventions in the literature, which may not be specified in the instance. For example, the X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read instances from the X set, it will return unrounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type, i.e., no rouding. This can be easily solved by rounding the distances matrix manually.
 
-For Solomon-type instances, we compute the Euclidean distances and do not round the edges. A recent convention that was proposed during the [2021 DIMACS Vehicle Routing Implementation Challenge](http://dimacs.rutgers.edu/programs/challenge/vrp/vrptw/) is to round the Euclidean distances to one decimal. Similar to the X instance set, you can manually round the distances matrix after reading in the file.
+For Solomon-type instances, the distance computation is not specified in the instance file, hence we compute the Euclidean distances without rounding. A recent convention that was proposed during the [2021 DIMACS Vehicle Routing Implementation Challenge](http://dimacs.rutgers.edu/programs/challenge/vrp/vrptw/) is to round the Euclidean distances to one decimal. Similar to the X instance set, you can manually round the distances matrix.
 
 ## Additional remarks
 - Downloading instances may take up to a few seconds. 
