@@ -19,7 +19,7 @@ pip install vrplib
 ```python
 import vrplib
 
-# Read VRPLIB formatted instances
+# Read VRPLIB formatted instances (default)
 instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
 solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
 
