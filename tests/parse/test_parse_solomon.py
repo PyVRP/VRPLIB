@@ -3,7 +3,7 @@ from numpy.testing import assert_equal
 
 from vrplib.parse.parse_solomon import parse_solomon
 
-_INSTANCE = [
+_SOLOMON_INSTANCE = [
     "C101",
     "VEHICLE",
     "NUMBER     CAPACITY",
@@ -19,7 +19,7 @@ def test_parse_vrplib():
     """
     Checks if the Solomon instance lines are correctly parsed.
     """
-    text = "\n".join(_INSTANCE)
+    text = "\n".join(_SOLOMON_INSTANCE)
 
     actual = parse_solomon(text)
 

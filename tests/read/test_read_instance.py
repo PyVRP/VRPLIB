@@ -41,7 +41,7 @@ def test_read_vrplib_instance(tmp_path):
         )
         fi.write(instance)
 
-    target = dict(
+    desired = dict(
         name="VRPLIB",
         edge_weight_type="EXPLICIT",
         edge_weight_format="FULL_MATRIX",
@@ -50,7 +50,19 @@ def test_read_vrplib_instance(tmp_path):
         time_window=np.array([[1, 2]]),
     )
 
-    assert_equal(read_instance(tmp_path / name), target)
+    assert_equal(read_instance(tmp_path / name), desired)
+
+
+_SOLOMON_INSTANCE = [
+    "C101",
+    "VEHICLE",
+    "NUMBER     CAPACITY",
+    "25         200",
+    "CUSTOMER",
+    "CUST NO.  XCOORD.   YCOORD.  DEMAND   READY TIME  DUE DATE  SERVICE TIME",
+    "0      40         50          0          0       1236          0",
+    "1      45         68         10        912        967         90",
+]
 
 
 def test_read_solomon_instance(tmp_path):
@@ -60,30 +72,25 @@ def test_read_solomon_instance(tmp_path):
     name = "test.sol"
 
     with open(tmp_path / name, "w") as fi:
-        instance = "\n".join(
-            [
-                "NAME: VRPLIB",
-                "EDGE_WEIGHT_TYPE: EXPLICIT",
-                "EDGE_WEIGHT_FORMAT: FULL_MATRIX",
-                "EDGE_WEIGHT_SECTION",
-                "0  1",
-                "1  0",
-                "SERVICE_TIME_SECTION",
-                "1  1",
-                "TIME_WINDOW_SECTION",
-                "1  1   2",
-                "EOF",
-            ]
-        )
+        instance = "\n".join(_SOLOMON_INSTANCE)
         fi.write(instance)
 
-    target = dict(
-        name="VRPLIB",
-        edge_weight_type="EXPLICIT",
-        edge_weight_format="FULL_MATRIX",
-        edge_weight=np.array([[0, 1], [1, 0]]),
-        service_time=np.array([1]),
-        time_window=np.array([[1, 2]]),
-    )
+    dist = ((40 - 45) ** 2 + (50 - 68) ** 2) ** 0.5  # from 0 to 1
+    desired = {
+        "name": "C101",
+        "vehicles": 25,
+        "capacity": 200,
+        "node_coord": np.array([[40, 50], [45, 68]]),
+        "demand": np.array([0, 10]),
+        "time_window": np.array([[0, 1236], [912, 967]]),
+        "service_time": np.array([0, 90]),
+        "edge_weight": np.array([[0, dist], [dist, 0]]),
+    }
 
-    assert_equal(read_instance(tmp_path / name), target)
+    actual = read_instance(tmp_path / name, instance_format="solomon")
+    assert_equal(actual, desired)
+
+    # When the instance format is not specified, then it is parsed as a
+    # VRPLIB instance. This yields an empty instance.
+    actual = read_instance(tmp_path / name)
+    assert_equal(actual, {})
