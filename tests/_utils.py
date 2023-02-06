@@ -3,7 +3,7 @@ from pathlib import Path
 
 from vrplib.download.download_utils import find_set
 
-CVRPLIB_DATA_DIR = Path("data/vrplib/")
+CVRPLIB_DATA_DIR = Path("data/cvrplib/")
 LKH_3_DATA_DIR = Path("data/lkh-3/")
 
 
@@ -78,18 +78,3 @@ def selected_cases():
         P,
         X,
     ]
-
-
-def compute_distance(distances, routes):
-    """
-    Compute the costs of the passed-in routes using the instance data.
-    """
-    total = 0
-
-    for route in routes:
-        visits = [0] + route + [0]
-
-        for idx in range(len(visits) - 1):
-            total += distances[visits[idx]][visits[idx + 1]]
-
-    return total
