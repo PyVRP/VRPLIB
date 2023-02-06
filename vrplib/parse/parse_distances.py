@@ -92,7 +92,7 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
     n = len(coords)
     distances = np.zeros((n, n))
 
-    for (i, j) in combinations(range(n), r=2):
+    for i, j in combinations(range(n), r=2):
         d_ij = np.linalg.norm(coords[i] - coords[j])
         distances[i, j] = d_ij
         distances[j, i] = d_ij
