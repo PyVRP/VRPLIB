@@ -25,6 +25,8 @@ def test_download_vrplib_solution(tmp_path):
     with open(loc, "r") as fi:
         actual = fi.read()
 
+    # The best known solution is known to be optimal, so it is unlikely that
+    # the solution file in the repository will be outdated.
     with open(f"data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
@@ -44,6 +46,8 @@ def test_download_solomon_solution(tmp_path):
     with open(loc, "r") as fi:
         actual = fi.read()
 
+    # The best known solution is known to be optimal, so it is unlikely that
+    # the solution file in the repository will be outdated.
     with open(f"data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
