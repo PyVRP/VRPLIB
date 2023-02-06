@@ -6,6 +6,7 @@ from vrplib.parse.parse_vrplib import (
     group_specifications_and_sections,
     parse_section,
     parse_specification,
+    parse_vrplib,
 )
 
 
@@ -87,3 +88,41 @@ def test_parse_section(lines, desired):
     actual = parse_section(lines, {})
 
     assert_equal(actual, desired)
+
+
+def test_parse_vrplib():
+    instance = "\n".join(
+        [
+            "NAME: VRPLIB",
+            "EDGE_WEIGHT_TYPE: EXPLICIT",
+            "EDGE_WEIGHT_FORMAT: FULL_MATRIX",
+            "EDGE_WEIGHT_SECTION",
+            "0  1",
+            "1  0",
+            "SERVICE_TIME_SECTION",
+            "1  1",
+            "TIME_WINDOW_SECTION",
+            "1  1   2",
+            "EOF",
+        ]
+    )
+    actual = parse_vrplib(instance)
+
+    desired = dict(
+        name="VRPLIB",
+        edge_weight_type="EXPLICIT",
+        edge_weight_format="FULL_MATRIX",
+        edge_weight=np.array([[0, 1], [1, 0]]),
+        service_time=np.array([1]),
+        time_window=np.array([[1, 2]]),
+    )
+
+    assert_equal(actual, desired)
+
+
+def test_empty_text():
+    """
+    Tests if an empty text file is still read correctly.
+    """
+    actual = parse_vrplib("")
+    assert_equal(actual, {})

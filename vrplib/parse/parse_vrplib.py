@@ -42,7 +42,7 @@ def parse_vrplib(text: str) -> Instance:
         section, data = parse_section(section, instance)
         instance[section] = data
 
-    if "edge_weight" not in instance:
+    if instance and "edge_weight" not in instance:
         # Compute edge weights if there was no explicit edge weight section
         edge_weights = parse_distances([], **instance)  # type: ignore
         instance["edge_weight"] = edge_weights
