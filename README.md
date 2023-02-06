@@ -23,16 +23,19 @@ import vrplib
 instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
 solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
 
-# Both instance and solution are dictionaries
-# >>> instance.keys()
-# dict_keys(['name', 'comment', 'type', 'dimension', 'edge_weight_type', 'capacity', 'node_coord', 'demand', 'depot', 'edge_weight'])
-# >>> solutions.keys()
-# dict_keys(['routes', 'cost'])
-
 # Read Solomon formatted instances
 instance = vrplib.read_instance("/path/to/C101.txt", instance_format="solomon")
 solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
 ```
+
+`instance` and `solution` are dictionaries. 
+``` python
+instance.keys()
+# dict_keys(['name', 'comment', 'type', 'dimension', ..., 'edge_weight'])
+solutions.keys()
+# dict_keys(['routes', 'cost'])
+```
+
 
 ## Downloading instances from CVRPLIB 
 ``` python
