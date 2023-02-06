@@ -82,7 +82,7 @@ More information about how VRPLIB specifications can be found [here](  http://co
 
 Note that there are VRPLIB instances that use different rounding conventions in the literature, which may not be specified in the instance. For example, the X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read instances from the X set, it will return unrounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type, i.e., no rouding. This can be easily solved by rounding the distances matrix manually.
 
-For Solomon-type instances, the distance computation is not specified in the instance file, hence we compute the Euclidean distances without rounding. A recent convention that was proposed during the [2021 DIMACS Vehicle Routing Implementation Challenge](http://dimacs.rutgers.edu/programs/challenge/vrp/vrptw/) is to round the Euclidean distances to one decimal. Similar to the X instance set, you can manually round the distances matrix.
+For Solomon-type instances, the distance computation is not specified in the instance file, hence we compute the Euclidean distances without rounding. A recent convention that was proposed during the [2021 DIMACS Vehicle Routing Implementation Challenge](http://dimacs.rutgers.edu/programs/challenge/vrp/vrptw/) is to truncate the Euclidean distances to one decimal. Similar to the X instance set, you can manually modify the distances matrix.
 
 ## Additional remarks
 - Downloading instances may take up to a few seconds. 
