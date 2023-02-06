@@ -1,8 +1,7 @@
 from functools import lru_cache
 from urllib.request import urlopen
 
-from vrplib.constants import CVRPLIB_URL
-
+from .constants import CVRPLIB_URL
 from .download_utils import find_set, is_vrptw
 
 
