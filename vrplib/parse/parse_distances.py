@@ -101,16 +101,25 @@ def from_lower_row(triangular: np.ndarray) -> np.ndarray:
     """
     Computes a full distances matrix from a lower row triangular matrix.
     The triangular matrix should not contain the diagonal.
+
+    Parameters
+    ----------
+    triangular
+        A list of lists, each list representing the entries of a row in a
+        lower triangular matrix without diagonals.
+
+    Returns
+    -------
+    np.ndarray
+        A n-by-n distances matrix.
     """
     n = len(triangular) + 1
     distances = np.zeros((n, n))
 
-    for j, i in combinations(range(n), r=2):
-        t_ij = triangular[i - 1][j]
-        distances[i, j] = t_ij
-        distances[j, i] = t_ij
+    for i in range(n - 1):
+        distances[i + 1, : i + 1] = triangular[i]
 
-    return distances
+    return distances + distances.T
 
 
 def from_eilon(edge_weights: np.ndarray) -> np.ndarray:
