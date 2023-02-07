@@ -106,7 +106,7 @@ def from_lower_row(triangular: np.ndarray) -> np.ndarray:
     ----------
     triangular
         A list of lists, each list representing the entries of a row in a
-        lower triangular matrix without diagonals.
+        lower triangular matrix without diagonal entries.
 
     Returns
     -------
