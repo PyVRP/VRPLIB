@@ -42,10 +42,11 @@ solutions.keys()
 ``` python
 import vrplib
 
-instance = vrplib.download_instance("X-n101-k25.vrp")
-solution = vrplib.download_solution("X-n101-k25.sol")
+# Download the instance and solution to a local file
+vrplib.download_instance("X-n101-k25", "/path/to/X-n101-k25.vrp")
+vrplib.download_solution("X-n101-k25", "/path/to/X-n101-k25.sol")
 
-# List instance names that can be downloaded 
+# List all instance names that can be downloaded 
 vrplib.list_names()                      # All instance names
 vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
 vrplib.list_names(vrp_type='cvrp')       # Only CVRP instances
