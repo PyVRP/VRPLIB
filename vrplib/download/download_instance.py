@@ -1,11 +1,9 @@
-from functools import lru_cache
 from urllib.request import urlopen
 
 from .constants import CVRPLIB_URL
 from .download_utils import find_set, is_vrptw
 
 
-@lru_cache()
 def download_instance(name: str, path: str):
     """
     Downloads an instance file from CVRPLIB and saves it at the specified path.

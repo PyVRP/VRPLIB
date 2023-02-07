@@ -1,11 +1,9 @@
-from functools import lru_cache
 from urllib.request import urlopen
 
 from .constants import CVRPLIB_URL
 from .download_utils import find_set
 
 
-@lru_cache()
 def download_solution(name: str, path: str):
     """
     Downloads a solution file from CVRPLIB and saves it at the specified path.
