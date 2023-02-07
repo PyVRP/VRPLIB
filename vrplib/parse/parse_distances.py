@@ -10,7 +10,7 @@ def parse_distances(
     edge_weight_format: Optional[str] = None,
     node_coord: Optional[np.ndarray] = None,
     comment: Optional[str] = None,
-    **kwargs: Union[float, str, np.ndarray]  # noqa
+    **kwargs: Union[float, str, np.ndarray],  # noqa
 ) -> np.ndarray:
     """
     Parses the distances. The specification "edge_weight_type" describes how
@@ -87,33 +87,39 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
     Returns
     -------
     np.ndarray
-        An n-by-n distance matrix.
+        An n-by-n Euclidean distances matrix.
+
     """
-    n = len(coords)
-    distances = np.zeros((n, n))
-
-    for i, j in combinations(range(n), r=2):
-        d_ij = np.linalg.norm(coords[i] - coords[j])
-        distances[i, j] = d_ij
-        distances[j, i] = d_ij
-
-    return distances
+    # Subtract each coordinate from every other coordinate
+    diff = coords[:, np.newaxis, :] - coords
+    square_diff = diff**2
+    square_dist = np.sum(square_diff, axis=-1)
+    return np.sqrt(square_dist)
 
 
 def from_lower_row(triangular: np.ndarray) -> np.ndarray:
     """
     Computes a full distances matrix from a lower row triangular matrix.
     The triangular matrix should not contain the diagonal.
+
+    Parameters
+    ----------
+    triangular
+        A list of lists, each list representing the entries of a row in a
+        lower triangular matrix without diagonal entries.
+
+    Returns
+    -------
+    np.ndarray
+        A n-by-n distances matrix.
     """
     n = len(triangular) + 1
     distances = np.zeros((n, n))
 
-    for j, i in combinations(range(n), r=2):
-        t_ij = triangular[i - 1][j]
-        distances[i, j] = t_ij
-        distances[j, i] = t_ij
+    for i in range(n - 1):
+        distances[i + 1, : i + 1] = triangular[i]
 
-    return distances
+    return distances + distances.T
 
 
 def from_eilon(edge_weights: np.ndarray) -> np.ndarray:
