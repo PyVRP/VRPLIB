@@ -15,9 +15,13 @@ def download_instance(name: str, path: str):
         listed in `vrplib.list_instances()`.
     path
         The path where the instance file should be saved.
+
+    Raises
+    ------
     """
     ext = "txt" if is_vrptw(name) else "vrp"
-    response = urlopen(CVRPLIB_URL + f"{find_set(name)}/{name}.{ext}")
+    url = CVRPLIB_URL + f"{find_set(name)}/{name}.{ext}"
+    response = urlopen(url, timeout=30)
 
     instance_text = response.read().decode("utf-8")
 
