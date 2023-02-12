@@ -1,4 +1,5 @@
-from numpy.testing import assert_equal, assert_raises
+from numpy.testing import assert_raises
+
 from vrplib.download import download_set
 
 
