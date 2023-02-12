@@ -108,14 +108,14 @@ def test_parse_vrplib():
     )
     actual = parse_vrplib(instance)
 
-    desired = dict(
-        name="VRPLIB",
-        edge_weight_type="EXPLICIT",
-        edge_weight_format="FULL_MATRIX",
-        edge_weight=np.array([[0, 1], [1, 0]]),
-        service_time=np.array([1]),
-        time_window=np.array([[1, 2]]),
-    )
+    desired = {
+        "name": "VRPLIB",
+        "edge_weight_type": "EXPLICIT",
+        "edge_weight_format": "FULL_MATRIX",
+        "edge_weight": np.array([[0, 1], [1, 0]]),
+        "service_time": np.array([1]),
+        "time_window": np.array([[1, 2]]),
+    }
 
     assert_equal(actual, desired)
 
