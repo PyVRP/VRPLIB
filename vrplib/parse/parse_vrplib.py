@@ -108,6 +108,9 @@ def parse_section(lines: List, instance: Dict) -> np.ndarray:
     data = np.array(data_)
 
     if section == "depot":
+        if len(data) < 2 or data[-1] != -1:
+            raise RuntimeError("Depot section does not end with -1.")
+
         # Remove end token and renormalize depots to start at zero
         data = data[:-1] - 1
     else:

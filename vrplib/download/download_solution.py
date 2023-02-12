@@ -16,7 +16,9 @@ def download_solution(name: str, path: str):
     path
         The path where the solution file should be saved.
     """
-    response = urlopen(CVRPLIB_URL + f"{find_set(name)}/{name}.sol")
+    url = CVRPLIB_URL + f"{find_set(name)}/{name}.sol"
+    response = urlopen(url, timeout=30)
+
     solution_text = response.read().decode("utf-8")
 
     with open(path, "w") as fi:

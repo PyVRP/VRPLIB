@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from numpy.testing import assert_equal
+from numpy.testing import assert_equal, assert_raises
 
 from vrplib.parse.parse_vrplib import (
     group_specifications_and_sections,
@@ -90,6 +90,23 @@ def test_parse_section(lines, desired):
     assert_equal(actual, desired)
 
 
+@pytest.mark.parametrize(
+    "lines",
+    [
+        ["DEPOT_SECTION"],
+        ["DEPOT_SECTION", "1"],
+        ["DEPOT_SECTION", "1", "-100"],
+    ],
+)
+def test_depot_section_raise_runtime_error(lines):
+    """
+    Tests if a RuntimeError is raised when the depot section does not end
+    with a -1.
+    """
+    with assert_raises(RuntimeError):
+        parse_section(lines, {})
+
+
 def test_parse_vrplib():
     instance = "\n".join(
         [
@@ -108,14 +125,14 @@ def test_parse_vrplib():
     )
     actual = parse_vrplib(instance)
 
-    desired = dict(
-        name="VRPLIB",
-        edge_weight_type="EXPLICIT",
-        edge_weight_format="FULL_MATRIX",
-        edge_weight=np.array([[0, 1], [1, 0]]),
-        service_time=np.array([1]),
-        time_window=np.array([[1, 2]]),
-    )
+    desired = {
+        "name": "VRPLIB",
+        "edge_weight_type": "EXPLICIT",
+        "edge_weight_format": "FULL_MATRIX",
+        "edge_weight": np.array([[0, 1], [1, 0]]),
+        "service_time": np.array([1]),
+        "time_window": np.array([[1, 2]]),
+    }
 
     assert_equal(actual, desired)
 
