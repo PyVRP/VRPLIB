@@ -1,5 +1,4 @@
-import pytest
-from numpy.testing import assert_equal
+from numpy.testing import assert_equal, assert_raises
 
 from vrplib import download_solution
 
@@ -8,7 +7,7 @@ def test_raise_invalid_name():
     """
     Raise an error if the passed-in name is invalid.
     """
-    with pytest.raises(ValueError):
+    with assert_raises(ValueError):
         download_solution("invalid_name", "tmp")
 
 
