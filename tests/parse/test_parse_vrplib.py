@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from numpy.testing import assert_equal
+from numpy.testing import assert_equal, assert_raises
 
 from vrplib.parse.parse_vrplib import (
     group_specifications_and_sections,
@@ -88,6 +88,23 @@ def test_parse_section(lines, desired):
     actual = parse_section(lines, {})
 
     assert_equal(actual, desired)
+
+
+@pytest.mark.parametrize(
+    "lines",
+    [
+        ["DEPOT_SECTION"],
+        ["DEPOT_SECTION", "1"],
+        ["DEPOT_SECTION", "1", "-100"],
+    ],
+)
+def test_depot_section_raise_runtime_error(lines):
+    """
+    Tests if a RuntimeError is raised when the depot section does not end
+    with a -1.
+    """
+    with assert_raises(RuntimeError):
+        parse_section(lines, {})
 
 
 def test_parse_vrplib():
