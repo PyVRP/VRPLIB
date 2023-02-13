@@ -62,8 +62,8 @@ def parse_distances(
             raise ValueError("Edge weight format unknown.")
 
         if edge_weight_format == "LOWER_ROW":
-            # Eilon instances edge weight specifications are incorrect.
-            # TODO Find a better way to identify Eilon instances?
+            # TODO Eilon instances edge weight specifications are incorrect in
+            # (C)VRPLIB format. Find a better way to identify Eilon instances.
             if comment is not None and "Eilon" in comment:
                 return from_eilon(data)
             else:
