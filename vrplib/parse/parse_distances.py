@@ -38,9 +38,6 @@ def parse_distances(
     np.ndarray
         An n-by-n distances matrix.
     """
-    if edge_weight_type not in ["EUC_2D", "FLOOR_2D", "EXACT_2D", "EXPLICIT"]:
-        raise ValueError("Edge weight type unknown.")
-
     if "2D" in edge_weight_type:  # Euclidean distance on node coordinates
         if node_coord is None:
             raise ValueError(
@@ -58,9 +55,6 @@ def parse_distances(
             return np.round(distance * 1000)
 
     if edge_weight_type == "EXPLICIT":
-        if edge_weight_format not in ["LOWER_ROW", "FULL_MATRIX"]:
-            raise ValueError("Edge weight format unknown.")
-
         if edge_weight_format == "LOWER_ROW":
             # TODO Eilon instances edge weight specifications are incorrect in
             # (C)VRPLIB format. Find a better way to identify Eilon instances.

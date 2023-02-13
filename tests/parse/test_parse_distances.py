@@ -10,30 +10,14 @@ from vrplib.parse.parse_distances import (
 )
 
 
-@pytest.mark.parametrize("edge_weight_type", ["EUC_4D", "MANHATTAN", "Lnorm"])
-def test_unknown_edge_weight_type(edge_weight_type):
-    instance = {"edge_weight_type": edge_weight_type}
-    with pytest.raises(ValueError):
-        parse_distances([], **instance)
-
-
-@pytest.mark.parametrize("edge_weight_format", ["", "empty", "HALF_MATRIX"])
-def test_unknown_explicit_edge_weight_format(edge_weight_format):
-    """
-    Tests if an error is raised when an unknown edge weight format is specified
-    together with an ``EXPLICIT`` edge weight type.
-    """
-    instance = {
-        "edge_weight_type": "EXPLICIT",
-        "edge_weight_format": edge_weight_format,
-    }
-    with pytest.raises(ValueError):
-        parse_distances([], **instance)
-
-
 @pytest.mark.parametrize(
     "edge_weight_type, edge_weight_format",
-    [("", ""), ("IMPLICIT", "LOWER_ROW"), ("TEST", "ABCD")],
+    [
+        ("2D", ""),  # unknown 2D type
+        ("EXPLICIT", ""),  # explicit without format
+        ("IMPLICIT", "LOWER_ROW"),  # unknown type
+        ("TEST", "ABCD"),  # unknown type and format
+    ],
 )
 def test_unknown_edge_weight_type_and_format(
     edge_weight_type, edge_weight_format
