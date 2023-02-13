@@ -137,6 +137,41 @@ def test_parse_vrplib():
     assert_equal(actual, desired)
 
 
+def test_parse_vrplib_no_explicit_edge_weights():
+    """
+    Tests if the edge weight section is calculated when the instance does not
+    contain an explicit section.
+    """
+    instance = "\n".join(
+        [
+            "NAME: VRPLIB",
+            "EDGE_WEIGHT_TYPE: FLOOR_2D",
+            "NODE_COORD_SECTION",
+            "1  0   1",
+            "2  1   0",
+            "SERVICE_TIME_SECTION",
+            "1  1",
+            "2  1",
+            "TIME_WINDOW_SECTION",
+            "1  1   2",
+            "2  1   2",
+            "EOF",
+        ]
+    )
+    actual = parse_vrplib(instance)
+
+    desired = {
+        "name": "VRPLIB",
+        "edge_weight_type": "FLOOR_2D",
+        "edge_weight": np.array([[0, 1], [1, 0]]),
+        "node_coord": np.array([[0, 1], [1, 0]]),
+        "service_time": np.array([1, 1]),
+        "time_window": np.array([[1, 2], [1, 2]]),
+    }
+
+    assert_equal(actual, desired)
+
+
 def test_empty_text():
     """
     Tests if an empty text file is still read correctly.
