@@ -82,8 +82,10 @@ def test_parse_euclidean_distances(edge_weight_type, desired):
     assert_almost_equal(actual, desired)
 
 
-@pytest.mark.parametrize("comment", ["Eilon", "", "None"])
-def test_parse_lower_row(comment):
+@pytest.mark.parametrize(
+    "comment, func", [("Eilon", from_eilon), (None, from_lower_row)]
+)
+def test_parse_lower_row(comment, func):
     """
     Tests if a ``LOWER ROW`` instance is parsed as Eilon instance or regular
     instance. Eilon instances do not contain a proper lower row matrix, but
@@ -98,26 +100,7 @@ def test_parse_lower_row(comment):
         "comment": comment,
     }
 
-    if "Eilon" in comment:
-        desired = np.array(
-            [
-                [0, 1, 2, 3],
-                [1, 0, 4, 5],
-                [2, 4, 0, 6],
-                [3, 5, 6, 0],
-            ]
-        )
-    else:
-        desired = np.array(
-            [
-                [0, 1, 2, 4],
-                [1, 0, 3, 5],
-                [2, 3, 0, 6],
-                [4, 5, 6, 0],
-            ]
-        )
-
-    assert_equal(parse_distances(**instance), desired)
+    assert_equal(parse_distances(**instance), func(instance["data"]))
 
 
 def test_from_lower_row():
