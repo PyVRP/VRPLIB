@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vrplib"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python library for reading vehicle routing problem instances."
 authors = ["Leon Lan <leon.lanyidong@gmail.com>"]
 license = "MIT"
