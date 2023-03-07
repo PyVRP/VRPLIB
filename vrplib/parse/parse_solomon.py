@@ -1,11 +1,11 @@
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 import numpy as np
 
 from .parse_distances import pairwise_euclidean
 from .parse_utils import text2lines
 
-Instance = Dict[str, Union[str, int, float, np.ndarray]]
+Instance = Dict[str, Union[str, float, np.ndarray]]
 
 
 def parse_solomon(text: str) -> Instance:
@@ -23,6 +23,8 @@ def parse_solomon(text: str) -> Instance:
     """
     lines = text2lines(text)
 
+    is_valid_solomon_instance(lines)
+
     instance: Instance = {"name": lines[0]}
     instance["vehicles"], instance["capacity"] = [
         int(num) for num in lines[3].split()
@@ -37,3 +39,32 @@ def parse_solomon(text: str) -> Instance:
     instance["edge_weight"] = pairwise_euclidean(instance["node_coord"])
 
     return instance
+
+
+def is_valid_solomon_instance(lines: List[str]):
+    """
+    Checks if the passed-in lines follow the Solomon format requirements.
+    """
+    BASE = "Instance does not conform to the Solomon format. "
+    MSG = BASE + "Expected {desired}, got {actual}."
+
+    desired = "VEHICLE"
+    if lines[1] != desired:
+        raise RuntimeError(MSG.format(actual=lines[1], desired=desired))
+
+    desired = "NUMBER CAPACITY"
+    if lines[2].split() != desired.split():
+        raise RuntimeError(MSG.format(actual=lines[2], desired=desired))
+
+    try:
+        actual = [int(x) for x in lines[3].split()]
+        assert len(actual) == 2
+    except (ValueError, AssertionError):
+        INFO = f"Expected two integers, got {lines[3]}."
+        raise RuntimeError(BASE + INFO) from None
+
+    desired = "CUSTOMER"
+    if lines[4] != desired:
+        raise RuntimeError(MSG.format(actual=actual, desired=desired))
+
+    # TODO Validate that lines[5] are data headers

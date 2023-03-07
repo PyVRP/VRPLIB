@@ -17,8 +17,9 @@ _DATA_DIR = Path("tests/data/")
 @mark.parametrize(
     "name",
     [
-        "C101.txt",  # solomon file
-        "C101.sol",  # solution file
+        "C101.txt",  # solomon
+        "C1_2_1.txt",  # solomon
+        "C101.sol",  # solution
         "NoColonSpecification.txt",
     ],
 )
