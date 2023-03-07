@@ -1,6 +1,6 @@
 import numpy as np
-import pytest
 from numpy.testing import assert_equal, assert_raises
+from pytest import mark
 
 from vrplib.parse.parse_vrplib import (
     group_specifications_and_sections,
@@ -8,6 +8,36 @@ from vrplib.parse.parse_vrplib import (
     parse_specification,
     parse_vrplib,
 )
+
+
+@mark.parametrize(
+    "path",
+    [
+        "data/cvrplib/C101.txt",  # solomon file
+        "data/cvrplib/C101.sol",  # a solution
+        "tests/data/NoColonSpecification.txt",
+    ],
+)
+def test_raise_invalid_vrplib_format(path):
+    """
+    Tests if a RuntimeError is raised when the text is not in VRPLIB format.
+    """
+    with open(path, "r") as fh:
+        with assert_raises(RuntimeError):
+            parse_vrplib(fh.read())
+
+
+@mark.parametrize(
+    "path",
+    [
+        "data/cvrplib/A-n32-k5.vrp",
+        "data/cvrplib/ORTEC-n242-k12.vrp",
+        "tests/data/empty.txt",
+    ],
+)
+def test_no_raise_valid_vrplib_format(path):
+    with open(path, "r") as fh:
+        parse_vrplib(fh.read())
 
 
 def test_group_specifications_and_sections():
@@ -35,7 +65,7 @@ def test_group_specifications_and_sections():
     assert_equal(actual_sections, [sections[:3], sections[3:]])
 
 
-@pytest.mark.parametrize(
+@mark.parametrize(
     "line, key, value",
     [
         ("NAME : Antwerp 1", "name", "Antwerp 1"),  # Whitespace around :
@@ -56,7 +86,7 @@ def test_parse_specification(line, key, value):
     assert_equal(v, value)
 
 
-@pytest.mark.parametrize(
+@mark.parametrize(
     "lines, desired",
     [
         (
@@ -90,7 +120,7 @@ def test_parse_section(lines, desired):
     assert_equal(actual, desired)
 
 
-@pytest.mark.parametrize(
+@mark.parametrize(
     "lines",
     [
         ["DEPOT_SECTION"],
@@ -170,11 +200,3 @@ def test_parse_vrplib_no_explicit_edge_weights():
     }
 
     assert_equal(actual, desired)
-
-
-def test_empty_text():
-    """
-    Tests if an empty text file is still read correctly.
-    """
-    actual = parse_vrplib("")
-    assert_equal(actual, {})

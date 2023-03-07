@@ -50,9 +50,9 @@ def parse_vrplib(text: str) -> Instance:
     return instance
 
 
-def group_specifications_and_sections(lines: List[str]):
+def is_valid_vrplib(lines: List[str]):
     """
-    Groups instance lines into specifications and section parts.
+    Raises if the lines do not follow the VRPLIB format.
     """
     specs = []
     sections = []
@@ -81,6 +81,40 @@ def group_specifications_and_sections(lines: List[str]):
                 end_section += 1
 
             sections.append(lines[start:end_section])
+
+    return specs, sections
+
+
+def group_specifications_and_sections(lines: List[str]):
+    """
+    Groups instance lines into specifications and section parts.
+    """
+    specs = []
+    sections = []
+
+    end_section = 0
+    for idx, line in enumerate(lines):
+        if "EOF" in line:
+            break
+        elif idx < end_section:  # Skip all lines of the current section
+            continue
+        elif ":" in line:
+            specs.append(line)
+        elif "_SECTION" in line:
+            start = lines.index(line)
+            end_section = start + 1
+
+            for next_line in lines[start + 1 :]:
+                # The current section ends when a next section is found or
+                # when an EOF token is found.
+                if "_SECTION" in next_line or "EOF" in next_line:
+                    break
+
+                end_section += 1
+
+            sections.append(lines[start:end_section])
+        else:
+            raise RuntimeError("Instance is not in VRPLIB format.")
 
     return specs, sections
 
