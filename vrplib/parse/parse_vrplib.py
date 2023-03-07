@@ -70,8 +70,8 @@ def group_specifications_and_sections(lines: List[str]):
             end_section = start + 1
 
             for next_line in lines[start + 1 :]:
-                # The current section ends when a next section is found or
-                # when an EOF token is found.
+                # The current section ends when a next section or an EOF token
+                # is found.
                 if "_SECTION" in next_line or "EOF" in next_line:
                     break
 

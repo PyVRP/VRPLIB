@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 from numpy.testing import assert_equal, assert_raises
 from pytest import mark
@@ -9,34 +11,43 @@ from vrplib.parse.parse_vrplib import (
     parse_vrplib,
 )
 
+_DATA_DIR = Path("tests/data/")
+
 
 @mark.parametrize(
-    "path",
+    "name",
     [
-        "data/cvrplib/C101.txt",  # solomon file
-        "data/cvrplib/C101.sol",  # a solution
-        "tests/data/NoColonSpecification.txt",
+        "C101.txt",  # solomon file
+        "C101.sol",  # solution file
+        "NoColonSpecification.txt",
     ],
 )
-def test_raise_invalid_vrplib_format(path):
+def test_raise_invalid_vrplib_format(name):
     """
     Tests if a RuntimeError is raised when the text is not in VRPLIB format.
     """
-    with open(path, "r") as fh:
+    with open(_DATA_DIR / name, "r") as fh:
         with assert_raises(RuntimeError):
             parse_vrplib(fh.read())
 
 
 @mark.parametrize(
-    "path",
+    "name",
     [
-        "data/cvrplib/A-n32-k5.vrp",
-        "data/cvrplib/ORTEC-n242-k12.vrp",
-        "tests/data/empty.txt",
+        "A-n32-k5.vrp",
+        "B-n31-k5.vrp",
+        "CMT6.vrp",
+        "E-n13-k4.vrp",
+        "F-n72-k4.vrp",
+        "Golden_1.vrp",
+        "Li_21.vrp",
+        "ORTEC-n242-k12.vrp",
+        "P-n16-k8.vrp",
+        "X-n101-k25.vrp",
     ],
 )
-def test_no_raise_valid_vrplib_format(path):
-    with open(path, "r") as fh:
+def test_no_raise_valid_vrplib_format(name):
+    with open(_DATA_DIR / name, "r") as fh:
         parse_vrplib(fh.read())
 
 
