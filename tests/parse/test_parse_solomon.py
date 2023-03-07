@@ -41,13 +41,7 @@ def test_raise_invalid_solomon_instance(name):
             parse_solomon(fh.read())
 
 
-@mark.parametrize(
-    "name",
-    [
-        "C101.txt",
-        "C1_2_1.txt",
-    ],
-)
+@mark.parametrize("name", ["C101.txt", "C1_2_1.txt"])
 def test_does_not_raise(name):
     with open(_DATA_DIR / name, "r") as fh:
         parse_solomon(fh.read())

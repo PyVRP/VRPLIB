@@ -56,15 +56,10 @@ def is_valid_solomon_instance(lines: List[str]):
     if lines[2].split() != desired.split():
         raise RuntimeError(MSG.format(actual=lines[2], desired=desired))
 
-    try:
-        actual = [int(x) for x in lines[3].split()]
-        assert len(actual) == 2
-    except (ValueError, AssertionError):
-        INFO = f"Expected two integers, got {lines[3]}."
-        raise RuntimeError(BASE + INFO) from None
+    # TODO Validate that lines[3] contains the num vehicles and capacity
 
     desired = "CUSTOMER"
     if lines[4] != desired:
-        raise RuntimeError(MSG.format(actual=actual, desired=desired))
+        raise RuntimeError(MSG.format(actual=lines[4], desired=desired))
 
     # TODO Validate that lines[5] are data headers
