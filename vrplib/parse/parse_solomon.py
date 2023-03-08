@@ -45,21 +45,19 @@ def is_valid_solomon_instance(lines: List[str]):
     """
     Checks if the passed-in lines follow the Solomon format requirements.
     """
-    BASE = "Instance does not conform to the Solomon format. "
-    MSG = BASE + "Expected {desired}, got {actual}."
 
-    desired = "VEHICLE"
-    if lines[1] != desired:
-        raise RuntimeError(MSG.format(actual=lines[1], desired=desired))
+    try:
+        assert lines[0]  # non-empty first line
+        assert "VEHICLE" in lines[1]
+        assert "NUMBER" in lines[2]
+        assert "CAPACITY" in lines[2]
 
-    desired = "NUMBER CAPACITY"
-    if lines[2].split() != desired.split():
-        raise RuntimeError(MSG.format(actual=lines[2], desired=desired))
+        # TODO Validate that lines[3] contains the num vehicles and capacity
 
-    # TODO Validate that lines[3] contains the num vehicles and capacity
+        assert "CUSTOMER" in lines[4]
 
-    desired = "CUSTOMER"
-    if lines[4] != desired:
-        raise RuntimeError(MSG.format(actual=lines[4], desired=desired))
+        # TODO Validate that lines[5] are data headers
 
-    # TODO Validate that lines[5] are data headers
+    except (IndexError, ValueError, AssertionError) as err:
+        msg = "Instance does not conform to the Solomon format."
+        raise RuntimeError(msg) from err

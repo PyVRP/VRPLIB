@@ -35,10 +35,25 @@ _SOLOMON_INSTANCE = [
         "X-n101-k25.vrp",
     ],
 )
-def test_raise_invalid_solomon_instance(name):
+def test_raise_invalid_solomon_instance_file(name):
     with assert_raises(RuntimeError):
         with open(_DATA_DIR / name, "r") as fh:
             parse_solomon(fh.read())
+
+
+@mark.parametrize(
+    "lines",
+    [
+        [""],
+        ["NAME", "CARS"],
+        ["NAME", "VEHICLES", "?"],
+        ["NAME", "VEHICLES", "NUMBER CAPACITY", "test"],
+        ["NAME", "VEHICLES", "NUMBER CAPACITY", "20 100", "wrong"],
+    ],
+)
+def test_raise_invalid_solomon_instance_lines(lines):
+    with assert_raises(RuntimeError):
+        parse_solomon("\n".join(lines))
 
 
 @mark.parametrize("name", ["C101.txt", "C1_2_1.txt"])
