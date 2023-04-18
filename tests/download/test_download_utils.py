@@ -3,7 +3,7 @@ from numpy.testing import assert_equal
 
 from vrplib.download.download_utils import find_set
 
-from .._utils import selected_cases
+from ..utils import selected_cases
 
 
 @pytest.mark.parametrize("case", selected_cases())

@@ -3,7 +3,7 @@ from numpy.testing import assert_
 
 from vrplib import list_names
 
-from .._utils import selected_cases
+from ..utils import selected_cases
 
 
 @pytest.mark.parametrize("case", selected_cases())

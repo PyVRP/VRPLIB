@@ -25,7 +25,7 @@ def test_download_vrplib_instance(tmp_path):
     with open(loc, "r") as fi:
         actual = fi.read()
 
-    with open(f"data/cvrplib/{name + ext}", "r") as fi:
+    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)
@@ -44,7 +44,7 @@ def test_download_solomon_instance(tmp_path):
     with open(loc, "r") as fi:
         actual = fi.read()
 
-    with open(f"data/cvrplib/{name + ext}", "r") as fi:
+    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)

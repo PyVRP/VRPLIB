@@ -1,5 +1,4 @@
-import pytest
-from numpy.testing import assert_equal
+from numpy.testing import assert_equal, assert_raises
 
 from vrplib import download_solution
 
@@ -8,7 +7,7 @@ def test_raise_invalid_name():
     """
     Raise an error if the passed-in name is invalid.
     """
-    with pytest.raises(ValueError):
+    with assert_raises(ValueError):
         download_solution("invalid_name", "tmp")
 
 
@@ -27,7 +26,7 @@ def test_download_vrplib_solution(tmp_path):
 
     # The best known solution is known to be optimal, so it is unlikely that
     # the solution file in the repository will be outdated.
-    with open(f"data/cvrplib/{name + ext}", "r") as fi:
+    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)
@@ -48,7 +47,7 @@ def test_download_solomon_solution(tmp_path):
 
     # The best known solution is known to be optimal, so it is unlikely that
     # the solution file in the repository will be outdated.
-    with open(f"data/cvrplib/{name + ext}", "r") as fi:
+    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)
