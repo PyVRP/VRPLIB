@@ -31,6 +31,28 @@ def test_download_vrplib_instance(tmp_path):
     assert_equal(actual, desired)
 
 
+def test_download_instance_dir_only(tmp_path):
+    """
+    Tests if a VRPLIB instance is correctly downloaded from CVRPLIB.
+    """
+    name = "X-n101-k25"
+    ext = ".vrp"
+    loc = tmp_path
+
+    download_instance(name, loc)
+
+    with open(loc / (name + ext), "r") as fi:
+        actual = fi.read()
+
+    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
+        desired = fi.read()
+
+    assert_equal(actual, desired)
+
+
+# TODO can we refactor the two tests above into one?
+
+
 def test_download_solomon_instance(tmp_path):
     """
     Tests if a Solomon instance is correctly downloaded from CVRPLIB.
