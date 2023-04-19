@@ -21,13 +21,12 @@ def test_download_vrplib_instance_file_name(tmp_path):
     """
     name = "X-n101-k25"
     fname = "random_file_name.txt"
+    file_path = tmp_path / fname
 
-    download_instance(name, tmp_path / fname)
+    download_instance(name, file_path)
+    assert_(os.path.exists(file_path))
 
-    expected_path = tmp_path / fname
-    assert_(os.path.exists(expected_path))
-
-    with open(expected_path, "r") as fi:
+    with open(file_path, "r") as fi:
         actual = fi.read()
 
     with open(f"tests/data/cvrplib/{name}.vrp", "r") as fi:
@@ -42,13 +41,13 @@ def test_download_vrplib_instance_dir_path(tmp_path):
     and saved to the passed-in directory.
     """
     name = "X-n101-k25"
+    dir_path = tmp_path
+    file_path = dir_path / (name + ".vrp")
 
-    download_instance(name, tmp_path)
+    download_instance(name, dir_path)
+    assert_(os.path.exists(file_path))
 
-    expected_path = tmp_path / (name + ".vrp")
-    assert_(os.path.exists(expected_path))
-
-    with open(expected_path, "r") as fi:
+    with open(file_path, "r") as fi:
         actual = fi.read()
 
     with open(f"tests/data/cvrplib/{name}.vrp", "r") as fi:
