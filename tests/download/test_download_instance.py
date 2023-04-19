@@ -1,5 +1,7 @@
+import os
+
 import pytest
-from numpy.testing import assert_equal
+from numpy.testing import assert_, assert_equal
 
 from vrplib import download_instance
 
@@ -12,20 +14,43 @@ def test_raise_invalid_name():
         download_instance("invalid_name", "tmp")
 
 
-def test_download_vrplib_instance(tmp_path):
+def test_download_vrplib_instance_file_name(tmp_path):
     """
-    Tests if a VRPLIB instance is correctly downloaded from CVRPLIB.
+    Tests if a VRPLIB instance is correctly downloaded from CVRPLIB
+    and saved to the passed-in file path.
     """
     name = "X-n101-k25"
-    ext = ".vrp"
-    loc = tmp_path / (name + ext)
+    fname = "random_file_name.txt"
+    file_path = tmp_path / fname
 
-    download_instance(name, loc)
+    download_instance(name, file_path)
+    assert_(os.path.exists(file_path))
 
-    with open(loc, "r") as fi:
+    with open(file_path, "r") as fi:
         actual = fi.read()
 
-    with open(f"data/cvrplib/{name + ext}", "r") as fi:
+    with open(f"tests/data/cvrplib/{name}.vrp", "r") as fi:
+        desired = fi.read()
+
+    assert_equal(actual, desired)
+
+
+def test_download_vrplib_instance_dir_path(tmp_path):
+    """
+    Tests if a VRPLIB instance is correctly downloaded from CVRPLIB
+    and saved to the passed-in directory.
+    """
+    name = "X-n101-k25"
+    dir_path = tmp_path
+    file_path = dir_path / (name + ".vrp")
+
+    download_instance(name, dir_path)
+    assert_(os.path.exists(file_path))
+
+    with open(file_path, "r") as fi:
+        actual = fi.read()
+
+    with open(f"tests/data/cvrplib/{name}.vrp", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)
@@ -44,7 +69,7 @@ def test_download_solomon_instance(tmp_path):
     with open(loc, "r") as fi:
         actual = fi.read()
 
-    with open(f"data/cvrplib/{name + ext}", "r") as fi:
+    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)
