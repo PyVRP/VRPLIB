@@ -1,4 +1,6 @@
-from numpy.testing import assert_equal, assert_raises
+import os
+
+from numpy.testing import assert_, assert_equal, assert_raises
 
 from vrplib import download_solution
 
@@ -11,22 +13,46 @@ def test_raise_invalid_name():
         download_solution("invalid_name", "tmp")
 
 
-def test_download_vrplib_solution(tmp_path):
+def test_download_vrplib_solution_file_name_path(tmp_path):
     """
     Tests if a VRPLIB solution is correctly downloaded from CVRPLIB.
     """
     name = "X-n101-k25"
-    ext = ".sol"
-    loc = tmp_path / (name + ext)
+    fname = "random_file_name.txt"
 
-    download_solution(name, loc)
+    download_solution(name, tmp_path / fname)
 
-    with open(loc, "r") as fi:
+    expected_path = tmp_path / fname
+    assert_(os.path.exists(expected_path))
+
+    with open(expected_path, "r") as fi:
         actual = fi.read()
 
-    # The best known solution is known to be optimal, so it is unlikely that
-    # the solution file in the repository will be outdated.
-    with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
+    # The best known solution is known to be optimal, so the the solution
+    # file in the repository will not be outdated.
+    with open(f"tests/data/cvrplib/{name}.sol", "r") as fi:
+        desired = fi.read()
+
+    assert_equal(actual, desired)
+
+
+def test_download_vrplib_solution_dir_path(tmp_path):
+    """
+    Tests if a VRPLIB solution is correctly downloaded from CVRPLIB.
+    """
+    name = "X-n101-k25"
+
+    download_solution(name, tmp_path)
+
+    expected_path = tmp_path / (name + ".sol")
+    assert_(os.path.exists(expected_path))
+
+    with open(expected_path, "r") as fi:
+        actual = fi.read()
+
+    # The best known solution is known to be optimal, so the the solution
+    # file in the repository will not be outdated.
+    with open(f"tests/data/cvrplib/{name}.sol", "r") as fi:
         desired = fi.read()
 
     assert_equal(actual, desired)
@@ -45,8 +71,8 @@ def test_download_solomon_solution(tmp_path):
     with open(loc, "r") as fi:
         actual = fi.read()
 
-    # The best known solution is known to be optimal, so it is unlikely that
-    # the solution file in the repository will be outdated.
+    # The best known solution is known to be optimal, so the the solution
+    # file in the repository will not be outdated.
     with open(f"tests/data/cvrplib/{name + ext}", "r") as fi:
         desired = fi.read()
 
