@@ -7,15 +7,15 @@
 - reading VRPLIB and Solomon instances and solutions, and
 - downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
-# Installation
+## Installation
 This library works with Python 3.8+ and only depends on `numpy`. Install the latest version of `vrplib`:
 
 ```shell
 pip install vrplib
 ```
 
-# Example usage
-## Reading instances and solutions
+## Example usage
+### Reading instances and solutions
 ```python
 import vrplib
 
@@ -38,13 +38,13 @@ solutions.keys()
 ```
 
 
-## Downloading instances from CVRPLIB 
+### Downloading instances from CVRPLIB 
 ``` python
 import vrplib
 
-# Download the instance and solution to a local file
-vrplib.download_instance("X-n101-k25", "/path/to/X-n101-k25.vrp")
-vrplib.download_solution("X-n101-k25", "/path/to/X-n101-k25.sol")
+# Download an instance and a solution file
+vrplib.download_instance("X-n101-k25", "/path/to/instances/")
+vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
 
 # List all instance names that can be downloaded 
 vrplib.list_names()                      # All instance names
@@ -54,20 +54,20 @@ vrplib.list_names(vrp_type='vrptw')      # Only VRPTW instances
 ```
 
 
-# Notes
-This section contains additional notes about the `vrplib` package.
+## Documentation
+This section contains some brief documentation about the `vrplib` package.
 
-## Instance formats
+### Instance formats
 Currently, two VRP instance formats are supported:
 - **VRPLIB**: this format is most commonly used for Capacitated Vehicle Routing Problem (CVRP) instances.  See the [X-n101-k25](http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/X/X-n101-k25.vrp) instance for an example. VRPLIB is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format. Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf). 
 - **Solomon**: this format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. See the [C101](http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/Solomon/C101.txt) instance for an example.
 
-## How instances are parsed
+### How instances are parsed
 `vrplib` parses an instance and returns a dictionary of keyword-value pairs. There are two types of instance data: 
 - Problem specifications, which may contain metadata or problem-specific information such as the max number of vehicles. 
 - Problem data, which are often arrays of values describing, for example, customer service times and time windows. 
 
-### On parsing distances 
+#### On parsing distances 
 The `vrplib` library tries to follow the instance specifications as strictly as possible to compute the distances. 
 
 For VRPLIB instances, the distances computation is determined by the `EDGE_WEIGHT_TYPE` and possibly the `EDGE_WEIGHT_FORMAT` specifications. We currently support two categories of edge weight types:
@@ -85,8 +85,8 @@ Note that there are VRPLIB instances that use different rounding conventions in 
 
 For Solomon-type instances, the distance computation is not specified in the instance file, hence we compute the Euclidean distances without rounding. A recent convention that was proposed during the [2021 DIMACS Vehicle Routing Implementation Challenge](http://dimacs.rutgers.edu/programs/challenge/vrp/vrptw/) is to truncate the Euclidean distances to one decimal. Similar to the X instance set, you can manually modify the distances matrix.
 
-## Additional remarks
-- Downloading instances may take up to a few seconds. 
+### Additional remarks
+- Downloading files may take up to a few seconds. 
 - The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded through this package. You can download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
     
