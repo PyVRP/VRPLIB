@@ -1,0 +1,10 @@
+NAME : Invalid VRPLIB
+COMMENT There's no colon on this line.
+NODE_COORD_SECTION
+1	365	689
+DEMAND_SECTION
+1	0
+DEPOT_SECTION
+1
+-1
+EOF
