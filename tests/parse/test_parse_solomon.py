@@ -6,17 +6,7 @@ from pytest import mark
 
 from vrplib.parse.parse_solomon import parse_solomon
 
-_DATA_DIR = Path("tests/data")
-_SOLOMON_INSTANCE = [
-    "C101",
-    "VEHICLE",
-    "NUMBER     CAPACITY",
-    "25         200",
-    "CUSTOMER",
-    "CUST NO.  XCOORD.   YCOORD.  DEMAND   READY TIME  DUE DATE  SERVICE TIME",
-    "0      40         50          0          0       1236          0",
-    "1      45         68         10        912        967         90",
-]
+DATA_DIR = Path("tests/data")
 
 
 @mark.parametrize(
@@ -37,7 +27,7 @@ _SOLOMON_INSTANCE = [
 )
 def test_raise_invalid_solomon_instance_file(name):
     with assert_raises(RuntimeError):
-        with open(_DATA_DIR / name, "r") as fh:
+        with open(DATA_DIR / name, "r") as fh:
             parse_solomon(fh.read())
 
 
@@ -58,7 +48,7 @@ def test_raise_invalid_solomon_instance_lines(lines):
 
 @mark.parametrize("name", ["C101.txt", "C1_2_1.txt"])
 def test_does_not_raise(name):
-    with open(_DATA_DIR / name, "r") as fh:
+    with open(DATA_DIR / name, "r") as fh:
         parse_solomon(fh.read())
 
 
@@ -66,9 +56,19 @@ def test_parse_vrplib():
     """
     Checks if the Solomon instance lines are correctly parsed.
     """
-    text = "\n".join(_SOLOMON_INSTANCE)
 
-    actual = parse_solomon(text)
+    SOLOMON_INSTANCE = [
+        "C101",
+        "VEHICLE",
+        "NUMBER     CAPACITY",
+        "25         200",
+        "CUSTOMER",
+        "CUST NO.  XCOORD.   YCOORD.  DEMAND   READY TIME  DUE DATE  SERVICE TIME",
+        "0      40         50          0          0       1236          0",
+        "1      45         68         10        912        967         90",
+    ]
+
+    actual = parse_solomon("\n".join(SOLOMON_INSTANCE))
 
     dist = ((40 - 45) ** 2 + (50 - 68) ** 2) ** 0.5  # from 0 to 1
     desired = {
