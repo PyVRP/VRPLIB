@@ -34,11 +34,17 @@ def test_raise_invalid_solomon_instance_file(name):
 @mark.parametrize(
     "lines",
     [
+        # empty first line
         [""],
+        # no VEHICLE in second line
         ["NAME", "CARS"],
+        # no NUMBER CAPACITY in third line
         ["NAME", "VEHICLES", "?"],
-        ["NAME", "VEHICLES", "NUMBER CAPACITY", "test"],
+        # no CUSTOMER in fifth line
         ["NAME", "VEHICLES", "NUMBER CAPACITY", "20 100", "wrong"],
+        # missing headers in sixth line
+        ["NAME", "VEHICLES", "NUMBER CAPACITY", "20 100", "wrong"]
+        + ["CUST NO. XCOORD. YCOORD. DEMAND"],
     ],
 )
 def test_raise_invalid_solomon_instance_lines(lines):

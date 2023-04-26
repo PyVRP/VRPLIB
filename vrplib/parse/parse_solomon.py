@@ -51,12 +51,24 @@ def is_valid_solomon_instance(lines: List[str]):
         assert "VEHICLE" in lines[1]
         assert "NUMBER" in lines[2]
         assert "CAPACITY" in lines[2]
-
-        # TODO Validate that lines[3] contains the num vehicles and capacity
-
         assert "CUSTOMER" in lines[4]
 
-        # TODO Validate that lines[5] are data headers
+        # Header names are separated on whitespace because the spacing of
+        # some Solomon instances is off.
+        headers = [
+            "CUST",
+            "NO.",
+            "XCOORD.",
+            "YCOORD.",
+            "DEMAND",
+            "READY",
+            "DUE",
+            "DATE",
+            "SERVICE",
+            "TIME",
+        ]
+        for header in headers:
+            assert header in lines[5]
 
     except (IndexError, ValueError, AssertionError) as err:
         msg = "Instance does not conform to the Solomon format."
