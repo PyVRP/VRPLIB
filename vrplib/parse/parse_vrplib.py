@@ -79,9 +79,8 @@ def group_specifications_and_sections(lines: List[str]):
 
             sections.append(lines[start:end_section])
         else:
-            raise RuntimeError(
-                "Instance does not conform to the VRPLIB format."
-            )
+            msg = "Instance does not conform to the VRPLIB format."
+            raise RuntimeError(msg)
 
     return specs, sections
 
