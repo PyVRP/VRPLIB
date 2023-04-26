@@ -118,6 +118,11 @@ def test_parse_specification(line, key, value):
             ["depot", np.array([0])],
         ),
         (
+            # No end token in DEPOT_SECTION
+            ["DEPOT_SECTION", "4"],
+            ["depot", np.array([3])],
+        ),
+        (
             ["UNKNOWN_SECTION", "1 1", "1 -1"],
             ["unknown", np.array([1, -1])],
         ),
@@ -130,23 +135,6 @@ def test_parse_section(lines, desired):
     actual = parse_section(lines, {})
 
     assert_equal(actual, desired)
-
-
-@mark.parametrize(
-    "lines",
-    [
-        ["DEPOT_SECTION"],
-        ["DEPOT_SECTION", "1"],
-        ["DEPOT_SECTION", "1", "-100"],
-    ],
-)
-def test_depot_section_raise_runtime_error(lines):
-    """
-    Tests if a RuntimeError is raised when the depot section does not end
-    with a -1.
-    """
-    with assert_raises(RuntimeError):
-        parse_section(lines, {})
 
 
 def test_parse_vrplib():
