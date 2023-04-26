@@ -11,7 +11,7 @@ from vrplib.parse.parse_vrplib import (
     parse_vrplib,
 )
 
-_DATA_DIR = Path("tests/data/")
+DATA_DIR = Path("tests/data/")
 
 
 @mark.parametrize(
@@ -27,7 +27,7 @@ def test_raise_invalid_vrplib_format(name):
     """
     Tests if a RuntimeError is raised when the text is not in VRPLIB format.
     """
-    with open(_DATA_DIR / name, "r") as fh:
+    with open(DATA_DIR / name, "r") as fh:
         with assert_raises(RuntimeError):
             parse_vrplib(fh.read())
 
@@ -48,7 +48,7 @@ def test_raise_invalid_vrplib_format(name):
     ],
 )
 def test_no_raise_valid_vrplib_format(name):
-    with open(_DATA_DIR / name, "r") as fh:
+    with open(DATA_DIR / name, "r") as fh:
         parse_vrplib(fh.read())
 
 
