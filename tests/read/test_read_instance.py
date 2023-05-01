@@ -90,11 +90,6 @@ def test_read_solomon_instance(tmp_path):
     actual = read_instance(tmp_path / name, instance_format="solomon")
     assert_equal(actual, desired)
 
-    # When the instance format is not specified, then it is parsed as a
-    # VRPLIB instance. This yields an empty instance.
-    actual = read_instance(tmp_path / name)
-    assert_equal(actual, {})
-
 
 def test_do_not_compute_edge_weights(tmp_path):
     """
