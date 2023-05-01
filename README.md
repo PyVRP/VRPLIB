@@ -58,7 +58,7 @@ vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
 This section contains some documentation about the `vrplib` package.
 
 ### VRPLIB instance format
-The VRPLIB format is the standard format for Capacitated Vehicle Routing Problem (CVRP) instances. An example of an VRPLIB instance looks as follows:
+The VRPLIB format is the standard format for the Capacitated Vehicle Routing Problem (CVRP). An example of an VRPLIB instance looks as follows:
 ``` bash
 NAME: Example 
 EDGE_WEIGHT_TYPE: EUC_2D
@@ -80,9 +80,12 @@ Each data section starts with a header name that ends with `_SECTION`, e.g., `SE
 The section is then followed by rows of array-like data, and each row must start with the location index, starting from 1, followed by any number of white-space separated data.
 There are two exceptions to this rule: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index for each row.
 
+Except for the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
+This means that you can use `vrplib` to read VRPLIB instances with custom specifications and section names like `MY_SECTION`.
+
 Reading the above example instance returns the following:
 ``` python
-vrplib.read_vrplib("vrplib-instance.txt")
+vrplib.read_vrplib("vrplib-example.txt")
 
 >>> {'name': 'Example',
      'edge_weight_type': 'EUC_2D',
@@ -92,7 +95,6 @@ vrplib.read_vrplib("vrplib-instance.txt")
      'depot': array([0])}
 ```
 
-In general, `vrplib` is flexible in the naming of specifications or sections: this means that you can create your own VRPLIB instances with section names like `MY_OWN_SECTION`, which will be parsed as any other data section.
 
 #### On computing distances 
 The `vrplib` library tries to follow the instance specifications as strictly as possible to compute the distances. 
