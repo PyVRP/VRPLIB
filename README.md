@@ -58,9 +58,7 @@ vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
 This section contains some documentation about the `vrplib` package.
 
 ### VRPLIB instance format
-The VRPLIB format is the standard format specification for Capacitated Vehicle Routing Problem (CVRP) instances, see the [X-n101-k25](http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/X/X-n101-k25.vrp) instance for an example. 
-
-An example of an VRPLIB instance looks as follows:
+The VRPLIB format is the standard format for Capacitated Vehicle Routing Problem (CVRP) instances. An example of an VRPLIB instance looks as follows:
 ``` bash
 NAME: Example 
 EDGE_WEIGHT_TYPE: EUC_2D
@@ -68,18 +66,19 @@ NODE_COORD_SECTION
 1 0 0
 2 5 5
 SERVICE_TIME_SECTION
-1 1
+1 0
 2 3
+DEPOT_SECTION
+1
 EOF
 ```
 
 A VRPLIB consists of a **specification** part and a **data** part. 
-- The specification part contains information on the file format and on its content. Each specification must be presented as a key-value pair, separated by a colon. 
-- The data part contains explicit problem data such as customer coordinates or service times.
-Data sections must start with a section header (e.g., `SERVICE_TIME_SECTION`) followed by rows of data. 
-Each row must start with the location index, starting from 1, followed by any number of white-space separated data.
-There are two exceptions to this data section format: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION`. These sections should not start with a location index for each row.
-
+- The specification part contains information about the file format and on its content. Each specification should be presented as a key-value pair separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the specifications.
+- The data part contains explicit problem data such as customer coordinates or service times. 
+Each data section starts with a header name that ends with `_SECTION`, e.g., `SERVICE_TIME_SECTION` and `NODE_COORD_SECTION`.
+The section is then followed by rows of array-like data, and each row must start with the location index, starting from 1, followed by any number of white-space separated data.
+There are two exceptions to this rule: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index for each row.
 
 Reading the above example instance returns the following:
 ``` python
@@ -89,12 +88,11 @@ vrplib.read_vrplib("vrplib-instance.txt")
      'edge_weight_type': 'EUC_2D',
      'node_coord': array([[0, 0], [5, 5]]),
      'service_time': array([1, 3]),
-     'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
+     'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]]),
+     'depot': array([0])}
 ```
 
-The basic requirements are as follows:
-- EDGE_WEIGHT_FORMAT: ...
-- EDGE_WEIGHT_TYPE: ...
+In general, `vrplib` is flexible in the naming of specifications or sections: this means that you can create your own VRPLIB instances with section names like `MY_OWN_SECTION`, which will be parsed as any other data section.
 
 #### On computing distances 
 The `vrplib` library tries to follow the instance specifications as strictly as possible to compute the distances. 
