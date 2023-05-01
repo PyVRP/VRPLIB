@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import numpy as np
-from numpy.testing import assert_equal, assert_raises
+from numpy.testing import assert_, assert_equal, assert_raises
 from pytest import mark
 
 from vrplib.parse.parse_solomon import parse_solomon
@@ -58,21 +58,22 @@ def test_does_not_raise(name):
         parse_solomon(fh.read())
 
 
-def test_parse_vrplib():
+SOLOMON_INSTANCE = [
+    "C101",
+    "VEHICLE",
+    "NUMBER     CAPACITY",
+    "25         200",
+    "CUSTOMER",
+    "CUST NO.  XCOORD.   YCOORD.  DEMAND   READY TIME  DUE DATE  SERVICE TIME",
+    "0      40         50          0          0       1236          0",
+    "1      45         68         10        912        967         90",
+]
+
+
+def test_parse_solomon():
     """
     Checks if the Solomon instance lines are correctly parsed.
     """
-
-    SOLOMON_INSTANCE = [
-        "C101",
-        "VEHICLE",
-        "NUMBER     CAPACITY",
-        "25         200",
-        "CUSTOMER",
-        "CUST NO.  XCOORD.   YCOORD.  DEMAND   READY TIME  DUE DATE  SERVICE TIME",
-        "0      40         50          0          0       1236          0",
-        "1      45         68         10        912        967         90",
-    ]
 
     actual = parse_solomon("\n".join(SOLOMON_INSTANCE))
 
@@ -89,3 +90,13 @@ def test_parse_vrplib():
     }
 
     assert_equal(actual, desired)
+
+
+def test_do_not_compute_edge_weights():
+    """
+    Tests if the instance does not contain edge weights if the
+    `compute_edge_weights` is set to False.
+    """
+    text = "\n".join(SOLOMON_INSTANCE)
+    actual = parse_solomon(text, compute_edge_weights=False)
+    assert_("edge_weight" not in actual)
