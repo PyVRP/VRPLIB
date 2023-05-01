@@ -57,6 +57,11 @@ vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
 ## Documentation
 This section contains some documentation about the `vrplib` package.
 
+- [VRPLIB instance format](#vrplib-instance-format)
+- [Solomon format](#solomon-format)
+- [Solution format](#solution-format)
+- [Other remarks](#other-remarks)
+
 ### VRPLIB instance format
 The VRPLIB format is the standard format for the Capacitated Vehicle Routing Problem (CVRP). An example of an VRPLIB instance looks as follows:
 ``` bash
@@ -120,6 +125,9 @@ The Solomon format was used to introduce the Solomon instances for the Vehicle R
 For Solomon-type instances, the default is to the Euclidean distances without rounding.
 TODO 
 
-## Other remarks
+### Solution format
+TODO
+
+### Other remarks
 - The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded through this package. You can download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 - In the literature, some instances use rounding conventions different from what is specified in the instance. For example, X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read this instance, it will return non-rounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type which implies no rounding. To adhere to the convention used in the literature, you can manually round the distances matrix.
