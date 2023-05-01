@@ -1,6 +1,6 @@
 import numpy as np
-import pytest
 from numpy.testing import assert_, assert_equal, assert_raises
+from pytest import mark
 
 from vrplib.read import read_instance
 
