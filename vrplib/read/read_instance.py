@@ -10,10 +10,10 @@ def read_instance(path, instance_format="vrplib", compute_edge_weights=True):
     path
         The path to the instance file.
     instance_format
-        The instance format, one of ["vrplib", "solomon"].
+        The instance format, one of ["vrplib", "solomon"]. Default is "vrplib".
     compute_edge_weights
         Whether to calculate edge weights based on instance specifications
-        and node coordinates, if not explicitly provided.
+        and node coordinates, if not explicitly provided. Defaults to True.
 
     Returns
     -------
