@@ -91,8 +91,8 @@ vrplib.read_vrplib("vrplib-example.txt")
      'edge_weight_type': 'EUC_2D',
      'node_coord': array([[0, 0], [5, 5]]),
      'service_time': array([1, 3]),
-     'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]]),
-     'depot': array([0])}
+     'depot': array([0]),
+     'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
 ```
 
 #### On computing edge weights 
