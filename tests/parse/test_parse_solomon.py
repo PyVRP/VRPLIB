@@ -93,7 +93,10 @@ def test_parse_solomon():
 
 
 def test_do_not_compute_edge_weights():
-    """"""
+    """
+    Tests if the instance does not contain edge weights if the
+    `compute_edge_weights` is set to False.
+    """
     text = "\n".join(SOLOMON_INSTANCE)
     actual = parse_solomon(text, compute_edge_weights=False)
     assert_("edge_weight" not in actual)

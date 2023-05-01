@@ -93,10 +93,10 @@ def test_read_solomon_instance(tmp_path):
 
 def test_do_not_compute_edge_weights(tmp_path):
     """
-    Tests if the edge weights are not computed when the corresponding argument
-    is set to False.
+    Tests if the edge weights are not contained in the instance when the
+    corresponding argument is set to False.
     """
-    # Test for VRPLIB instance
+    # Test VRPLIB instance
     name = "vrplib.txt"
 
     with open(tmp_path / name, "w") as fi:
@@ -106,14 +106,12 @@ def test_do_not_compute_edge_weights(tmp_path):
     instance = read_instance(tmp_path / name, compute_edge_weights=False)
     assert_("edge_weight" not in instance)
 
-    # Test for Solomon instance
+    # Test Solomon instance
     name = "solomon.txt"
 
     with open(tmp_path / name, "w") as fi:
         instance = "\n".join(SOLOMON_INSTANCE)
         fi.write(instance)
 
-    instance = read_instance(
-        tmp_path / name, instance_format="solomon", compute_edge_weights=False
-    )
+    instance = read_instance(tmp_path / name, "solomon", False)
     assert_("edge_weight" not in instance)
