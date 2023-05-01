@@ -49,8 +49,8 @@ vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
 # List all instance names that can be downloaded 
 vrplib.list_names()                      # All instance names
 vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
-vrplib.list_names(vrp_type='cvrp')       # Only CVRP instances
-vrplib.list_names(vrp_type='vrptw')      # Only VRPTW instances
+vrplib.list_names(vrp_type="cvrp")       # Only CVRP instances
+vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
 ```
 
 
