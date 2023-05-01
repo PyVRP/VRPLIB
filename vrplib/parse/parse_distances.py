@@ -40,9 +40,12 @@ def parse_distances(
     """
     if "2D" in edge_weight_type:  # Euclidean distance on node coordinates
         if node_coord is None:
-            raise ValueError(
-                "Node coordinates are required for Euclidean edge weight type."
+            msg = (
+                "Cannot compute Euclidean distances because node coordinates "
+                "are not provided."
             )
+            raise ValueError(msg)
+
         distance = pairwise_euclidean(node_coord)
 
         if edge_weight_type == "EUC_2D":
@@ -84,7 +87,6 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
         An n-by-n Euclidean distances matrix.
 
     """
-    # Subtract each coordinate from every other coordinate
     diff = coords[:, np.newaxis, :] - coords
     square_diff = diff**2
     square_dist = np.sum(square_diff, axis=-1)

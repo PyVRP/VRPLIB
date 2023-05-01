@@ -5,7 +5,7 @@ from numpy.testing import assert_, assert_equal, assert_raises
 from vrplib.read import read_instance
 
 
-@pytest.mark.parametrize("instance_format", ["CVRPLIB", "LKH", "VRP"])
+@mark.parametrize("instance_format", ["CVRPLIB", "LKH", "VRP"])
 def test_raise_unknown_instance_format(tmp_path, instance_format):
     """
     Tests if a ValueError is raised when an unknown instance format is passed.

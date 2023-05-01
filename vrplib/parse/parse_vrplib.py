@@ -62,28 +62,28 @@ def group_specifications_and_sections(lines: List[str]):
 
     end_section = 0
     for idx, line in enumerate(lines):
-        if idx < end_section:  # Skip all lines of the current section
-            continue
-
         if "EOF" in line:
             break
-
-        if ":" in line:
+        elif idx < end_section:  # Skip all lines of the current section
+            continue
+        elif ":" in line:
             specs.append(line)
-
-        if "_SECTION" in line:
+        elif "_SECTION" in line:
             start = lines.index(line)
             end_section = start + 1
 
             for next_line in lines[start + 1 :]:
-                # The current section ends when a next section is found or
-                # when an EOF token is found.
+                # The current section ends when a next section or an EOF token
+                # is found.
                 if "_SECTION" in next_line or "EOF" in next_line:
                     break
 
                 end_section += 1
 
             sections.append(lines[start:end_section])
+        else:
+            msg = "Instance does not conform to the VRPLIB format."
+            raise RuntimeError(msg)
 
     return specs, sections
 
@@ -111,11 +111,8 @@ def parse_section(lines: List, instance: Dict) -> np.ndarray:
     data = np.array(data_)
 
     if section == "depot":
-        if len(data) < 2 or data[-1] != -1:
-            raise RuntimeError("Depot section does not end with -1.")
-
-        # Remove end token and renormalize depots to start at zero
-        data = data[:-1] - 1
+        # Remove -1 end token and renormalize depots to start at zero
+        data = data[data != -1] - 1
     else:
         # We remove the customer indices column from non-depot section
         data = data[:, 1:]
