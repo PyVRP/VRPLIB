@@ -25,8 +25,8 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
     text
         The instance text.
     compute_edge_weights
-        Whether to compute edge weights from the node coordinates. Defaults to
-        True.
+        Whether to compute edge weights from the node coordinates.
+        Defaults to True.
 
     Returns
     -------
