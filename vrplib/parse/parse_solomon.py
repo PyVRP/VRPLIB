@@ -8,7 +8,7 @@ from .parse_utils import text2lines
 Instance = Dict[str, Union[str, float, np.ndarray]]
 
 
-def parse_solomon(text: str) -> Instance:
+def parse_solomon(text: str, compute_edge_weights: bool = True) -> Instance:
     """
     Parses the text of a Solomon VRPTW instance.
 
@@ -16,6 +16,9 @@ def parse_solomon(text: str) -> Instance:
     ----------
     text
         The instance text.
+    compute_edge_weights
+        Whether to compute the edge weights from the node coordinates.
+        Defaults to True.
 
     Returns
     -------
@@ -36,7 +39,9 @@ def parse_solomon(text: str) -> Instance:
     instance["demand"] = data[:, 3]
     instance["time_window"] = data[:, 4:6]
     instance["service_time"] = data[:, 6]
-    instance["edge_weight"] = pairwise_euclidean(instance["node_coord"])
+
+    if compute_edge_weights:
+        instance["edge_weight"] = pairwise_euclidean(instance["node_coord"])
 
     return instance
 

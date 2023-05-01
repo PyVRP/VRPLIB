@@ -9,7 +9,7 @@ from .parse_utils import infer_type, text2lines
 Instance = Dict[str, Union[str, float, np.ndarray]]
 
 
-def parse_vrplib(text: str) -> Instance:
+def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
     """
     Parses a VRPLIB instance. An instance consists of two parts:
     1) Specifications: single line of the form <KEY>:<VALUE>.
@@ -24,6 +24,9 @@ def parse_vrplib(text: str) -> Instance:
     ----------
     text
         The instance text.
+    compute_edge_weights
+        Whether to compute edge weights from the node coordinates.
+        Defaults to True.
 
     Returns
     -------
@@ -42,7 +45,7 @@ def parse_vrplib(text: str) -> Instance:
         section, data = parse_section(section, instance)
         instance[section] = data
 
-    if instance and "edge_weight" not in instance:
+    if instance and compute_edge_weights and "edge_weight" not in instance:
         # Compute edge weights if there was no explicit edge weight section
         edge_weights = parse_distances([], **instance)  # type: ignore
         instance["edge_weight"] = edge_weights
@@ -103,7 +106,7 @@ def parse_section(lines: List, instance: Dict) -> np.ndarray:
 
     if section == "edge_weight":
         # Parse separately because it may require additional processing
-        return section, parse_distances(data_, **instance)
+        return section, parse_distances(data_, **instance)  # type: ignore
 
     data = np.array(data_)
 

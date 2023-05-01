@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import numpy as np
-from numpy.testing import assert_equal, assert_raises
+from numpy.testing import assert_, assert_equal, assert_raises
 from pytest import mark
 
 from vrplib.parse.parse_vrplib import (
@@ -200,3 +200,36 @@ def test_parse_vrplib_no_explicit_edge_weights():
     }
 
     assert_equal(actual, desired)
+
+
+def test_parse_vrplib_do_not_compute_edge_weights():
+    """
+    Tests if the edge weight section is not calculated when the instance does
+    not contain an explicit section and the user does not want to compute it.
+    """
+    instance = "\n".join(
+        [
+            "NAME: VRPLIB",
+            "EDGE_WEIGHT_TYPE: FLOOR_2D",
+            "NODE_COORD_SECTION",
+            "1  0   1",
+            "2  1   0",
+            "SERVICE_TIME_SECTION",
+            "1  1",
+            "2  1",
+            "TIME_WINDOW_SECTION",
+            "1  1   2",
+            "2  1   2",
+            "EOF",
+        ]
+    )
+    actual = parse_vrplib(instance, compute_edge_weights=False)
+    assert_("edge_weight" not in actual)
+
+
+def test_empty_text():
+    """
+    Tests if an empty text file is still read correctly.
+    """
+    actual = parse_vrplib("")
+    assert_equal(actual, {})
