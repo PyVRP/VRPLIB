@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from numpy.testing import assert_equal, assert_raises
+from numpy.testing import assert_, assert_equal, assert_raises
 
 from vrplib.read import read_instance
 
@@ -17,37 +17,37 @@ def test_raise_unknown_instance_format(tmp_path, instance_format):
         read_instance(path, instance_format)
 
 
+_VRPLIB_INSTANCE = [
+    "NAME: VRPLIB",
+    "EDGE_WEIGHT_TYPE: EUC_2D",
+    "NODE_COORD_SECTION",
+    "1  0  0",
+    "2  0  1",
+    "SERVICE_TIME_SECTION",
+    "1  1",
+    "TIME_WINDOW_SECTION",
+    "1  1   2",
+    "EOF",
+]
+
+
 def test_read_vrplib_instance(tmp_path):
     """
     Tests if a VRPLIB instance is correctly read and parsed.
     """
-    name = "test.sol"
+    name = "vrplib.txt"
 
     with open(tmp_path / name, "w") as fi:
-        instance = "\n".join(
-            [
-                "NAME: VRPLIB",
-                "EDGE_WEIGHT_TYPE: EXPLICIT",
-                "EDGE_WEIGHT_FORMAT: FULL_MATRIX",
-                "EDGE_WEIGHT_SECTION",
-                "0  1",
-                "1  0",
-                "SERVICE_TIME_SECTION",
-                "1  1",
-                "TIME_WINDOW_SECTION",
-                "1  1   2",
-                "EOF",
-            ]
-        )
+        instance = "\n".join(_VRPLIB_INSTANCE)
         fi.write(instance)
 
     desired = {
         "name": "VRPLIB",
-        "edge_weight_type": "EXPLICIT",
-        "edge_weight_format": "FULL_MATRIX",
-        "edge_weight": np.array([[0, 1], [1, 0]]),
+        "edge_weight_type": "EUC_2D",
+        "node_coord": np.array([[0, 0], [0, 1]]),
         "service_time": np.array([1]),
         "time_window": np.array([[1, 2]]),
+        "edge_weight": np.array([[0, 1], [1, 0]]),
     }
 
     assert_equal(read_instance(tmp_path / name), desired)
@@ -69,7 +69,7 @@ def test_read_solomon_instance(tmp_path):
     """
     Tests if a Solomon instance is correctly read and parsed.
     """
-    name = "test.sol"
+    name = "solomon.txt"
 
     with open(tmp_path / name, "w") as fi:
         instance = "\n".join(_SOLOMON_INSTANCE)
@@ -94,3 +94,31 @@ def test_read_solomon_instance(tmp_path):
     # VRPLIB instance. This yields an empty instance.
     actual = read_instance(tmp_path / name)
     assert_equal(actual, {})
+
+
+def test_do_not_compute_edge_weights(tmp_path):
+    """
+    Tests if the edge weights are not computed when the corresponding argument
+    is set to False.
+    """
+    # Test for VRPLIB instance
+    name = "vrplib.txt"
+
+    with open(tmp_path / name, "w") as fi:
+        instance = "\n".join(_VRPLIB_INSTANCE)
+        fi.write(instance)
+
+    instance = read_instance(tmp_path / name, compute_edge_weights=False)
+    assert_("edge_weight" not in instance)
+
+    # Test for Solomon instance
+    name = "solomon.txt"
+
+    with open(tmp_path / name, "w") as fi:
+        instance = "\n".join(_SOLOMON_INSTANCE)
+        fi.write(instance)
+
+    instance = read_instance(
+        tmp_path / name, instance_format="solomon", compute_edge_weights=False
+    )
+    assert_("edge_weight" not in instance)
