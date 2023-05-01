@@ -95,20 +95,22 @@ vrplib.read_vrplib("vrplib-example.txt")
      'depot': array([0])}
 ```
 
+#### On computing edge weights 
+Note that in the above example, the edge weights were not included in the data section part, but they were included in the instance output.
+By default, `vrplib` computes the edge weights by following the instance specifications as strictly as possible.
+You can use the `compute_distances` argument in `read_instance` to disable this.
 
-#### On computing distances 
-The `vrplib` library tries to follow the instance specifications as strictly as possible to compute the distances. 
-
-For VRPLIB instances, the distances computation is determined by the `EDGE_WEIGHT_TYPE` and possibly the `EDGE_WEIGHT_FORMAT` specifications. We currently support two categories of edge weight types:
+For VRPLIB instances, the distances computation is determined by the `EDGE_WEIGHT_TYPE` specification, and in some cases the `EDGE_WEIGHT_FORMAT` specification. 
+`vrplib` currently supports two categories of edge weight types:
 - `*_2D`: compute the Euclidean distances using the node coordinate data.
     - `EUC_2D`: Double precision distances without rounding.
     - `FLOOR_2D`: Round down all distances to down to an integer.
     - `EXACT_2D`: Multiply the distances by 1000, round to the nearest integer.
-- `EXPLICIT`: the distance data is explicitly provided, in partial or full form. For explicit matrices, the `EDGE_WEIGHT_FORMAT` must be specified. We support the following two formats:
+- `EXPLICIT`: the distance data is explicitly provided, in partial or full form. For explicit matrices, the `EDGE_WEIGHT_FORMAT` specification must be present. We support the following two edge weight formats:
   - `LOWER_ROW`: Lower row triangular matrix without diagonal entries.  
   - `FULL_MATRIX`: Explicit full matrix representation.
   
-
+#### More information
 The VRPLIB format is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format. 
 Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
 
