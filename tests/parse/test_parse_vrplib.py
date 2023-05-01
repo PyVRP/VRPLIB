@@ -1,6 +1,8 @@
+from pathlib import Path
+
 import numpy as np
-import pytest
 from numpy.testing import assert_equal, assert_raises
+from pytest import mark
 
 from vrplib.parse.parse_vrplib import (
     group_specifications_and_sections,
@@ -8,6 +10,46 @@ from vrplib.parse.parse_vrplib import (
     parse_specification,
     parse_vrplib,
 )
+
+DATA_DIR = Path("tests/data/")
+
+
+@mark.parametrize(
+    "name",
+    [
+        "C101.txt",  # solomon
+        "C1_2_1.txt",  # solomon
+        "C101.sol",  # solution
+        "NoColonSpecification.txt",
+    ],
+)
+def test_raise_invalid_vrplib_format(name):
+    """
+    Tests if a RuntimeError is raised when the text is not in VRPLIB format.
+    """
+    with open(DATA_DIR / name, "r") as fh:
+        with assert_raises(RuntimeError):
+            parse_vrplib(fh.read())
+
+
+@mark.parametrize(
+    "name",
+    [
+        "A-n32-k5.vrp",
+        "B-n31-k5.vrp",
+        "CMT6.vrp",
+        "E-n13-k4.vrp",
+        "F-n72-k4.vrp",
+        "Golden_1.vrp",
+        "Li_21.vrp",
+        "ORTEC-n242-k12.vrp",
+        "P-n16-k8.vrp",
+        "X-n101-k25.vrp",
+    ],
+)
+def test_no_raise_valid_vrplib_format(name):
+    with open(DATA_DIR / name, "r") as fh:
+        parse_vrplib(fh.read())
 
 
 def test_group_specifications_and_sections():
@@ -35,7 +77,7 @@ def test_group_specifications_and_sections():
     assert_equal(actual_sections, [sections[:3], sections[3:]])
 
 
-@pytest.mark.parametrize(
+@mark.parametrize(
     "line, key, value",
     [
         ("NAME : Antwerp 1", "name", "Antwerp 1"),  # Whitespace around :
@@ -56,7 +98,7 @@ def test_parse_specification(line, key, value):
     assert_equal(v, value)
 
 
-@pytest.mark.parametrize(
+@mark.parametrize(
     "lines, desired",
     [
         (
@@ -76,6 +118,11 @@ def test_parse_specification(line, key, value):
             ["depot", np.array([0])],
         ),
         (
+            # No end token in DEPOT_SECTION
+            ["DEPOT_SECTION", "4"],
+            ["depot", np.array([3])],
+        ),
+        (
             ["UNKNOWN_SECTION", "1 1", "1 -1"],
             ["unknown", np.array([1, -1])],
         ),
@@ -88,23 +135,6 @@ def test_parse_section(lines, desired):
     actual = parse_section(lines, {})
 
     assert_equal(actual, desired)
-
-
-@pytest.mark.parametrize(
-    "lines",
-    [
-        ["DEPOT_SECTION"],
-        ["DEPOT_SECTION", "1"],
-        ["DEPOT_SECTION", "1", "-100"],
-    ],
-)
-def test_depot_section_raise_runtime_error(lines):
-    """
-    Tests if a RuntimeError is raised when the depot section does not end
-    with a -1.
-    """
-    with assert_raises(RuntimeError):
-        parse_section(lines, {})
 
 
 def test_parse_vrplib():
@@ -170,11 +200,3 @@ def test_parse_vrplib_no_explicit_edge_weights():
     }
 
     assert_equal(actual, desired)
-
-
-def test_empty_text():
-    """
-    Tests if an empty text file is still read correctly.
-    """
-    actual = parse_vrplib("")
-    assert_equal(actual, {})
