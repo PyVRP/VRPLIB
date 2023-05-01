@@ -63,10 +63,10 @@ The VRPLIB format is the standard format specification for Capacitated Vehicle R
 An example of an VRPLIB instance looks as follows:
 ``` bash
 NAME: Example 
-KEY: VALUE
+EDGE_WEIGHT_TYPE: EUC_2D
 NODE_COORD_SECTION
 1 0 0
-2 0 0
+2 5 5
 SERVICE_TIME_SECTION
 1 1
 2 3
@@ -80,10 +80,16 @@ Data sections must start with a section header (e.g., `SERVICE_TIME_SECTION`) fo
 Each row must start with the location index, starting from 1, followed by any number of white-space separated data.
 There are two exceptions to this data section format: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION`. These sections should not start with a location index for each row.
 
+
+Reading the above example instance returns the following:
 ``` python
 vrplib.read_vrplib("vrplib-instance.txt")
 
->>> TODO
+>>> {'name': 'Example',
+     'edge_weight_type': 'EUC_2D',
+     'node_coord': array([[0, 0], [5, 5]]),
+     'service_time': array([1, 3]),
+     'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
 ```
 
 The basic requirements are as follows:
@@ -102,9 +108,6 @@ For VRPLIB instances, the distances computation is determined by the `EDGE_WEIGH
   - `LOWER_ROW`: Lower row triangular matrix without diagonal entries.  
   - `FULL_MATRIX`: Explicit full matrix representation.
   
-<!-- Note that there are VRPLIB instances that use different rounding conventions in the literature, which may not be specified in the instance. For example, the X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer.  -->
-<!-- When you use the `vrplib` package to read instances from the X set, it will return non-rounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type which implies no rounding.  -->
-<!-- This can be easily solved by rounding the distances matrix manually. -->
 
 The VRPLIB format is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format. 
 Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
@@ -112,12 +115,9 @@ Additional information about the VRPLIB format can be found [here]( http://webho
 ### Solomon format
 The Solomon format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. See the [C101](http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/Solomon/C101.txt) instance for an example. 
 `vrplib` supports this type of instance format because the aforementioned instances are widely used.
-
-<!-- For Solomon-type instances, the default is to the Euclidean distances without rounding.  -->
-<!-- A recent convention that was proposed during the [2021 DIMACS Vehicle Routing Implementation Challenge](http://dimacs.rutgers.edu/programs/challenge/vrp/vrptw/) is to truncate the Euclidean distances to one decimal.  -->
-<!-- Similar to the X instance set, you can manually round the distances matrix to follow this convention. -->
+For Solomon-type instances, the default is to the Euclidean distances without rounding.
+TODO 
 
 ## Other remarks
 - The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded through this package. You can download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
-
-    
+- In the literature, some instances use rounding conventions different from what is specified in the instance. For example, X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read this instance, it will return non-rounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type which implies no rounding. To adhere to the convention used in the literature, you can manually round the distances matrix.
