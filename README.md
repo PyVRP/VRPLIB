@@ -58,7 +58,7 @@ vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
 This section contains some documentation about the `vrplib` package.
 
 - [VRPLIB instance format](#vrplib-instance-format)
-- [Solomon format](#solomon-format)
+- [Solomon instance format](#solomon-instance-format)
 - [Solution format](#solution-format)
 - [Other remarks](#other-remarks)
 
@@ -119,7 +119,7 @@ For VRPLIB instances, the edge weights computation is determined by the `EDGE_WE
 The VRPLIB format is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format. 
 Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
 
-### Solomon format
+### Solomon instance format
 The Solomon format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. See the [C101](http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/Solomon/C101.txt) instance for an example. 
 `vrplib` supports this type of instance format because the aforementioned instances are widely used.
 For Solomon-type instances, the default is to the Euclidean distances without rounding.
