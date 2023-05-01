@@ -17,7 +17,7 @@ def test_raise_unknown_instance_format(tmp_path, instance_format):
         read_instance(path, instance_format)
 
 
-_VRPLIB_INSTANCE = [
+VRPLIB_INSTANCE = [
     "NAME: VRPLIB",
     "EDGE_WEIGHT_TYPE: EUC_2D",
     "NODE_COORD_SECTION",
@@ -38,7 +38,7 @@ def test_read_vrplib_instance(tmp_path):
     name = "vrplib.txt"
 
     with open(tmp_path / name, "w") as fi:
-        instance = "\n".join(_VRPLIB_INSTANCE)
+        instance = "\n".join(VRPLIB_INSTANCE)
         fi.write(instance)
 
     desired = {
@@ -53,7 +53,7 @@ def test_read_vrplib_instance(tmp_path):
     assert_equal(read_instance(tmp_path / name), desired)
 
 
-_SOLOMON_INSTANCE = [
+SOLOMON_INSTANCE = [
     "C101",
     "VEHICLE",
     "NUMBER     CAPACITY",
@@ -72,7 +72,7 @@ def test_read_solomon_instance(tmp_path):
     name = "solomon.txt"
 
     with open(tmp_path / name, "w") as fi:
-        instance = "\n".join(_SOLOMON_INSTANCE)
+        instance = "\n".join(SOLOMON_INSTANCE)
         fi.write(instance)
 
     dist = ((40 - 45) ** 2 + (50 - 68) ** 2) ** 0.5  # from 0 to 1
@@ -100,7 +100,7 @@ def test_do_not_compute_edge_weights(tmp_path):
     name = "vrplib.txt"
 
     with open(tmp_path / name, "w") as fi:
-        instance = "\n".join(_VRPLIB_INSTANCE)
+        instance = "\n".join(VRPLIB_INSTANCE)
         fi.write(instance)
 
     instance = read_instance(tmp_path / name, compute_edge_weights=False)
@@ -110,7 +110,7 @@ def test_do_not_compute_edge_weights(tmp_path):
     name = "solomon.txt"
 
     with open(tmp_path / name, "w") as fi:
-        instance = "\n".join(_SOLOMON_INSTANCE)
+        instance = "\n".join(SOLOMON_INSTANCE)
         fi.write(instance)
 
     instance = read_instance(
