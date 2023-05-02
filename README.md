@@ -31,11 +31,9 @@ solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
 `instance` and `solution` are dictionaries that contain all parsed data. 
 ``` python
 >>> instance.keys()
-
 dict_keys(['name', ..., 'edge_weight'])
 
->>> solutions.keys()
-
+>>> solution.keys()
 dict_keys(['routes', 'cost'])
 ```
 
