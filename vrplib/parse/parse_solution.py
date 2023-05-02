@@ -32,7 +32,7 @@ def parse_solution(text: str) -> Solution:
         elif ":" in line or " " in line:  # Split at first colon or whitespace
             split_at = ":" if ":" in line else " "
             k, v = [word.strip() for word in line.split(split_at, 1)]
-            solution[k] = infer_type(v)  # type: ignore
+            solution[k.lower()] = infer_type(v)  # type: ignore
         else:  # Ignore lines without keyword-value pairs
             continue
 
