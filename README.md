@@ -79,7 +79,7 @@ EOF
 A VRPLIB instance contains problem **specifications** and problem **data**. 
 - Specifications are key-value pairs separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the two data specifications.
 - Data are explicit array-like values such as customer coordinates or service times. 
-Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or client. 
+Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or customer. 
 There are two exceptions: values in `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with an index.
 
 Besides the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
@@ -156,18 +156,17 @@ Route #2: 4 5
 Cost: 100
 ```
 
-A solution is represented by a set of routes, where each route specifies the sequence of clients to visit. 
+A solution is represented by a set of routes, where each route specifies the sequence of customers to visit. 
 Each route should start with "Route", followed by the route number, and followed by a colon. 
-The clients to be served on the route are then listed.
+The customers to be served on the route are then listed.
 The solution file can also include other keywords like `Cost`, which will be separated on the first colon or whitespace.
 
-The convention is that client indices start counting from 1, but `vrplib` simply parses the file without strict requirements.
+The convention is that customer indices start counting from 1, but `vrplib` simply parses the file without strict requirements about those indices.
 
 Reading the above example solution returns the following dictionary:
 ``` python
 {'routes': [[1, 2, 3], [4, 5]], 'cost': 100}
 ```
-
 
 ### Other remarks
 - The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded through this package. You can download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
