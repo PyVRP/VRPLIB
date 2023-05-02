@@ -3,7 +3,7 @@
 [![vrplib](https://github.com/leonlan/vrplib/actions/workflows/vrplib.yaml/badge.svg)](https://github.com/leonlan/vrplib/actions/workflows/vrplib.yaml)
 [![codecov](https://codecov.io/gh/leonlan/VRPLIB/branch/master/graph/badge.svg?token=X0X66LBNZ7)](https://codecov.io/gh/leonlan/VRPLIB)
 
-`vrplib` is a Python package for reading Vehicle Routing Problem (VRP) instances. The main features are:
+`vrplib` is a Python package for working with Vehicle Routing Problem (VRP) instances. The main features are:
 - reading VRPLIB and Solomon instances and solutions, and
 - downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
@@ -80,7 +80,7 @@ A VRPLIB instance contains problem **specifications** and problem **data**.
 - Specifications are key-value pairs separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the two data specifications.
 - Data are explicit array-like values such as customer coordinates or service times. 
 Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or client. 
-There are two exceptions: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index.
+There are two exceptions: values in `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with an index.
 
 Besides the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
 This means that you can use `vrplib` to read VRPLIB instances with custom specifications like `MY_SPECIFICATION: SOME_VALUE` and custom section names like `MY_SECTION`.
@@ -95,9 +95,9 @@ Reading the above example instance returns the following dictionary:
  'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
 ```
 
-The depot section is special because it specifies which location index corresponds to the depot data. 
+The depot section specifies which location index corresponds to the depot data. 
 The convention is to let index 1 represent the depot. 
-`vrplib` adheres to this convention but subtracts one to make indexing data easier.
+`vrplib` subtracts one from the depot value to make it easier to index.
 
 #### Computing edge weights 
 Note that the example instance did not include any explicit information about the edge weights, yet the output includes edge weights data.
