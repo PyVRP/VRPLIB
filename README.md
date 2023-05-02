@@ -8,7 +8,7 @@
 - downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
 ## Installation
-This library works with Python 3.8+ and only depends on `numpy`. Install the latest version of `vrplib`:
+`vrplib` works with Python 3.8+ and only depends on `numpy`.
 
 ```shell
 pip install vrplib
@@ -17,53 +17,64 @@ pip install vrplib
 ## Example usage
 ### Reading instances and solutions
 ```python
-import vrplib
+>>> import vrplib
 
-# Read VRPLIB formatted instances (default)
-instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
-solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
+>>> # Read VRPLIB formatted instances (default)
+>>> instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
+>>> solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
 
-# Read Solomon formatted instances
-instance = vrplib.read_instance("/path/to/C101.txt", instance_format="solomon")
-solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
+>>> # Read Solomon formatted instances
+>>> instance = vrplib.read_instance("/path/to/C101.txt", instance_format="solomon")
+>>> solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
 ```
 
 `instance` and `solution` are dictionaries that contain all parsed data. 
 ``` python
-instance.keys()
-# dict_keys(['name', 'comment', 'type', 'dimension', ..., 'edge_weight'])
+>>> instance.keys()
 
-solutions.keys()
-# dict_keys(['routes', 'cost'])
+dict_keys(['name', ..., 'edge_weight'])
+
+>>> solutions.keys()
+
+dict_keys(['routes', 'cost'])
 ```
 
 
 ### Downloading instances from CVRPLIB 
 ``` python
-import vrplib
+>>> import vrplib
 
-# Download an instance and a solution file
-vrplib.download_instance("X-n101-k25", "/path/to/instances/")
-vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
+>>> # Download an instance and a solution file 
+>>> vrplib.download_instance("X-n101-k25", "/path/to/instances/")
+>>> vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
 
-# List all instance names that can be downloaded 
-vrplib.list_names()                      # All instance names
-vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
-vrplib.list_names(vrp_type="cvrp")       # Only CVRP instances
-vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
+>>> # List all instance names that can be downloaded 
+>>> vrplib.list_names()                      # All instance names
+
+['A-n32-k5', ..., 'RC2_10_10']
+
+>>> vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
+
+['E-n101-k8', ..., 'RC2_2_10']
+
+>>> vrplib.list_names(vrp_type="cvrp")       # Only CVRP instances
+
+['A-n32-k5', ..., 'ORTEC-n701-k64']
+
+>>> vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
+
+['C101', ..., 'RC2_10_10']
 ```
 
 
 ## Documentation
-This section contains some documentation about the `vrplib` package.
-
 - [VRPLIB instance format](#vrplib-instance-format)
 - [Solomon instance format](#solomon-instance-format)
 - [Solution format](#solution-format)
 - [Other remarks](#other-remarks)
 
 ### VRPLIB instance format
-The VRPLIB format is the standard format for the Capacitated Vehicle Routing Problem (CVRP). An example of an VRPLIB instance looks as follows:
+The VRPLIB format is the standard format for the Capacitated Vehicle Routing Problem (CVRP). An example VRPLIB instance looks as follows:
 ``` bash
 NAME: Example 
 EDGE_WEIGHT_TYPE: EUC_2D
@@ -78,8 +89,8 @@ DEPOT_SECTION
 EOF
 ```
 
-A VRPLIB consists of a **specification** part and a **data** part. 
-- The specification part contains information about the file format and on its content. Each specification should be formatted as a key-value pair separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the specifications.
+A VRPLIB instance contains problem **specifications** and problem **data**. 
+- Specifications contains information about the file format and on its content. Each specification should be formatted as a key-value pair separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the specifications.
 - The data part contains explicit problem data such as customer coordinates or service times. 
 Each data section starts with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`.
 The section header is followed by rows of array-like data, and each row must start with the location index. It is customary to start counting from one.
@@ -91,6 +102,7 @@ This means that you can use `vrplib` to read VRPLIB instances with custom specif
 Reading the above example instance returns the following:
 ``` python
 >>> vrplib.read_vrplib("vrplib-example.txt")
+
 {'name': 'Example',
  'edge_weight_type': 'EUC_2D',
  'node_coord': array([[0, 0], [5, 5]]),
@@ -120,9 +132,7 @@ The VRPLIB format is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidel
 Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
 
 ### Solomon instance format
-The Solomon format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. 
-
-A Solomon instance looks like this:
+The Solomon format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. A Solomon instance looks like this:
 ``` bash
 Example
 
@@ -140,6 +150,7 @@ CUST NO.  XCOORD.    YCOORD.    DEMAND   READY TIME  DUE DATE   SERVICE TIME
 Reading this Solomon instance returns the following output:
 ``` python
 >>> vrplib.read_instance("solomon-example.txt", instance_format="solomon")
+
 {'name': 'Example',
  'vehicles': 50,
  'capacity': 200,
@@ -152,8 +163,6 @@ Reading this Solomon instance returns the following output:
 
 The edge weights are computed by default using the Euclidean distances. 
 
-`vrplib` supports the Solomon instance format because these instances are widely used to benchmark VRPTW algorithms. 
-
 ### Solution format
 Here's an example of the solution format:
 ``` bash
@@ -163,7 +172,7 @@ Cost: 100
 ```
 
 A solution is represented as a set of routes, where each route specifies the sequence of clients to visit. 
-Each route is denoted by "Route", followed by the route number, and followed by a colon. 
+Each route should start with "Route", followed by the route number, and followed by a colon. 
 The clients to be served on the route are then listed.
 The solution file can also include other keywords like `Cost`, which will be separated on the first colon or whitespace.
 
@@ -171,6 +180,7 @@ The convention is that clients starts at index 1 for the first client, but this 
 
 ``` python
 >>> vrplib.read_solution("solution-example.txt")
+
 {'routes': [[1, 2, 3], [4, 5]], 'cost': 100}
 ```
 
