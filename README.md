@@ -17,15 +17,15 @@ pip install vrplib
 ## Example usage
 ### Reading instances and solutions
 ```python
->>> import vrplib
+import vrplib
 
->>> # Read VRPLIB formatted instances (default)
->>> instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
->>> solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
+# Read VRPLIB formatted instances (default)
+instance = vrplib.read_instance("/path/to/X-n101-k25.vrp")
+solution = vrplib.read_solution("/path/to/X-n101-k25.sol")
 
->>> # Read Solomon formatted instances
->>> instance = vrplib.read_instance("/path/to/C101.txt", instance_format="solomon")
->>> solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
+# Read Solomon formatted instances
+instance = vrplib.read_instance("/path/to/C101.txt", instance_format="solomon")
+solution = vrplib.read_solution("/path/to/C101.sol") # only 1 solution format
 ```
 
 `instance` and `solution` are dictionaries that contain all parsed data. 
@@ -42,28 +42,17 @@ dict_keys(['routes', 'cost'])
 
 ### Downloading instances from CVRPLIB 
 ``` python
->>> import vrplib
+import vrplib
 
->>> # Download an instance and a solution file 
->>> vrplib.download_instance("X-n101-k25", "/path/to/instances/")
->>> vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
+# Download an instance and a solution file 
+vrplib.download_instance("X-n101-k25", "/path/to/instances/")
+vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
 
->>> # List all instance names that can be downloaded 
->>> vrplib.list_names()                      # All instance names
-
-['A-n32-k5', ..., 'RC2_10_10']
-
->>> vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
-
-['E-n101-k8', ..., 'RC2_2_10']
-
->>> vrplib.list_names(vrp_type="cvrp")       # Only CVRP instances
-
-['A-n32-k5', ..., 'ORTEC-n701-k64']
-
->>> vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
-
-['C101', ..., 'RC2_10_10']
+# List all instance names that can be downloaded 
+vrplib.list_names()                      # All instance names
+vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
+vrplib.list_names(vrp_type="cvrp")       # Only CVRP instances
+vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
 ```
 
 
