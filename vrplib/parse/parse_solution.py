@@ -1,8 +1,11 @@
-from typing import Dict, List, Union
+from typing import List, TypedDict
 
 from .parse_utils import infer_type, text2lines
 
-Solution = Dict[str, Union[float, str, List]]
+
+class Solution(TypedDict, total=False):
+    routes: List[List[int]]
+    cost: float
 
 
 def parse_solution(text: str) -> Solution:
@@ -25,11 +28,11 @@ def parse_solution(text: str) -> Solution:
     for line in text2lines(text):
         if "Route" in line:
             route = [int(idx) for idx in line.split(":")[1].split(" ") if idx]
-            solution["routes"].append(route)  # type: ignore
+            solution["routes"].append(route)
         elif ":" in line or " " in line:  # Split at first colon or whitespace
             split_at = ":" if ":" in line else " "
             k, v = [word.strip() for word in line.split(split_at, 1)]
-            solution[k.lower()] = infer_type(v)
+            solution[k] = infer_type(v)  # type: ignore
         else:  # Ignore lines without keyword-value pairs
             continue
 

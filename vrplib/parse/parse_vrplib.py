@@ -38,11 +38,11 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
 
     for spec in specs:
         key, value = parse_specification(spec)
-        instance[key] = value
+        instance[key] = value  # type: ignore
 
     for section in sections:
         section, data = parse_section(section, instance)
-        instance[section] = data
+        instance[section] = data  # type: ignore
 
     if instance and compute_edge_weights and "edge_weight" not in instance:
         # Compute edge weights if there was no explicit edge weight section
