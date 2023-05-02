@@ -99,7 +99,7 @@ The depot section is special because it specifies which location index correspon
 The convention is to let index 1 represent the depot. 
 `vrplib` adheres to this convention but subtracts one to make indexing data easier.
 
-#### On computing edge weights 
+#### Computing edge weights 
 Note that the example instance did not include any explicit information about the edge weights, yet the output includes edge weights data.
 This is because `vrplib` automatically computes the edge weights based on the instance specifications, if applicable.
 In the example, the edge weight type specification and node coordinates data are used to compute the Euclidean distance.
