@@ -77,11 +77,10 @@ EOF
 ```
 
 A VRPLIB instance contains problem **specifications** and problem **data**. 
-- Specifications contains information about the file format and on its content. Each specification should be formatted as a key-value pair separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the specifications.
-- The data part contains explicit problem data such as customer coordinates or service times. 
-Each data section starts with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`.
-The section header is followed by rows of array-like data, and each row must start with the location index. It is customary to start counting from one.
-There are two exceptions to this rule: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index.
+- Specifications are key-value pairs formatted by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the two data specifications.
+- Data are explicit array-like problem data such as customer coordinates or service times. 
+Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or client. The convention is to start counting from one, representing the depot, but the `vrplib` library itself does not care which indices are used.
+There are two exceptions: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index.
 
 Besides for the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
 This means that you can use `vrplib` to read VRPLIB instances with custom specifications like `MY_SPECIFICATION: SOME_VALUE` and custom section names like `MY_SECTION`.
@@ -98,7 +97,7 @@ Reading the above example instance returns the following dictionary:
 
 #### On computing edge weights 
 Note that the example instance did not include any explicit information about the edge weights, yet the output includes edge weights data.
-This is because `vrplib` automatically computes the edge weights based on the instance specifications.
+This is because `vrplib` automatically computes the edge weights based on the instance specifications, if applicable.
 In the example, the edge weight type specification and node coordinates data are used to compute the Euclidean distance.
 You can set the `compute_distances` argument in `read_instance` to disable this feature.
 
@@ -147,19 +146,19 @@ Reading this Solomon instance returns the following dictionary:
 The edge weights are computed by default using the Euclidean distances. 
 
 ### Solution format
-Here's an example of the solution format:
+Here's an example of a solution format:
 ``` bash
 Route #1: 1 2 3
 Route #2: 4 5
 Cost: 100
 ```
 
-A solution is represented as a set of routes, where each route specifies the sequence of clients to visit. 
+A solution is represented by a set of routes, where each route specifies the sequence of clients to visit. 
 Each route should start with "Route", followed by the route number, and followed by a colon. 
 The clients to be served on the route are then listed.
 The solution file can also include other keywords like `Cost`, which will be separated on the first colon or whitespace.
 
-The convention is that clients starts at index 1 for the first client, but this is not a strict requirement.
+The convention is that client indices start counting from 1, but `vrplib` simply parses the file without strict requirements.
 
 Reading the above example solution returns the following dictionary:
 ``` python
