@@ -150,7 +150,7 @@ The edge weights are computed by default using the Euclidean distances.
 
 ### Solution format
 Here's an example of a solution format:
-``` 
+``` { .html } 
 Route #1: 1 2 3
 Route #2: 4 5
 Cost: 100
