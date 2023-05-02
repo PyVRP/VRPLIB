@@ -132,7 +132,6 @@ CUSTOMER
 CUST NO.  XCOORD.    YCOORD.    DEMAND   READY TIME  DUE DATE   SERVICE TIME
     0      70         70          0          0       1351          0
     1      33         78         20        750        809         90
-... 
 ```
 
 Reading this Solomon instance returns the following dictionary:
