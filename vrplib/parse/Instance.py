@@ -6,8 +6,10 @@ import numpy as np
 class Instance(TypedDict, total=False):
     # Specifications
     name: str
+    dimension: int  # number of depots + number of customers
     edge_weight_format: str
     edge_weight_type: str
+    display_type: str
     comment: str
     vehicles: int  # number of vehicles
     capacity: int

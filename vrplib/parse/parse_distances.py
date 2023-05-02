@@ -37,8 +37,7 @@ def parse_distances(
 
     Returns
     -------
-    np.ndarray
-        An n-by-n distances matrix.
+    An n-by-n distances matrix.
     """
     if "2D" in edge_weight_type:  # Euclidean distance on node coordinates
         if node_coord is None:
@@ -85,8 +84,7 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
 
     Returns
     -------
-    np.ndarray
-        An n-by-n Euclidean distances matrix.
+    An n-by-n Euclidean distances matrix.
 
     """
     diff = coords[:, np.newaxis, :] - coords
@@ -108,8 +106,7 @@ def from_lower_row(triangular: List) -> np.ndarray:
 
     Returns
     -------
-    np.ndarray
-        A n-by-n distances matrix.
+    A n-by-n distances matrix.
     """
     n = len(triangular) + 1
     distances = np.zeros((n, n))

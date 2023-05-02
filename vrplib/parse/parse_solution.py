@@ -20,8 +20,7 @@ def parse_solution(text: str) -> Solution:
 
     Returns
     -------
-    dict
-        The soluion data.
+    The soluion data.
     """
     solution: Solution = {"routes": []}
 
