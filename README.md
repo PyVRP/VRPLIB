@@ -86,10 +86,8 @@ There are two exceptions to this rule: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECT
 Besides for the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
 This means that you can use `vrplib` to read VRPLIB instances with custom specifications like `MY_SPECIFICATION: SOME_VALUE` and custom section names like `MY_SECTION`.
 
-Reading the above example instance returns the following:
+Reading the above example instance returns the following dictionary:
 ``` python
->>> vrplib.read_vrplib("vrplib-example.txt")
-
 {'name': 'Example',
  'edge_weight_type': 'EUC_2D',
  'node_coord': array([[0, 0], [5, 5]]),
@@ -134,10 +132,8 @@ CUST NO.  XCOORD.    YCOORD.    DEMAND   READY TIME  DUE DATE   SERVICE TIME
 ... 
 ```
 
-Reading this Solomon instance returns the following output:
+Reading this Solomon instance returns the following dictionary:
 ``` python
->>> vrplib.read_instance("solomon-example.txt", instance_format="solomon")
-
 {'name': 'Example',
  'vehicles': 50,
  'capacity': 200,
@@ -165,9 +161,8 @@ The solution file can also include other keywords like `Cost`, which will be sep
 
 The convention is that clients starts at index 1 for the first client, but this is not a strict requirement.
 
+Reading the above example solution returns the following dictionary:
 ``` python
->>> vrplib.read_solution("solution-example.txt")
-
 {'routes': [[1, 2, 3], [4, 5]], 'cost': 100}
 ```
 
