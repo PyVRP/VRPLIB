@@ -79,34 +79,33 @@ EOF
 ```
 
 A VRPLIB consists of a **specification** part and a **data** part. 
-- The specification part contains information about the file format and on its content. Each specification should be presented as a key-value pair separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the specifications.
+- The specification part contains information about the file format and on its content. Each specification should be formatted as a key-value pair separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the specifications.
 - The data part contains explicit problem data such as customer coordinates or service times. 
-Each data section starts with a header name that ends with `_SECTION`, e.g., `SERVICE_TIME_SECTION` and `NODE_COORD_SECTION`.
-The section is then followed by rows of array-like data, and each row must start with the location index, starting from 1, followed by any number of white-space separated data.
-There are two exceptions to this rule: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index for each row.
+Each data section starts with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`.
+The section header is followed by rows of array-like data, and each row must start with the location index. It is customary to start counting from one.
+There are two exceptions to this rule: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index.
 
-Except for the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
-This means that you can use `vrplib` to read VRPLIB instances with custom specifications and section names like `MY_SECTION`.
+Besides for the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
+This means that you can use `vrplib` to read VRPLIB instances with custom specifications like `MY_SPECIFICATION: SOME_VALUE` and custom section names like `MY_SECTION`.
 
 Reading the above example instance returns the following:
 ``` python
-vrplib.read_vrplib("vrplib-example.txt")
-
->>> {'name': 'Example',
-     'edge_weight_type': 'EUC_2D',
-     'node_coord': array([[0, 0], [5, 5]]),
-     'service_time': array([1, 3]),
-     'depot': array([0]),
-     'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
+>>> vrplib.read_vrplib("vrplib-example.txt")
+{'name': 'Example',
+ 'edge_weight_type': 'EUC_2D',
+ 'node_coord': array([[0, 0], [5, 5]]),
+ 'service_time': array([1, 3]),
+ 'depot': array([0]),
+ 'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
 ```
 
 #### On computing edge weights 
-Note that in the example instance did not include any explicit information about the edge weights, yet the instance output included it.
-You can use the `compute_distances` argument in `read_instance` to enable this behavior, which is set to `True` by default.
+Note that the example instance did not include any explicit information about the edge weights, yet outputted instance includes edge weights data.
+This is because `vrplib` computes the edge weights based on the instance data by default.
+In the example, the edge weight type specification and node coordinates data are used to compute the Euclidean distance.
+You can set the `compute_distances` argument in `read_instance` to disable this feature.
 
-`vrplib` computes the edge weights by following the instance specifications as strictly as possible. 
-For VRPLIB instances, the edge weights computation is determined by the `EDGE_WEIGHT_TYPE` specification, and in some cases the `EDGE_WEIGHT_FORMAT` specification. 
-`vrplib` currently supports two categories of edge weight types:
+The edge weights are computed based on the `EDGE_WEIGHT_TYPE` specification, and in some cases the `EDGE_WEIGHT_FORMAT` specification. `vrplib` currently supports two categories of edge weight types:
 - `*_2D`: Euclidean distances based on the node coordinates data.
     - `EUC_2D`: Double precision distances without rounding.
     - `FLOOR_2D`: Round down all distances to down to an integer.
@@ -115,19 +114,68 @@ For VRPLIB instances, the edge weights computation is determined by the `EDGE_WE
   - `LOWER_ROW`: Lower row triangular matrix without diagonal entries.
   - `FULL_MATRIX`: Explicit full matrix representation.
   
+
 #### More information about VRPLIB
 The VRPLIB format is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format. 
 Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
 
 ### Solomon instance format
-The Solomon format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. See the [C101](http://vrp.atd-lab.inf.puc-rio.br/media/com_vrp/instances/Solomon/C101.txt) instance for an example. 
-`vrplib` supports this type of instance format because the aforementioned instances are widely used.
-For Solomon-type instances, the default is to the Euclidean distances without rounding.
-TODO 
+The Solomon format was used to introduce the Solomon instances for the Vehicle Routing Problem with Time Window (VRPTW) and also the extended instance set by Homberger and Gehring. 
+
+A Solomon instance looks like this:
+``` bash
+Example
+
+VEHICLE
+NUMBER     CAPACITY
+  50          200
+
+CUSTOMER
+CUST NO.  XCOORD.    YCOORD.    DEMAND   READY TIME  DUE DATE   SERVICE TIME
+    0      70         70          0          0       1351          0
+    1      33         78         20        750        809         90
+... 
+```
+
+Reading this Solomon instance returns the following output:
+``` python
+>>> vrplib.read_instance("solomon-example.txt", instance_format="solomon")
+{'name': 'Example',
+ 'vehicles': 50,
+ 'capacity': 200,
+ 'node_coord': array([[70, 70], [33, 78]]),
+ 'demand': array([ 0, 20]),
+ 'time_window': array([[ 0, 1351], [ 750,  809]]),
+ 'service_time': array([ 0, 90]),
+ 'edge_weight': array([[ 0.  , 37.85498646], [37.85498646,  0.  ]])}
+```
+
+The edge weights are computed by default using the Euclidean distances. 
+
+`vrplib` supports the Solomon instance format because these instances are widely used to benchmark VRPTW algorithms. 
 
 ### Solution format
-TODO
+Here's an example of the solution format:
+``` bash
+Route #1: 1 2 3
+Route #2: 4 5
+Cost: 100
+```
+
+A solution is represented as a set of routes, where each route specifies the sequence of clients to visit. 
+Each route is denoted by "Route", followed by the route number, and followed by a colon. 
+The clients to be served on the route are then listed.
+The solution file can also include other keywords like `Cost`, which will be separated on the first colon or whitespace.
+
+The convention is that clients starts at index 1 for the first client, but this is not a strict requirement.
+
+``` python
+>>> vrplib.read_solution("solution-example.txt")
+{'routes': [[1, 2, 3], [4, 5]], 'cost': 100}
+```
+
 
 ### Other remarks
 - The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded through this package. You can download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 - In the literature, some instances use rounding conventions different from what is specified in the instance. For example, X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read this instance, it will return non-rounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type which implies no rounding. To adhere to the convention used in the literature, you can manually round the distances matrix.
+- For large instances (>5000 customers) it's recommended to set the `compute_edge_weights` argument to `False` in `read_instance`.
