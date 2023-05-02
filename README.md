@@ -77,12 +77,12 @@ EOF
 ```
 
 A VRPLIB instance contains problem **specifications** and problem **data**. 
-- Specifications are key-value pairs formatted by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the two data specifications.
-- Data are explicit array-like problem data such as customer coordinates or service times. 
-Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or client. The convention is to start counting from one, representing the depot, but the `vrplib` library itself does not care which indices are used.
+- Specifications are key-value pairs separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the two data specifications.
+- Data are explicit array-like values such as customer coordinates or service times. 
+Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or client. 
 There are two exceptions: the `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with a location index.
 
-Besides for the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
+Besides the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
 This means that you can use `vrplib` to read VRPLIB instances with custom specifications like `MY_SPECIFICATION: SOME_VALUE` and custom section names like `MY_SECTION`.
 
 Reading the above example instance returns the following dictionary:
@@ -94,6 +94,10 @@ Reading the above example instance returns the following dictionary:
  'depot': array([0]),
  'edge_weight': array([[0.  , 7.07106781], [7.07106781, 0.  ]])}
 ```
+
+The depot section is special because it specifies which location index corresponds to the depot data. 
+The convention is to let index 1 represent the depot. 
+`vrplib` adheres to this convention but subtracts one to make indexing data easier.
 
 #### On computing edge weights 
 Note that the example instance did not include any explicit information about the edge weights, yet the output includes edge weights data.
