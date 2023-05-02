@@ -1,7 +1,9 @@
 from itertools import combinations
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import numpy as np
+
+from .Instance import Instance
 
 
 def parse_distances(
@@ -10,7 +12,7 @@ def parse_distances(
     edge_weight_format: Optional[str] = None,
     node_coord: Optional[np.ndarray] = None,
     comment: Optional[str] = None,
-    **kwargs: Union[float, str, np.ndarray],  # noqa
+    **kwargs: Instance,  # noqa
 ) -> np.ndarray:
     """
     Parses the distances. The specification "edge_weight_type" describes how
@@ -93,7 +95,7 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
     return np.sqrt(square_dist)
 
 
-def from_lower_row(triangular: np.ndarray) -> np.ndarray:
+def from_lower_row(triangular: List) -> np.ndarray:
     """
     Computes a full distances matrix from a lower row triangular matrix.
     The triangular matrix should not contain the diagonal.
@@ -118,7 +120,7 @@ def from_lower_row(triangular: np.ndarray) -> np.ndarray:
     return distances + distances.T
 
 
-def from_eilon(edge_weights: np.ndarray) -> np.ndarray:
+def from_eilon(edge_weights: List) -> np.ndarray:
     """
     Computes a full distances matrix from the Eilon instances with "LOWER_ROW"
     edge weight format. The specification is incorrect, instead the edge weight

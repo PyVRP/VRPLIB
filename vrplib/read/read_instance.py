@@ -1,7 +1,11 @@
 from vrplib.parse import parse_solomon, parse_vrplib
 
 
-def read_instance(path, instance_format="vrplib", compute_edge_weights=True):
+def read_instance(
+    path: str,
+    instance_format: str = "vrplib",
+    compute_edge_weights: bool = True,
+):
     """
     Reads the instance from the passed-in file path.
 

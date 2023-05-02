@@ -1,12 +1,11 @@
 import re
-from typing import Dict, List, Tuple, Union
+from typing import List, Tuple, Union
 
 import numpy as np
 
+from .Instance import Instance
 from .parse_distances import parse_distances
 from .parse_utils import infer_type, text2lines
-
-Instance = Dict[str, Union[str, float, np.ndarray]]
 
 
 def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
@@ -33,7 +32,7 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
     dict
         The instance data.
     """
-    instance = {}
+    instance = Instance()
 
     specs, sections = group_specifications_and_sections(text2lines(text))
 
@@ -97,9 +96,18 @@ def parse_specification(line: str) -> Tuple[str, Union[float, str]]:
     return k.lower(), infer_type(v)
 
 
-def parse_section(lines: List, instance: Dict) -> np.ndarray:
+def parse_section(
+    lines: List[str], instance: Instance
+) -> Tuple[str, np.ndarray]:
     """
-    Parses the data section into numpy arrays.
+    Parses the lines corresponding to a section and returns the data.
+
+    Parameters
+    ----------
+    lines
+        The lines corresponding to a section.
+    instance
+        The instance data parsed so far.
     """
     section = _remove_suffix(lines[0].strip(), "_SECTION").lower()
     data_ = [[infer_type(n) for n in line.split()] for line in lines[1:]]
@@ -124,5 +132,5 @@ def parse_section(lines: List, instance: Dict) -> np.ndarray:
     return section, data
 
 
-def _remove_suffix(name: str, suffix: str):
+def _remove_suffix(name: str, suffix: str) -> str:
     return name[: -len(suffix)] if name.endswith(suffix) else name
