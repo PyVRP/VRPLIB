@@ -97,12 +97,12 @@ Reading the above example instance returns the following dictionary:
 ```
 
 #### On computing edge weights 
-Note that the example instance did not include any explicit information about the edge weights, yet outputted instance includes edge weights data.
-This is because `vrplib` computes the edge weights based on the instance data by default.
+Note that the example instance did not include any explicit information about the edge weights, yet the output includes edge weights data.
+This is because `vrplib` automatically computes the edge weights based on the instance specifications.
 In the example, the edge weight type specification and node coordinates data are used to compute the Euclidean distance.
 You can set the `compute_distances` argument in `read_instance` to disable this feature.
 
-The edge weights are computed based on the `EDGE_WEIGHT_TYPE` specification, and in some cases the `EDGE_WEIGHT_FORMAT` specification. `vrplib` currently supports two categories of edge weight types:
+Following the VRPLIB conventions, the edge weights are computed based on the `EDGE_WEIGHT_TYPE` specification, and in some cases the `EDGE_WEIGHT_FORMAT` specification. `vrplib` currently supports two categories of edge weight types:
 - `*_2D`: Euclidean distances based on the node coordinates data.
     - `EUC_2D`: Double precision distances without rounding.
     - `FLOOR_2D`: Round down all distances to down to an integer.
