@@ -1,8 +1,11 @@
+import os
+from typing import Union
+
 from vrplib.parse import parse_solomon, parse_vrplib
 
 
 def read_instance(
-    path: str,
+    path: Union[str, os.PathLike],
     instance_format: str = "vrplib",
     compute_edge_weights: bool = True,
 ):
