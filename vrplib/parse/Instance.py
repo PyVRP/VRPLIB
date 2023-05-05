@@ -17,7 +17,7 @@ class Instance(TypedDict, total=False):
     # Data sections
     node_coord: np.ndarray
     demand: np.ndarray
-    depot: Union[int, np.ndarray]
+    depot: Union[np.ndarray]
     service_time: np.ndarray
     time_window: np.ndarray
     edge_weight: np.ndarray
