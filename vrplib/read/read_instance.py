@@ -1,6 +1,7 @@
 import os
 from typing import Union
 
+from vrplib.Instance import Instance
 from vrplib.parse import parse_solomon, parse_vrplib
 
 
@@ -8,7 +9,7 @@ def read_instance(
     path: Union[str, os.PathLike],
     instance_format: str = "vrplib",
     compute_edge_weights: bool = True,
-):
+) -> Instance:
     """
     Reads the instance from the passed-in file path.
 

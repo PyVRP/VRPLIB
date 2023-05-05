@@ -2,7 +2,8 @@ from typing import List
 
 import numpy as np
 
-from .Instance import Instance
+from vrplib.Instance import Instance
+
 from .parse_distances import pairwise_euclidean
 from .parse_utils import text2lines
 

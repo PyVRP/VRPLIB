@@ -3,7 +3,8 @@ from typing import List, Tuple, Union
 
 import numpy as np
 
-from .Instance import Instance
+from vrplib.Instance import Instance
+
 from .parse_distances import parse_distances
 from .parse_utils import infer_type, text2lines
 

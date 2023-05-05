@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import numpy as np
 
-from .Instance import Instance
+from vrplib.Instance import Instance
 
 
 def parse_distances(

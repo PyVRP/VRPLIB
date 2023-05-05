@@ -1,11 +1,6 @@
-from typing import List, TypedDict
+from vrplib.Solution import Solution
 
 from .parse_utils import infer_type, text2lines
-
-
-class Solution(TypedDict, total=False):
-    routes: List[List[int]]
-    cost: float
 
 
 def parse_solution(text: str) -> Solution:
