@@ -1,7 +1,14 @@
+import os
+from typing import Any, Dict, Union
+
 from vrplib.parse import parse_solomon, parse_vrplib
 
 
-def read_instance(path, instance_format="vrplib", compute_edge_weights=True):
+def read_instance(
+    path: Union[str, os.PathLike],
+    instance_format: str = "vrplib",
+    compute_edge_weights: bool = True,
+) -> Dict[str, Any]:
     """
     Reads the instance from the passed-in file path.
 
