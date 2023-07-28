@@ -115,6 +115,9 @@ Following the VRPLIB conventions, the edge weights are computed based on the `ED
   - `FULL_MATRIX`: Explicit full matrix representation.
   
 
+#### Line comments
+Lines starting with `#` are interpreted as comments and not parsed when reading the instance.
+
 #### More information about VRPLIB
 The VRPLIB format is an extension of the [TSPLIB95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp95.pdf) format. 
 Additional information about the VRPLIB format can be found [here]( http://webhotel4.ruc.dk/~keld/research/LKH-3/LKH-3_REPORT.pdf).
