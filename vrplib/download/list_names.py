@@ -1,5 +1,5 @@
+import importlib.resources as pkg_resource
 from functools import lru_cache
-from importlib.resources import files
 from typing import Optional
 
 from .download_utils import is_vrptw
@@ -49,7 +49,7 @@ def _read_instance_data():
     Reads the instance data. All CVRPLIB instance names are stored in the
     `instance_data.csv` file.
     """
-    fi = (files("vrplib.download") / "instance_data.csv").read_text()
+    fi = pkg_resource.read_text(__package__, "instance_data.csv")
     instances = [line.strip().split(",") for line in fi.split()]
 
     return [
