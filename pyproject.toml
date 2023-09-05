@@ -12,7 +12,6 @@ python = "^3.8"
 numpy = "^1.19"
 
 [tool.poetry.group.dev.dependencies]
-ipdb = "^0.13.9"
 pytest = "^7.1.2"
 codecov = "^2.1.13"
 pytest-cov = "^4.0.0"
