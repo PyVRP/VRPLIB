@@ -1,4 +1,5 @@
 import os
+import warnings
 from pathlib import Path
 from typing import Union
 from urllib.request import urlopen
@@ -21,6 +22,12 @@ def download_instance(name: str, path: Union[str, os.PathLike]):
         specified, the file will be saved in that directory with the original
         file name.
     """
+    msg = (
+        "The function 'download_instance' is deprecated and will be removed"
+        " in the next major version (vrplib v2.0.0)."
+    )
+    warnings.warn(msg, DeprecationWarning)
+
     ext = "txt" if is_vrptw(name) else "vrp"
     url = CVRPLIB_URL + f"{find_set(name)}/{name}.{ext}"
     response = urlopen(url, timeout=30)

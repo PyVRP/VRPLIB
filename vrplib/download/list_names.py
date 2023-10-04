@@ -1,4 +1,5 @@
 import importlib.resources as pkg_resource
+import warnings
 from functools import lru_cache
 from typing import Optional
 
@@ -24,6 +25,11 @@ def list_names(
         of both types are returned.
     """
     instances = _read_instance_data()
+    msg = (
+        "The function 'list_names' is deprecated and will be removed"
+        " in the next major version (vrplib v2.0.0)."
+    )
+    warnings.warn(msg, DeprecationWarning)
 
     if low is not None:
         instances = filter(lambda inst: inst["n_customers"] >= low, instances)

@@ -1,10 +1,20 @@
 import os
 
+import pytest
 from numpy.testing import assert_, assert_equal, assert_raises
 
 from vrplib import download_solution
 
 
+def test_deprecation_warning():
+    """
+    Checks if a deprecation warning is raised when the function is called.
+    """
+    with pytest.warns(DeprecationWarning):
+        download_solution("X-n101-k25", "tmp")
+
+
+@pytest.mark.filterwarnings("ignore:The function")
 def test_raise_invalid_name():
     """
     Raise an error if the passed-in name is invalid.
@@ -13,6 +23,7 @@ def test_raise_invalid_name():
         download_solution("invalid_name", "tmp")
 
 
+@pytest.mark.filterwarnings("ignore:The function")
 def test_download_vrplib_solution_file_name_path(tmp_path):
     """
     Tests if a VRPLIB solution is correctly downloaded from CVRPLIB
@@ -36,6 +47,7 @@ def test_download_vrplib_solution_file_name_path(tmp_path):
     assert_equal(actual, desired)
 
 
+@pytest.mark.filterwarnings("ignore:The function")
 def test_download_vrplib_solution_dir_path(tmp_path):
     """
     Tests if a VRPLIB solution is correctly downloaded from CVRPLIB
@@ -59,6 +71,7 @@ def test_download_vrplib_solution_dir_path(tmp_path):
     assert_equal(actual, desired)
 
 
+@pytest.mark.filterwarnings("ignore:The function")
 def test_download_solomon_solution(tmp_path):
     """
     Tests if a Solomon solution is correctly downloaded from CVRPLIB.

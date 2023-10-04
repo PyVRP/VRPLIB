@@ -6,11 +6,21 @@ from vrplib import list_names
 from ..utils import selected_cases
 
 
+def test_deprecationg_warning():
+    """
+    Check if the deprecation warning is raised.
+    """
+    with pytest.warns(DeprecationWarning):
+        list_names(1, 2, "cvrp")
+
+
+@pytest.mark.filterwarnings("ignore:The function")
 @pytest.mark.parametrize("case", selected_cases())
 def test_list_names(case):
     assert_(case.instance_name in list_names())
 
 
+@pytest.mark.filterwarnings("ignore:The function")
 @pytest.mark.parametrize(
     "low, high, vrp_type",
     [
@@ -25,6 +35,7 @@ def test_list_names_raise(low, high, vrp_type):
         list_names(low, high, vrp_type)
 
 
+@pytest.mark.filterwarnings("ignore:The function")
 @pytest.mark.parametrize(
     "name, low, high, vrp_type",
     [
