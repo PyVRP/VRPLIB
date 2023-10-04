@@ -45,35 +45,23 @@ def write_instance(
     with open(path, "w") as fh:
         for key, value in data.items():
             if isinstance(value, (np.ndarray, list)):
-                fh.write(_format2section(key, value))
+                fh.write(_format2section(key, value) + "\n")
             else:
                 fh.write(f"{key}: {value}" + "\n")
 
         fh.write("EOF\n")
 
 
-def _format2section(
-    name: str, data: Union[list, list[list], np.ndarray]
-) -> str:
-    text = f"{name}\n"
-
+def _format2section(name: str, data: Union[list, np.ndarray]) -> str:
     # Convert the data to a 2-dimensional numpy array.
     array = np.asarray(data)
     if array.ndim == 1:
         array = np.expand_dims(array, axis=1)
 
-    # These lengths are used to space each column properly.
-    lens = [4 for _ in range(len(array[0]) + 1)]
+    # Add an index column for most sections.
+    if name not in ["EDGE_WEIGHT_SECTION", "DEPOT_SECTION"]:
+        idcs = np.arange(1, array.shape[0] + 1)
+        array = np.column_stack((idcs, array))
 
-    for row in array:
-        for idx, cell in enumerate(row, 1):
-            lens[0] = max(lens[0], len(str(idx)))
-            lens[idx] = max(lens[idx], len(str(cell)))
-
-    for idx, row in enumerate(array, 1):
-        if name not in ["EDGE_WEIGHT_SECTION", "DEPOT_SECTION"]:
-            text += str(idx)  # include index if not edge weight or depot
-
-        text += "  ".join(f"{val:>{ln}}" for ln, val in zip(lens, row)) + "\n"
-
-    return text
+    content = ["\t".join([str(elt) for elt in row]) for row in array]
+    return "\n".join([name] + content)
