@@ -8,8 +8,14 @@
 - writing VRPLIB-style instances and solutions, and
 - downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
+## Outline
+- [Installation](#installation)
+- [Example usage](#example-usage)
+- [Documentation](#documentation)
+
+  * [ ] 
 ## Installation
-`vrplib` works with Python 3.8+ and only depends on `numpy`.
+`vrplib` works with Python 3.8+ and only depends on `numpy`. It may be installed in the usual way as 
 
 ```shell
 pip install vrplib
@@ -43,9 +49,9 @@ dict_keys(['routes', 'cost'])
 VRPLIB provides the functions `write_instance` and `write_solution`.
 These functions provide a simple interface to writing instances and solutions in VRPLIB-style:
 - `write_instance` adds indices to data sections when necessary (`EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` are excluded).
-- `write_solution` adds `Route #idx"` to routes.
+- `write_solution` adds the `Route #{idx}` prefix to routes.
 
-Note that these functions do not validate instances: its the user's responsibility to write a correct VRPLIB-style instance.
+Note that these functions do not validate instances: its up to the user to write correct VRPLIB-style instances and solutions.
 
 #### Instances
 ``` python
@@ -67,7 +73,6 @@ instance_data = {
 vrplib.write_instance(instance_loc, instance_data)
 ```
 
-`instance.vrp`:
 ``` 
 NAME: instance
 TYPE: CVRP
@@ -97,7 +102,6 @@ solution_data = {"Cost": 42, "Vehicle types": [1, 2, 3]}
 vrplib.write_solution(solution_loc, routes, solution_data)
 ```
 
-`solution.sol`:
 ``` python
 Route #1: 1
 Route #2: 2 3
