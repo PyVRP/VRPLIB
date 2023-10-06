@@ -4,18 +4,24 @@
 [![codecov](https://codecov.io/gh/leonlan/VRPLIB/branch/master/graph/badge.svg?token=X0X66LBNZ7)](https://codecov.io/gh/leonlan/VRPLIB)
 
 `vrplib` is a Python package for working with Vehicle Routing Problem (VRP) instances. The main features are:
-- reading VRPLIB and Solomon instances and solutions, and
+- reading VRPLIB and Solomon instances and solutions, 
+- writing VRPLIB-style instances and solutions, and
 - downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
+## Outline
+- [Installation](#installation)
+- [Example usage](#example-usage)
+- [Documentation](#documentation)
+
 ## Installation
-`vrplib` works with Python 3.8+ and only depends on `numpy`.
+`vrplib` works with Python 3.8+ and only depends on `numpy`. It may be installed in the usual way as 
 
 ```shell
 pip install vrplib
 ```
 
 ## Example usage
-### Reading instances and solutions
+### Reading files
 ```python
 import vrplib
 
@@ -38,7 +44,72 @@ dict_keys(['routes', 'cost'])
 ```
 
 
-### Downloading instances from CVRPLIB 
+### Writing files
+The functions `write_instance` and `write_solution` provide a simple interface to writing instances and solutions in VRPLIB-style:
+- `write_instance` adds indices to data sections when necessary (`EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` are excluded).
+- `write_solution` adds the `Route #{idx}` prefix to routes.
+
+Note that these functions do not validate instances: it is up to the user to write correct VRPLIB-style files.
+
+#### Instances
+``` python
+import vrplib
+
+instance_loc = "instance.vrp"
+instance_data = {
+    "NAME": "instance",
+    "TYPE": "CVRP",
+    "VEHICLES": 2,
+    "DIMENSION": 1,
+    "CAPACITY": 1,
+    "EDGE_WEIGHT_TYPE": "EUC_2D",
+    "NODE_COORD_SECTION": [[250, 250], [500, 500]],
+    "DEMAND_SECTION": [1, 1],
+    "DEPOT_SECTION": [1],
+}
+
+vrplib.write_instance(instance_loc, instance_data)
+```
+
+``` 
+NAME: instance
+TYPE: CVRP
+VEHICLES: 2
+DIMENSION: 1
+CAPACITY: 1
+EDGE_WEIGHT_TYPE: EUC_2D
+NODE_COORD_SECTION
+1	250	250
+2	500	500
+DEMAND_SECTION
+1	1
+2	1
+DEPOT_SECTION
+1
+EOF
+```
+
+#### Solutions
+``` python
+import vrplib
+
+solution_loc = "solution.sol"
+routes = [[1], [2, 3], [4, 5, 6]]
+solution_data = {"Cost": 42, "Vehicle types": [1, 2, 3]}
+
+vrplib.write_solution(solution_loc, routes, solution_data)
+```
+
+``` { .html } 
+Route #1: 1
+Route #2: 2 3
+Route #3: 4 5 6
+Cost: 42
+Vehicle types: [1, 2, 3]
+```
+
+
+### Downloading from CVRPLIB 
 ``` python
 import vrplib
 
