@@ -1,8 +1,8 @@
-from typing import Dict, Union
+from typing import Any, Optional
 
 
 def write_solution(
-    path: str, routes: list[list[int]], data: Dict[str, Union[str, float]]
+    path: str, routes: list[list[int]], data: Optional[dict[str, Any]] = None
 ):
     """
     Writes a VRP solution to file following the VRPLIB convention.
@@ -15,14 +15,18 @@ def write_solution(
         A list of routes, each route denoting the order in which the customers
         are visited.
     **kwargs
-        Optional keyword arguments. Each keyword-value pair is written to the
-        solution file as "{keyword}: {value}".
+        Optional keyword arguments. Each key-value pair is written to the
+        solution file as "{key}: {value}".
     """
+    for route in routes:
+        if len(route) == 0:
+            raise ValueError("Empty route in solution.")
+
     with open(path, "w") as fi:
         for idx, route in enumerate(routes, 1):
-            fi.write(f"Route #{idx}: {' '.join([str(s) for s in route])}")
-            fi.write("\n")
+            text = " ".join([f"Route #{idx}:"] + [str(val) for val in route])
+            fi.write(text + "\n")
 
-        for k, v in data.items():
-            fi.write(f"{k}: {v}")
-            fi.write("\n")
+        if data is not None:
+            for key, value in data.items():
+                fi.write(f"{key}: {value}\n")

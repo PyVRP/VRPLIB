@@ -8,11 +8,11 @@ from vrplib import write_instance
 @mark.parametrize(
     "key, value, desired",
     (
-        ["NAME", "Instance", "NAME: Instance"],
-        ["type", "VRPTW", "type: VRPTW"],
-        ["DIMENSION", 100, "DIMENSION: 100"],
-        ["CAPACITY", -10.1, "CAPACITY: -10.1"],
-        ["EMPTY", "", "EMPTY: "],
+        ["name", "Instance", "name: Instance"],  # string
+        ["DIMENSION", 100, "DIMENSION: 100"],  # int
+        ["VEHICLES", -10, "VEHICLES: -10"],  # negative
+        ["CAPACITY", 10.5, "CAPACITY: 10.5"],  # float
+        ["EMPTY", "", "EMPTY: "],  # empty
     ),
 )
 def test_specifications(tmp_path, key, value, desired):
@@ -34,7 +34,7 @@ def test_specifications(tmp_path, key, value, desired):
     (
         # 1-dimensional list
         ["X_SECTION", [0, 10], "\n".join(["X_SECTION", "1\t0", "2\t10"])],
-        # 1-dimensional list with float values
+        # 1-dimensional list with mixed int and float values
         ["X_SECTION", [0, 10.5], "\n".join(["X_SECTION", "1\t0", "2\t10.5"])],
         # 1-dimensional list empty
         ["X_SECTION", [], "\n".join(["X_SECTION"])],
@@ -44,11 +44,11 @@ def test_specifications(tmp_path, key, value, desired):
             np.array([[0, 0], [1, 1]]),
             "\n".join(["Y_SECTION", "1\t0\t0", "2\t1\t1"]),
         ],
-        # 2-dimensional array empty
+        # 2-dimensional list empty
         ["Y_SECTION", [[]], "\n".join(["Y_SECTION", "1\t"])],
         # 2-dimensional array with different row lengths
         # NOTE: This is currently an invalid VRPLIB format, see
-        # https://github.com/leonlan/VRPLIB/issues/108
+        # https://github.com/leonlan/VRPLIB/issues/108.
         [
             "DATA_SECTION",
             [[1], [3, 4]],
@@ -71,7 +71,7 @@ def test_sections(tmp_path, key, value, desired):
 
 def test_no_indices_depot_and_edge_weight_section(tmp_path):
     """
-    Tests that no indices are added when writing the depot and edge weight
+    Tests that indices are not included when formatting depot and edge weight
     section.
     """
     # Let's first test the depot section.
@@ -87,9 +87,9 @@ def test_no_indices_depot_and_edge_weight_section(tmp_path):
     name = "edge_weight"
     instance = {
         "EDGE_WEIGHT_SECTION": [
-            [0, 1, 2],
+            [1, 1, 2],
             [1, 0, 3],
-            [2, 3, 0],
+            [1, 3, 0],
         ]
     }
     write_instance(tmp_path / name, instance)
@@ -97,9 +97,9 @@ def test_no_indices_depot_and_edge_weight_section(tmp_path):
     desired = "\n".join(
         [
             "EDGE_WEIGHT_SECTION",
-            "0\t1\t2",
+            "1\t1\t2",
             "1\t0\t3",
-            "2\t3\t0",
+            "1\t3\t0",
             "EOF",
             "",
         ]
@@ -125,6 +125,7 @@ def test_small_instance_example(tmp_path):
             [42, 66],
         ],
         "DEMAND_SECTION": [0, 10, 30, 10],
+        "DEPOT_SECTION": [1],
     }
 
     write_instance(tmp_path / name, instance)
@@ -145,6 +146,8 @@ def test_small_instance_example(tmp_path):
             "2\t10",
             "3\t30",
             "4\t10",
+            "DEPOT_SECTION",
+            "1",
             "EOF",
             "",
         ]
