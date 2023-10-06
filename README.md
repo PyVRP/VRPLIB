@@ -38,6 +38,68 @@ dict_keys(['routes', 'cost'])
 ```
 
 
+### Writing instances and solutions
+Writing instances:
+``` python
+import vrplib
+
+instance_loc = "instance.vrp"
+instance_data = {
+    "NAME": "instance",
+    "TYPE": "CVRP",
+    "VEHICLES": 2,
+    "DIMENSION": 1,
+    "CAPACITY": 1,
+    "EDGE_WEIGHT_TYPE": "EUC_2D",
+    "NODE_COORD_SECTION": [[250, 250], [500, 500]],
+    "DEMAND_SECTION": [1, 1],
+    "DEPOT_SECTION": [1],
+}
+
+vrplib.write_instance(instance_loc, instance_data)
+```
+
+The content of `instance.vrp`
+``` 
+NAME: instance
+TYPE: CVRP
+VEHICLES: 2
+DIMENSION: 1
+CAPACITY: 1
+EDGE_WEIGHT_TYPE: EUC_2D
+NODE_COORD_SECTION
+1	250	250
+2	500	500
+DEMAND_SECTION
+1	1
+2	1
+DEPOT_SECTION
+1
+EOF
+```
+
+Writing solutions:
+
+``` python
+import vrplib
+
+solution_loc = "instance.vrp"
+routes = [[1], [2, 3], [4, 5, 6]]
+solution_data = {"Cost": 42, "Vehicle types": [1, 2, 3]}
+
+vrplib.write_solution(solution_loc, routes, solution_data)
+```
+
+Content of `solution.sol`:
+``` python
+Route #1: 1
+Route #2: 2 3
+Route #3: 4 5 6
+Cost: 42
+Vehicle types: [1, 2, 3]
+```
+
+
 ### Downloading instances from CVRPLIB 
 ``` python
 import vrplib
