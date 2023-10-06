@@ -1,8 +1,8 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 def write_solution(
-    path: str, routes: list[list[int]], data: Optional[Dict[str, Any]] = None
+    path: str, routes: List[List[int]], data: Optional[Dict[str, Any]] = None
 ):
     """
     Writes a VRP solution to file following the VRPLIB convention.
