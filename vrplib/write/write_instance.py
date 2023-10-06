@@ -1,13 +1,13 @@
-from pathlib import Path
-from typing import TypeVar, Union
+import os
+from typing import List, Tuple, TypeVar, Union
 
 import numpy as np
 
-_ArrayLike = TypeVar("_ArrayLike", list, tuple, np.ndarray)
+_ArrayLike = TypeVar("_ArrayLike", List, Tuple, np.ndarray)
 
 
 def write_instance(
-    path: Union[str, Path],
+    path: Union[str, os.PathLike],
     data: dict[str, Union[str, int, float, _ArrayLike]],
 ):
     """
