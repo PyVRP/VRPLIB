@@ -102,7 +102,7 @@ solution_data = {"Cost": 42, "Vehicle types": [1, 2, 3]}
 vrplib.write_solution(solution_loc, routes, solution_data)
 ```
 
-``` python
+``` { .html } 
 Route #1: 1
 Route #2: 2 3
 Route #3: 4 5 6
