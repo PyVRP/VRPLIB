@@ -4,7 +4,8 @@
 [![codecov](https://codecov.io/gh/leonlan/VRPLIB/branch/master/graph/badge.svg?token=X0X66LBNZ7)](https://codecov.io/gh/leonlan/VRPLIB)
 
 `vrplib` is a Python package for working with Vehicle Routing Problem (VRP) instances. The main features are:
-- reading VRPLIB and Solomon instances and solutions, and
+- reading VRPLIB and Solomon instances and solutions, 
+- writing VRPLIB-style instances and solutions, and
 - downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 
 ## Installation
@@ -15,7 +16,7 @@ pip install vrplib
 ```
 
 ## Example usage
-### Reading instances and solutions
+### Reading files
 ```python
 import vrplib
 
@@ -38,8 +39,15 @@ dict_keys(['routes', 'cost'])
 ```
 
 
-### Writing instances and solutions
-Writing instances:
+### Writing files
+VRPLIB provides the functions `write_instance` and `write_solution`.
+These functions provide a simple interface to writing instances and solutions in VRPLIB-style:
+- `write_instance` adds indices to data sections when necessary (`EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` are excluded).
+- `write_solution` adds `Route #idx"` to routes.
+
+Note that these functions do not validate instances: its the user's responsibility to write a correct VRPLIB-style instance.
+
+#### Instances
 ``` python
 import vrplib
 
@@ -59,7 +67,7 @@ instance_data = {
 vrplib.write_instance(instance_loc, instance_data)
 ```
 
-The content of `instance.vrp`
+`instance.vrp`:
 ``` 
 NAME: instance
 TYPE: CVRP
@@ -78,19 +86,18 @@ DEPOT_SECTION
 EOF
 ```
 
-Writing solutions:
-
+#### Solutions
 ``` python
 import vrplib
 
-solution_loc = "instance.vrp"
+solution_loc = "solution.sol"
 routes = [[1], [2, 3], [4, 5, 6]]
 solution_data = {"Cost": 42, "Vehicle types": [1, 2, 3]}
 
 vrplib.write_solution(solution_loc, routes, solution_data)
 ```
 
-Content of `solution.sol`:
+`solution.sol`:
 ``` python
 Route #1: 1
 Route #2: 2 3
@@ -100,7 +107,7 @@ Vehicle types: [1, 2, 3]
 ```
 
 
-### Downloading instances from CVRPLIB 
+### Downloading from CVRPLIB 
 ``` python
 import vrplib
 
