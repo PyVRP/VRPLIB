@@ -13,7 +13,6 @@
 - [Example usage](#example-usage)
 - [Documentation](#documentation)
 
-  * [ ] 
 ## Installation
 `vrplib` works with Python 3.8+ and only depends on `numpy`. It may be installed in the usual way as 
 
@@ -50,7 +49,7 @@ The functions `write_instance` and `write_solution` provide a simple interface t
 - `write_instance` adds indices to data sections when necessary (`EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` are excluded).
 - `write_solution` adds the `Route #{idx}` prefix to routes.
 
-Note that these functions do not validate instances: its up to the user to write correct VRPLIB-style instances and solutions.
+Note that these functions do not validate instances: it is up to the user to write correct VRPLIB-style files.
 
 #### Instances
 ``` python
