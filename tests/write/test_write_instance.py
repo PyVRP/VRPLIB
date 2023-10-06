@@ -32,17 +32,27 @@ def test_specifications(tmp_path, key, value, desired):
 @mark.parametrize(
     "key, value, desired",
     (
-        # list
+        # 1-dimensional list
+        ["X_SECTION", [0, 10], "\n".join(["X_SECTION", "1\t0", "2\t10"])],
+        # 1-dimensional list with float values
+        ["X_SECTION", [0, 10.5], "\n".join(["X_SECTION", "1\t0", "2\t10.5"])],
+        # 1-dimensional list empty
+        ["X_SECTION", [], "\n".join(["X_SECTION"])],
+        # 2-dimensional numpy array
         [
-            "DEMAND_SECTION",
-            [0, 10],
-            "\n".join(["DEMAND_SECTION", "1\t0", "2\t10"]),
+            "Y_SECTION",
+            np.array([[0, 0], [1, 1]]),
+            "\n".join(["Y_SECTION", "1\t0\t0", "2\t1\t1"]),
         ],
-        # list of lists
+        # 2-dimensional array empty
+        ["Y_SECTION", [[]], "\n".join(["Y_SECTION", "1\t"])],
+        # 2-dimensional array with different row lengths
+        # NOTE: This is currently an invalid VRPLIB format, see
+        # https://github.com/leonlan/VRPLIB/issues/108
         [
-            "NODE_COORD_SECTION",
-            [[0, 0], [1, 1]],
-            "\n".join(["NODE_COORD_SECTION", "1\t0\t0", "2\t1\t1"]),
+            "DATA_SECTION",
+            [[1], [3, 4]],
+            "\n".join(["DATA_SECTION", "1\t1", "2\t3\t4"]),
         ],
     ),
 )
@@ -53,13 +63,6 @@ def test_sections(tmp_path, key, value, desired):
     """
     name = "sections"
     instance = {key: value}
-    write_instance(tmp_path / name, instance)
-
-    with open(tmp_path / name, "r") as fh:
-        assert_equal(fh.read(), "\n".join([desired, "EOF", ""]))
-
-    # Should also work if the values are numpy arrays.
-    instance = {key: np.array(value)}
     write_instance(tmp_path / name, instance)
 
     with open(tmp_path / name, "r") as fh:
@@ -105,7 +108,7 @@ def test_no_indices_depot_and_edge_weight_section(tmp_path):
         assert_equal(fh.read(), desired)
 
 
-def test_small_full_example(tmp_path):
+def test_small_instance_example(tmp_path):
     """
     Tests if writing a small instance yields the correct result.
     """
@@ -113,7 +116,7 @@ def test_small_full_example(tmp_path):
     instance = {
         "NAME": name,
         "TYPE": "VRPTW",
-        "DIMENSION": 101,
+        "DIMENSION": 4,
         "CAPACITY": 200,
         "NODE_COORD_SECTION": [
             [40, 50],
@@ -130,7 +133,7 @@ def test_small_full_example(tmp_path):
         [
             "NAME: C101",
             "TYPE: VRPTW",
-            "DIMENSION: 101",
+            "DIMENSION: 4",
             "CAPACITY: 200",
             "NODE_COORD_SECTION",
             "1\t40\t50",

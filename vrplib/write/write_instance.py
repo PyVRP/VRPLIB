@@ -1,12 +1,14 @@
 from pathlib import Path
-from typing import Union
+from typing import TypeVar, Union
 
 import numpy as np
+
+_ArrayLike = TypeVar("_ArrayLike", list, tuple, np.ndarray)
 
 
 def write_instance(
     path: Union[str, Path],
-    data: dict[str, Union[str, float, list, np.ndarray]],
+    data: dict[str, Union[str, int, float, _ArrayLike]],
 ):
     """
     Writes a VRP instance to file following the VRPLIB format [1].
@@ -19,9 +21,9 @@ def write_instance(
         A dictionary of keyword-value pairs. For each key-value pair, the
         following rules apply:
         * If ``value`` is a string, integer or float, then it is considered a
-          problem specification and written as "{keyword}: {value}".
-        * If ``value`` is a list or numpy array, then it is considered a
-          data section and formatted as
+          problem specification and formatted as "{keyword}: {value}".
+        * If ``value`` is a one or two-dimensional array, then it is considered
+          a data section and formatted as
           ```
           {name}
           1 {row_1}
@@ -30,9 +32,9 @@ def write_instance(
           n {row_n}
           ```
           where ``name`` is the key and ``row_1``, ``row_2``, etc. are the
-          elements of the array. If name is "EDGE_WEIGHT_SECTION" or
-          "DEPOT_SECTION", then the index is not included.
-
+          elements of the array. One-dimensional arrays are treated as column
+          vectors. If name is "EDGE_WEIGHT_SECTION" or "DEPOT_SECTION", then
+          the index is not included.
 
     References
     ----------
@@ -44,24 +46,49 @@ def write_instance(
     """
     with open(path, "w") as fh:
         for key, value in data.items():
-            if isinstance(value, (np.ndarray, list)):
-                fh.write(_format2section(key, value) + "\n")
-            else:
+            if isinstance(value, (str, int, float)):
                 fh.write(f"{key}: {value}" + "\n")
+            else:
+                fh.write(_format_section(key, value) + "\n")
 
         fh.write("EOF\n")
 
 
-def _format2section(name: str, data: Union[list, np.ndarray]) -> str:
-    # Convert the data to a 2-dimensional numpy array.
-    array = np.asarray(data)
-    if array.ndim == 1:
-        array = np.expand_dims(array, axis=1)
+def _format_section(name: str, data: _ArrayLike) -> str:
+    """
+    Formats a data section.
 
-    # Add an index column for most sections.
-    if name not in ["EDGE_WEIGHT_SECTION", "DEPOT_SECTION"]:
-        idcs = np.arange(1, array.shape[0] + 1)
-        array = np.column_stack((idcs, array))
+    Parameters
+    ----------
+    name
+        The name of the section.
+    data
+        The data to be formatted.
 
-    content = ["\t".join([str(elt) for elt in row]) for row in array]
-    return "\n".join([name] + content)
+    Returns
+    -------
+    str
+        A VRPLIB-formatted data section.
+    """
+    section = [name]
+    include_idx = name not in ["EDGE_WEIGHT_SECTION", "DEPOT_SECTION"]
+
+    if _is_one_dimensional(data):
+        # Treat 1D arrays as column vectors, so each element is a row.
+        for idx, elt in enumerate(data, 1):
+            prefix = f"{idx}\t" if include_idx else ""
+            section.append(prefix + str(elt))
+    else:
+        for idx, row in enumerate(data, 1):
+            prefix = f"{idx}\t" if include_idx else ""
+            rest = "\t".join([str(elt) for elt in row])
+            section.append(prefix + rest)
+
+    return "\n".join(section)
+
+
+def _is_one_dimensional(data: _ArrayLike) -> bool:
+    for elt in data:
+        if isinstance(elt, (list, tuple, np.ndarray)):
+            return False
+    return True
