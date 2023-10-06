@@ -46,8 +46,7 @@ dict_keys(['routes', 'cost'])
 
 
 ### Writing files
-VRPLIB provides the functions `write_instance` and `write_solution`.
-These functions provide a simple interface to writing instances and solutions in VRPLIB-style:
+The functions `write_instance` and `write_solution` provide a simple interface to writing instances and solutions in VRPLIB-style:
 - `write_instance` adds indices to data sections when necessary (`EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` are excluded).
 - `write_solution` adds the `Route #{idx}` prefix to routes.
 
