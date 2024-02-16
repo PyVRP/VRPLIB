@@ -1,8 +1,11 @@
-from typing import Any, Dict, List, Optional
+import os
+from typing import Any, Dict, List, Optional, Union
 
 
 def write_solution(
-    path: str, routes: List[List[int]], data: Optional[Dict[str, Any]] = None
+    path: Union[str, os.PathLike],
+    routes: List[List[int]],
+    data: Optional[Dict[str, Any]] = None,
 ):
     """
     Writes a VRP solution to file following the VRPLIB convention.
@@ -14,8 +17,8 @@ def write_solution(
     routes
         A list of routes, each route denoting the order in which the customers
         are visited.
-    **kwargs
-        Optional keyword arguments. Each key-value pair is written to the
+    data
+        Optional data dictionary. Each key-value pair is written to the
         solution file as "{key}: {value}".
     """
     for route in routes:
