@@ -33,7 +33,7 @@ jobs:
           key: python-${{ env.pythonLocation }}-${{ hashFiles('pyproject.toml') }}
       - name: Install Python dependencies
         if: steps.cache-python.outputs.cache-hit != 'true'
-        run: poetry install --no-root --with examples
+        run: poetry install
       - name: Cache pre-commit
         uses: actions/cache@v4
         id: cache-pre-commit
