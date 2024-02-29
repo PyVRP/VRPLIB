@@ -1,5 +1,3 @@
-from typing import List
-
 import pytest
 from numpy.testing import assert_equal
 
@@ -7,7 +5,7 @@ from vrplib.parse.parse_utils import text2lines
 
 
 @pytest.mark.parametrize(("text", "expected"), [("", []), ("\n", [])])
-def test_empty_lines(text: str, expected: List[str]):
+def test_empty_lines(text: str, expected: list[str]):
     assert_equal(text2lines(text), expected)
 
 
@@ -23,5 +21,5 @@ def test_empty_lines(text: str, expected: List[str]):
         (" # comment after whitespace", []),
     ],
 )
-def test_comments(text: str, expected: List[str]):
+def test_comments(text: str, expected: list[str]):
     assert_equal(text2lines(text), expected)

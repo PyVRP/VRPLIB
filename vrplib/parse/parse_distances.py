@@ -1,11 +1,11 @@
 from itertools import combinations
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
 
 
 def parse_distances(
-    data: List,
+    data: list,
     edge_weight_type: str,
     edge_weight_format: Optional[str] = None,
     node_coord: Optional[np.ndarray] = None,
