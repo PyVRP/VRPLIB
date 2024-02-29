@@ -5,7 +5,7 @@ import numpy as np
 
 
 def parse_distances(
-    data: list,
+    data: list[float],
     edge_weight_type: str,
     edge_weight_format: Optional[str] = None,
     node_coord: Optional[np.ndarray] = None,
