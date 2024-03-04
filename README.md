@@ -4,9 +4,8 @@
 [![codecov](https://codecov.io/gh/leonlan/VRPLIB/branch/master/graph/badge.svg?token=X0X66LBNZ7)](https://codecov.io/gh/leonlan/VRPLIB)
 
 `vrplib` is a Python package for working with Vehicle Routing Problem (VRP) instances. The main features are:
-- reading VRPLIB and Solomon instances and solutions, 
-- writing VRPLIB-style instances and solutions, and
-- downloading instances and best known solutions from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
+- reading VRPLIB and Solomon instances and solutions, and
+- writing VRPLIB-style instances and solutions.
 
 ## Outline
 - [Installation](#installation)
@@ -110,6 +109,10 @@ Vehicle types: [1, 2, 3]
 
 
 ### Downloading from CVRPLIB 
+
+> [!WARNING]  
+> This functionality is deprecated and will be removed in the next major version.
+
 ``` python
 import vrplib
 
