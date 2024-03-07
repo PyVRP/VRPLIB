@@ -1,8 +1,8 @@
-from typing import Dict, List, Union
+from typing import Union
 
 from .parse_utils import infer_type, text2lines
 
-Solution = Dict[str, Union[float, str, List]]
+Solution = dict[str, Union[float, str, list]]
 
 
 def parse_solution(text: str) -> Solution:

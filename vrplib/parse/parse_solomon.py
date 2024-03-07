@@ -1,11 +1,11 @@
-from typing import Dict, List, Union
+from typing import Union
 
 import numpy as np
 
 from .parse_distances import pairwise_euclidean
 from .parse_utils import text2lines
 
-Instance = Dict[str, Union[str, float, np.ndarray]]
+Instance = dict[str, Union[str, float, np.ndarray]]
 
 
 def parse_solomon(text: str, compute_edge_weights: bool = True) -> Instance:
@@ -46,7 +46,7 @@ def parse_solomon(text: str, compute_edge_weights: bool = True) -> Instance:
     return instance
 
 
-def is_valid_solomon_instance(lines: List[str]):
+def is_valid_solomon_instance(lines: list[str]):
     """
     Checks if the passed-in lines follow the Solomon format requirements.
     """

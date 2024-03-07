@@ -1,11 +1,11 @@
 import os
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 
 def write_solution(
     path: Union[str, os.PathLike],
-    routes: List[List[int]],
-    data: Optional[Dict[str, Any]] = None,
+    routes: list[list[int]],
+    data: Optional[dict[str, Any]] = None,
 ):
     """
     Writes a VRP solution to file following the VRPLIB convention.

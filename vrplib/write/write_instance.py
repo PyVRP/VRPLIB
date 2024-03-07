@@ -1,14 +1,14 @@
 import os
-from typing import Dict, List, Tuple, TypeVar, Union
+from typing import TypeVar, Union
 
 import numpy as np
 
-_ArrayLike = TypeVar("_ArrayLike", List, Tuple, np.ndarray)
+_ArrayLike = TypeVar("_ArrayLike", list, tuple, np.ndarray)
 
 
 def write_instance(
     path: Union[str, os.PathLike],
-    data: Dict[str, Union[str, int, float, _ArrayLike]],
+    data: dict[str, Union[str, int, float, _ArrayLike]],
 ):
     """
     Writes a VRP instance to file following the VRPLIB format [1].

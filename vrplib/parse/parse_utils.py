@@ -1,7 +1,7 @@
-from typing import List, Union
+from typing import Union
 
 
-def text2lines(text: str) -> List[str]:
+def text2lines(text: str) -> list[str]:
     """
     Takes a string and returns a list of non-empty, stripped lines. Also
     removes any comment lines from the given string.
