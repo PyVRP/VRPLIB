@@ -126,6 +126,10 @@ def test_parse_specification(line, key, value):
             ["UNKNOWN_SECTION", "1 1", "1 -1"],
             ["unknown", np.array([1, -1])],
         ),
+        (
+            ["VEHICLES_ALLOWED_CLIENTS_SECTION", "1 2 3 4", "2 4 5", "3 6"],
+            ["vehicles_allowed_clients", [[2, 3, 4], [4, 5], [6]]],
+        ),
     ],
 )
 def test_parse_section(lines, desired):
