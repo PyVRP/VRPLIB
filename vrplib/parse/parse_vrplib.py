@@ -1,12 +1,12 @@
 import re
-from typing import Dict, List, Tuple, Union
+from typing import Union
 
 import numpy as np
 
 from .parse_distances import parse_distances
 from .parse_utils import infer_type, text2lines
 
-Instance = Dict[str, Union[str, float, np.ndarray]]
+Instance = dict[str, Union[str, float, np.ndarray]]
 
 
 def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
@@ -53,7 +53,7 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
     return instance
 
 
-def group_specifications_and_sections(lines: List[str]):
+def group_specifications_and_sections(lines: list[str]):
     """
     Groups instance lines into specifications and section parts.
     """
@@ -88,7 +88,7 @@ def group_specifications_and_sections(lines: List[str]):
     return specs, sections
 
 
-def parse_specification(line: str) -> Tuple[str, Union[float, str]]:
+def parse_specification(line: str) -> tuple[str, Union[float, str]]:
     """
     Parses a specification line as keyword-value pair, split at the first colon
     occurrence. The keyword is made lowercase and the value is unmodified.
@@ -97,7 +97,7 @@ def parse_specification(line: str) -> Tuple[str, Union[float, str]]:
     return k.lower(), infer_type(v)
 
 
-def parse_section(lines: List, instance: Dict) -> np.ndarray:
+def parse_section(lines: list, instance: dict) -> np.ndarray:
     """
     Parses the data section into numpy arrays.
     """
