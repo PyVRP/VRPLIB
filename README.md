@@ -1,6 +1,6 @@
 # VRPLIB
 [![PyPI version](https://badge.fury.io/py/vrplib.svg)](https://badge.fury.io/py/vrplib)
-[![vrplib](https://github.com/leonlan/vrplib/actions/workflows/vrplib.yaml/badge.svg)](https://github.com/leonlan/vrplib/actions/workflows/vrplib.yaml)
+[![vrplib](https://github.com/leonlan/vrplib/actions/workflows/vrplib.yml/badge.svg)](https://github.com/leonlan/vrplib/actions/workflows/vrplib.yaml)
 [![codecov](https://codecov.io/gh/leonlan/VRPLIB/branch/master/graph/badge.svg?token=X0X66LBNZ7)](https://codecov.io/gh/leonlan/VRPLIB)
 
 `vrplib` is a Python package for working with Vehicle Routing Problem (VRP) instances. The main features are:
@@ -13,7 +13,7 @@
 - [Documentation](#documentation)
 
 ## Installation
-`vrplib` works with Python 3.8+ and only depends on `numpy`. It may be installed in the usual way as 
+`vrplib` works with Python 3.9+ and only depends on `numpy`. It may be installed in the usual way as 
 
 ```shell
 pip install vrplib
