@@ -42,8 +42,8 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
         instance[key] = value
 
     for section in sections:
-        section, data = parse_section(section, instance)
-        instance[section] = data
+        section_name, data = parse_section(section, instance)
+        instance[section_name] = data  # type: ignore
 
     if instance and compute_edge_weights and "edge_weight" not in instance:
         # Compute edge weights if there was no explicit edge weight section
@@ -97,7 +97,9 @@ def parse_specification(line: str) -> tuple[str, Union[float, str]]:
     return k.lower(), infer_type(v)
 
 
-def parse_section(lines: list, instance: dict) -> np.ndarray:
+def parse_section(
+    lines: list, instance: dict
+) -> tuple[str, Union[list, np.ndarray]]:
     """
     Parses the data section into numpy arrays.
     """
@@ -108,6 +110,10 @@ def parse_section(lines: list, instance: dict) -> np.ndarray:
         # Parse separately because it may require additional processing
         return section, parse_distances(data_, **instance)  # type: ignore
 
+    if any(len(row) != len(data_[0]) for row in data_):
+        # This is a ragged array, so we shortcut to avoid casting to np.array.
+        return section, [row[1:] for row in data_]
+
     data = np.array(data_)
 
     if section == "depot":
@@ -117,8 +123,8 @@ def parse_section(lines: list, instance: dict) -> np.ndarray:
         # We remove the customer indices column from non-depot section
         data = data[:, 1:]
 
-    # Squeeze data sections that contain only one column
     if data.ndim > 1 and data.shape[-1] == 1:
+        # Squeeze data sections that contain only one column.
         data = data.squeeze(-1)
 
     return section, data
