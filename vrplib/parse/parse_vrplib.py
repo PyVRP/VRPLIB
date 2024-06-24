@@ -34,7 +34,6 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
         The instance data.
     """
     instance = {}
-
     specs, sections = group_specifications_and_sections(text2lines(text))
 
     for spec in specs:
@@ -42,14 +41,13 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
         instance[key] = value
 
     for section in sections:
-        section_name, data = parse_section(section, instance)
+        name, data = parse_section(section, instance)
 
-        if section_name in instance:
-            name = section_name.upper()
-            msg = f"'{name}' is used both as a specification and a section."
+        if name in instance:
+            msg = f"{name.upper()} is used both as specification and section."
             raise ValueError(msg)
 
-        instance[section_name] = data  # type: ignore
+        instance[name] = data  # type: ignore
 
     if instance and compute_edge_weights and "edge_weight" not in instance:
         # Compute edge weights if there was no explicit edge weight section
@@ -79,6 +77,9 @@ def group_specifications_and_sections(lines: list[str]):
             end_section = start + 1
 
             for next_line in lines[start + 1 :]:
+                if ":" in next_line:
+                    raise ValueError("Specification presented after section.")
+
                 # The current section ends when a next section or an EOF token
                 # is found.
                 if "_SECTION" in next_line or "EOF" in next_line:
@@ -107,34 +108,26 @@ def parse_section(
     lines: list, instance: dict
 ) -> tuple[str, Union[list, np.ndarray]]:
     """
-    Parses the data section into numpy arrays.
+    Parses the data section lines.
     """
-    section = _remove_suffix(lines[0].strip(), "_SECTION").lower()
-    data_ = [[infer_type(n) for n in line.split()] for line in lines[1:]]
+    name = lines[0].strip().removesuffix("_SECTION").lower()
+    rows = [[infer_type(n) for n in line.split()] for line in lines[1:]]
 
-    if section == "edge_weight":
-        # Parse separately because it may require additional processing
-        return section, parse_distances(data_, **instance)  # type: ignore
-
-    if any(len(row) != len(data_[0]) for row in data_):
-        # This is a ragged array, so we shortcut to avoid casting to np.array.
-        return section, [row[1:] for row in data_]
-
-    data = np.array(data_)
-
-    if section == "depot":
-        # Remove -1 end token and renormalize depots to start at zero
-        data = data[data != -1] - 1
+    if name == "edge_weight":
+        # Parse edge weights separately as it involves extra processing.
+        data = parse_distances(rows, **instance)  # type: ignore
+    elif name == "depot":
+        # Remove -1 end token and renormalize depots to start at zero.
+        data = np.array(rows[0]) - 1
+    elif any(len(row) != len(rows[0]) for row in rows):
+        # This is a ragged array, so we keep it as a nested list, but we
+        # remove the indices column.
+        data = [row[1:] for row in rows]
     else:
-        # We remove the customer indices column from non-depot section
-        data = data[:, 1:]
+        data = np.array([row[1:] for row in rows])
 
-    if data.ndim > 1 and data.shape[-1] == 1:
-        # Squeeze data sections that contain only one column.
-        data = data.squeeze(-1)
+        if data.ndim > 1 and data.shape[-1] == 1:
+            # Squeeze data lines that contain only one column.
+            data = data.squeeze(-1)
 
-    return section, data
-
-
-def _remove_suffix(name: str, suffix: str):
-    return name[: -len(suffix)] if name.endswith(suffix) else name
+    return name, data
