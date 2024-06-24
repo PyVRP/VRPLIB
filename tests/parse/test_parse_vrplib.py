@@ -257,12 +257,10 @@ def test_parse_vrplib_raises_when_specification_after_section():
     """
     instance = "\n".join(
         [
-            "EDGE_WEIGHT_SECTION",
-            "0  1",
-            "1  0",
+            "NODE_COORD_SECTION",
+            "1  20  20",
             "NAME: Test",
-            "EDGE_WEIGHT_TYPE: EXPLICIT",
-            "EDGE_WEIGHT_FORMAT: FULL_MATRIX",
+            "EDGE_WEIGHT_TYPE: EUC_2D",
             "EOF",
         ]
     )
