@@ -250,6 +250,26 @@ def test_parse_vrplib_raises_data_specification_and_section():
         parse_vrplib(instance)
 
 
+def test_parse_vrplib_raises_when_specification_after_section():
+    """
+    Tests that a ValueError is raised when a specification is presented after
+    a data section.
+    """
+    instance = "\n".join(
+        [
+            "NODE_COORD_SECTION",
+            "1  20  20",
+            "NAME: Test",
+            "EDGE_WEIGHT_TYPE: EUC_2D",
+            "EOF",
+        ]
+    )
+
+    # Specification after a section is not allowed.
+    with assert_raises(ValueError):
+        parse_vrplib(instance)
+
+
 def test_empty_text():
     """
     Tests if an empty text file is still read correctly.
