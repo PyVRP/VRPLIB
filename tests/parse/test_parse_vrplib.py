@@ -231,6 +231,25 @@ def test_parse_vrplib_do_not_compute_edge_weights():
     assert_("edge_weight" not in actual)
 
 
+def test_parse_vrplib_raises_data_specification_and_section():
+    """
+    Tests that a ValueError is raised when data is included both as
+    specification and section.
+    """
+    instance = "\n".join(
+        [
+            "SERVICE_TIME: 10",
+            "SERVICE_TIME_SECTION",
+            "1    20",
+            "2    20",
+        ]
+    )
+
+    # Service time is both a specification and a section which is not allowed.
+    with assert_raises(ValueError):
+        parse_vrplib(instance)
+
+
 def test_empty_text():
     """
     Tests if an empty text file is still read correctly.
