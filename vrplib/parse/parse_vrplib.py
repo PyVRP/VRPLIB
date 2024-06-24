@@ -111,20 +111,20 @@ def parse_section(
     Parses the data section lines.
     """
     name = lines[0].strip().removesuffix("_SECTION").lower()
-    rows = [[infer_type(n) for n in line.split()] for line in lines[1:]]
+    values = [[infer_type(n) for n in line.split()] for line in lines[1:]]
 
     if name == "edge_weight":
         # Parse edge weights separately as it involves extra processing.
-        data = parse_distances(rows, **instance)  # type: ignore
+        data = parse_distances(values, **instance)  # type: ignore
     elif name == "depot":
         # Remove -1 end token and renormalize depots to start at zero.
-        data = np.array(rows[0]) - 1
-    elif any(len(row) != len(rows[0]) for row in rows):
+        data = np.array(values[0]) - 1
+    elif any(len(row) != len(values[0]) for row in values):
         # This is a ragged array, so we keep it as a nested list, but we
         # remove the indices column.
-        data = [row[1:] for row in rows]
+        data = [row[1:] for row in values]
     else:
-        data = np.array([row[1:] for row in rows])
+        data = np.array([row[1:] for row in values])
 
         if data.ndim > 1 and data.shape[-1] == 1:
             # Squeeze data lines that contain only one column.
