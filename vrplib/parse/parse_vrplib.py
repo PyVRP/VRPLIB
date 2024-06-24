@@ -46,7 +46,7 @@ def parse_vrplib(text: str, compute_edge_weights: bool = True) -> Instance:
 
         if section_name in instance:
             name = section_name.upper()
-            msg = f"{name} is used both as a specification and a section."
+            msg = f"'{name}' is used both as a specification and a section."
             raise ValueError(msg)
 
         instance[section_name] = data  # type: ignore
