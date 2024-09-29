@@ -4,6 +4,7 @@ from typing import Union
 import numpy as np
 
 from .parse_distances import parse_distances
+from .parse_durations import parse_durations
 from .parse_utils import infer_type, text2lines
 
 Instance = dict[str, Union[str, float, np.ndarray]]
@@ -116,6 +117,9 @@ def parse_section(
     if name == "edge_weight":
         # Parse edge weights separately as it involves extra processing.
         data = parse_distances(values, **instance)  # type: ignore
+    elif name == "duration":
+        # Parse duration weights separately as it involves extra processing.
+        data = parse_durations(values)
     elif name == "depot":
         # Remove -1 end token and renormalize depots to start at zero.
         data = np.array(values[0]) - 1

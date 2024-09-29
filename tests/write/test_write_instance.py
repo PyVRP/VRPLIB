@@ -155,3 +155,35 @@ def test_small_instance_example(tmp_path):
 
     with open(tmp_path / name, "r") as fh:
         assert_equal(fh.read(), desired)
+
+
+def test_duration_section(tmp_path):
+    """
+    Tests that the DURATION_SECTION is written correctly without row indices.
+    """
+    name = "duration_test"
+    instance = {
+        "NAME": "duration_test_instance",
+        "DURATION_SECTION": [
+            [0, 5, 8],
+            [5, 0, 6],
+            [8, 6, 0]
+        ]
+    }
+
+    write_instance(tmp_path / name, instance)
+
+    desired = "\n".join(
+        [
+            "NAME: duration_test_instance",
+            "DURATION_SECTION",
+            "0\t5\t8",
+            "5\t0\t6",
+            "8\t6\t0",
+            "EOF",
+            ""
+        ]
+    )
+
+    with open(tmp_path / name, "r") as fh:
+        assert_equal(fh.read(), desired)
