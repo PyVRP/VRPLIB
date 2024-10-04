@@ -187,3 +187,4 @@ def test_duration_section(tmp_path):
 
     with open(tmp_path / name, "r") as fh:
         assert_equal(fh.read(), desired)
+        

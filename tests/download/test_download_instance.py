@@ -85,3 +85,4 @@ def test_download_solomon_instance(tmp_path):
         desired = fi.read()
 
     assert_equal(actual, desired)
+    
