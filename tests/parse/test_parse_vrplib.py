@@ -278,19 +278,21 @@ def test_empty_text():
     assert_equal(actual, {})
 
 
-def test_parse_vrplib_with_duration_section():
+def test_parse_vrplib_with_edge_duration_section():
     """
-    Tests if DURATION_SECTION is parsed correctly.
+    Tests if EDGE_DURATION_SECTION is parsed correctly.
     """
     instance = "\n".join(
         [
             "NAME: VRPLIB",
             "EDGE_WEIGHT_TYPE: EXPLICIT",
             "EDGE_WEIGHT_FORMAT: FULL_MATRIX",
+            "EDGE_DURATION_TYPE: EXPLICIT",
+            "EDGE_DURATION_FORMAT: FULL_MATRIX",
             "EDGE_WEIGHT_SECTION",
             "0  1",
             "1  0",
-            "DURATION_SECTION",
+            "EDGE_DURATION_SECTION",
             "0  5  8",
             "5  0  6",
             "8  6  0",
@@ -302,7 +304,7 @@ def test_parse_vrplib_with_duration_section():
 
     # Expected results
     expected_edge_weight = np.array([[0, 1], [1, 0]])
-    expected_duration = np.array([[0, 5, 8], [5, 0, 6], [8, 6, 0]])
+    expected_edge_duration = np.array([[0, 5, 8], [5, 0, 6], [8, 6, 0]])
 
     assert_equal(actual["edge_weight"], expected_edge_weight)
-    assert_equal(actual["duration"], expected_duration)
+    assert_equal(actual["edge_duration"], expected_edge_duration)

@@ -117,7 +117,7 @@ def parse_section(
     if name == "edge_weight":
         # Parse edge weights separately as it involves extra processing.
         data = parse_distances(values, **instance)  # type: ignore
-    elif name == "duration":
+    elif name == "edge_duration":
         # Parse duration weights separately as it involves extra processing.
         data = parse_durations(values, **instance)  
     elif name == "depot":

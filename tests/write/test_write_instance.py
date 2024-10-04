@@ -164,7 +164,7 @@ def test_duration_section(tmp_path):
     name = "duration_test"
     instance = {
         "NAME": "duration_test_instance",
-        "DURATION_SECTION": [
+        "EDGE_DURATION_SECTION": [
             [0, 5, 8],
             [5, 0, 6],
             [8, 6, 0]
@@ -176,7 +176,7 @@ def test_duration_section(tmp_path):
     desired = "\n".join(
         [
             "NAME: duration_test_instance",
-            "DURATION_SECTION",
+            "EDGE_DURATION_SECTION",
             "0\t5\t8",
             "5\t0\t6",
             "8\t6\t0",
