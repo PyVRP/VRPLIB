@@ -71,7 +71,11 @@ def _format_section(name: str, data: _ArrayLike) -> str:
         A VRPLIB-formatted data section.
     """
     section = [name]
-    include_idx = name not in ["EDGE_WEIGHT_SECTION", "DEPOT_SECTION", "EDGE_DURATION_SECTION"]
+    include_idx = name not in [
+        "EDGE_WEIGHT_SECTION",
+        "DEPOT_SECTION",
+        "EDGE_DURATION_SECTION",
+    ]
 
     if _is_one_dimensional(data):
         # Treat 1D arrays as column vectors, so each element is a row.

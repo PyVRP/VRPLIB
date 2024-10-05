@@ -164,11 +164,7 @@ def test_duration_section(tmp_path):
     name = "duration_test"
     instance = {
         "NAME": "duration_test_instance",
-        "EDGE_DURATION_SECTION": [
-            [0, 5, 8],
-            [5, 0, 6],
-            [8, 6, 0]
-        ]
+        "EDGE_DURATION_SECTION": [[0, 5, 8], [5, 0, 6], [8, 6, 0]],
     }
 
     write_instance(tmp_path / name, instance)
@@ -181,7 +177,7 @@ def test_duration_section(tmp_path):
             "5\t0\t6",
             "8\t6\t0",
             "EOF",
-            ""
+            "",
         ]
     )
 

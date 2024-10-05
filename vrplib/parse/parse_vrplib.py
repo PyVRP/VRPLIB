@@ -119,7 +119,7 @@ def parse_section(
         data = parse_distances(values, **instance)  # type: ignore
     elif name == "edge_duration":
         # Parse duration weights separately as it involves extra processing.
-        data = parse_durations(values, **instance)  
+        data = parse_durations(values, **instance)
     elif name == "depot":
         # Remove -1 end token and renormalize depots to start at zero.
         data = np.array(values[0]) - 1

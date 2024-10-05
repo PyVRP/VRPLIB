@@ -1,10 +1,14 @@
+from typing import Optional, Union
+
 import numpy as np
-from typing import Union, Optional
+
 
 def parse_durations(
-    data: list[list[float]],
+    data: list[list[Union[float, int, str]]],
     edge_duration_type: str = "EXPLICIT",  # Default to 'EXPLICIT'
-    edge_duration_format: Optional[str] = "FULL_MATRIX",  # Default to 'FULL_MATRIX'
+    edge_duration_format: Optional[
+        str
+    ] = "FULL_MATRIX",  # Default to 'FULL_MATRIX'
     **kwargs: Union[float, str, np.ndarray],  # Optional keyword arguments
 ) -> np.ndarray:
     """
@@ -32,7 +36,12 @@ def parse_durations(
     ValueError
         If the edge_durations_type or edge_duration_format is unsupported.
     """
-    if edge_duration_type == "EXPLICIT" and edge_duration_format == "FULL_MATRIX":
+    if (
+        edge_duration_type == "EXPLICIT"
+        and edge_duration_format == "FULL_MATRIX"
+    ):
         return np.array(data)
-    
-    raise ValueError(f"Unsupported durations_weight_type: {edge_duration_type} or format: {edge_duration_format}.")
+
+    raise ValueError(
+        f"Unsupported durations_weight_type: {edge_duration_type} or format: {edge_duration_format}."
+    )

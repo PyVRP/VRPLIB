@@ -299,7 +299,7 @@ def test_parse_vrplib_with_edge_duration_section():
             "EOF",
         ]
     )
-    
+
     actual = parse_vrplib(instance)
 
     # Expected results
