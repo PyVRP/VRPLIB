@@ -9,16 +9,13 @@ repository = "https://github.com/PyVRP/VRPLIB"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-numpy = "^1.19.3"
+numpy = ">=1.19.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.2"
 codecov = "^2.1.13"
 pytest-cov = "^4.0.0"
 pre-commit = "^2.19.0"
-
-[pytest]
-pythonpath = [".", "vrplib"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -48,6 +45,7 @@ ignore = [
 
 [tool.pytest.ini_options]
 addopts = "--cov=. --cov-report=xml"
+pythonpath = [".", "vrplib"]
 
 [tool.coverage.run]
 omit = [
