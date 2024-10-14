@@ -276,3 +276,27 @@ def test_empty_text():
     """
     actual = parse_vrplib("")
     assert_equal(actual, {})
+
+
+def test_multiple_depot():
+    """
+    Tests if an instance with multiple depots is correctly parsed. This fixes
+    a bug that was introduced in #121 where the depot section only returned the
+    first depot.
+    """
+    instance = "\n".join(
+        [
+            "NAME: Test",
+            "EDGE_WEIGHT_TYPE: EUC_2D",
+            "NODE_COORD_SECTION",
+            "1  20  20",
+            "DEPOT_SECTION",
+            "1",
+            "2",
+            "3",
+            "-1",
+        ]
+    )
+
+    actual = parse_vrplib(instance)
+    assert_equal(actual["depot"], [0, 1, 2])
