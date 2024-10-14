@@ -114,8 +114,8 @@ def test_parse_specification(line, key, value):
             ["demand", np.array([1.1, 2.2, 3.3])],
         ),
         (
-            ["DEPOT_SECTION", "1", "-1"],
-            ["depot", np.array([0])],
+            ["DEPOT_SECTION", "1", "2", "3", "-1"],
+            ["depot", np.array([0, 1, 2])],
         ),
         (
             # No end token in DEPOT_SECTION
