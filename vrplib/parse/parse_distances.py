@@ -87,10 +87,13 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
         An n-by-n Euclidean distances matrix.
 
     """
-    diff = coords[:, np.newaxis, :] - coords
-    square_diff = diff**2
-    square_dist = np.sum(square_diff, axis=-1)
-    return np.sqrt(square_dist)
+    coords = np.atleast_2d(coords)
+
+    sq_sum = (coords**2).sum(axis=1)
+    sq_dist = np.add.outer(sq_sum, sq_sum) - 2 * (coords @ coords.T)
+    np.fill_diagonal(sq_dist, 0)  # avoids minor numerical issues
+
+    return np.sqrt(sq_dist)
 
 
 def from_lower_row(triangular: np.ndarray) -> np.ndarray:
