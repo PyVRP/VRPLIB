@@ -6,21 +6,21 @@ from numpy.testing import assert_, assert_equal
 from vrplib import download_instance
 
 
-def test_deprecation_warning():
+def test_deprecation_warning(tmp_path):
     """
     Checks if a deprecation warning is raised when the function is called.
     """
     with pytest.warns(DeprecationWarning):
-        download_instance("X-n101-k25", "tmp")
+        download_instance("X-n101-k25", tmp_path / "tmp")
 
 
 @pytest.mark.filterwarnings("ignore:The function")
-def test_raise_invalid_name():
+def test_raise_invalid_name(tmp_path):
     """
     Raise an error if the passed-in name is invalid.
     """
     with pytest.raises(ValueError):
-        download_instance("invalid_name", "tmp")
+        download_instance("invalid_name", tmp_path / "tmp")
 
 
 @pytest.mark.filterwarnings("ignore:The function")
