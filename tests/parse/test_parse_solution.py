@@ -24,6 +24,11 @@ from vrplib.parse.parse_solution import parse_solution
             "Route #1: 1 \n Route #2: 6\n ABCDE",
             {"routes": [[1], [6]]},
         ),
+        (
+            # Reload "|" character
+            "Route #1: 1 | 2 \n Route #2: 3",
+            {"routes": [[1, "|", 2], [3]]},
+        ),
     ],
 )
 def test_parse_solution(text, data):
