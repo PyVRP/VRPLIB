@@ -1,10 +1,10 @@
 import os
-from typing import Any, Union
+from typing import Any
 
 from vrplib.parse import parse_solution
 
 
-def read_solution(path: Union[str, os.PathLike]) -> dict[str, Any]:
+def read_solution(path: str | os.PathLike) -> dict[str, Any]:
     """
     Reads the solution from the passed-in file path.
 

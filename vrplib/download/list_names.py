@@ -1,15 +1,14 @@
 import importlib.resources as pkg_resource
 import warnings
 from functools import lru_cache
-from typing import Optional
 
 from .download_utils import is_vrptw
 
 
 def list_names(
-    low: Optional[int] = None,
-    high: Optional[int] = None,
-    vrp_type: Optional[str] = None,
+    low: int | None = None,
+    high: int | None = None,
+    vrp_type: str | None = None,
 ):
     """
     Returns the names of the instances that can be downloaded from CVRPLIB.
@@ -40,7 +39,7 @@ def list_names(
     if vrp_type not in [None, "cvrp", "vrptw"]:
         raise ValueError("vrp_type must be one of [None, 'cvrp', 'vrptw']")
 
-    elif vrp_type == "cvrp":
+    if vrp_type == "cvrp":
         instances = filter(lambda inst: not is_vrptw(inst["name"]), instances)
 
     elif vrp_type == "vrptw":

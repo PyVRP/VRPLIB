@@ -1,14 +1,13 @@
 import os
 import warnings
 from pathlib import Path
-from typing import Union
 from urllib.request import urlopen
 
 from .constants import CVRPLIB_URL
 from .download_utils import find_set, is_vrptw
 
 
-def download_instance(name: str, path: Union[str, os.PathLike]):
+def download_instance(name: str, path: str | os.PathLike):
     """
     Downloads an instance file from CVRPLIB and saves it at the specified path.
 

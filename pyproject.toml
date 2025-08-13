@@ -19,7 +19,7 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Programming Language :: Python :: 3",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.19.3; python_version < '3.12'",
     "numpy>=1.26.0; python_version >= '3.12'",
@@ -48,7 +48,7 @@ line-length = 79
 
 [tool.ruff.lint]
 select = [
-    "E", "F", "I", "NPY", "PYI", "Q", "RET", "RSE", "RUF", "SLF", "SIM", "TC"
+    "E", "F", "I", "NPY", "PYI", "Q", "RET", "RSE", "RUF", "SLF", "SIM", "TC",
 ]
 
 

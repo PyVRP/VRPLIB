@@ -1,11 +1,11 @@
 import os
-from typing import Any, Union
+from typing import Any
 
 from vrplib.parse import parse_solomon, parse_vrplib
 
 
 def read_instance(
-    path: Union[str, os.PathLike],
+    path: str | os.PathLike,
     instance_format: str = "vrplib",
     compute_edge_weights: bool = True,
 ) -> dict[str, Any]:
@@ -29,7 +29,7 @@ def read_instance(
     with open(path, "r") as fi:
         if instance_format == "vrplib":
             return parse_vrplib(fi.read(), compute_edge_weights)
-        elif instance_format == "solomon":
+        if instance_format == "solomon":
             return parse_solomon(fi.read(), compute_edge_weights)
 
         raise ValueError(f"Format style {instance_format} not known.")

@@ -1,14 +1,13 @@
 import os
 import warnings
 from pathlib import Path
-from typing import Union
 from urllib.request import urlopen
 
 from .constants import CVRPLIB_URL
 from .download_utils import find_set
 
 
-def download_solution(name: str, path: Union[str, os.PathLike]):
+def download_solution(name: str, path: str | os.PathLike):
     """
     Downloads a solution file from CVRPLIB and saves it at the specified path.
 
