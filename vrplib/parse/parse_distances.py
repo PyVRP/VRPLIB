@@ -57,6 +57,9 @@ def parse_distances(
         if edge_weight_type == "EXACT_2D":
             return np.round(distance * 1000)
 
+        if edge_weight_type == "CEIL_2D":
+            return np.ceil(distance)
+
     if edge_weight_type == "EXPLICIT":
         if edge_weight_format == "LOWER_ROW":
             # TODO Eilon instances edge weight specifications are incorrect in

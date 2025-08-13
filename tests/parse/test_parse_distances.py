@@ -35,7 +35,7 @@ def test_unknown_edge_weight_type_and_format(
 
 
 @pytest.mark.parametrize(
-    "edge_weight_type", ["EUC_2D", "FLOOR_2D", "EXACT_2D"]
+    "edge_weight_type", ["EUC_2D", "FLOOR_2D", "CEIL_2D", "EXACT_2D"]
 )
 def test_raise_no_coordinates_euclidean_distances(edge_weight_type):
     """
@@ -51,6 +51,7 @@ def test_raise_no_coordinates_euclidean_distances(edge_weight_type):
     [
         ("EUC_2D", [[0, np.sqrt(2)], [np.sqrt(2), 0]]),
         ("FLOOR_2D", [[0, 1], [1, 0]]),
+        ("CEIL_2D", [[0, 2], [2, 0]]),
         ("EXACT_2D", [[0, 1414], [1414, 0]]),
     ],
 )

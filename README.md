@@ -183,6 +183,7 @@ Following the VRPLIB conventions, the edge weights are computed based on the `ED
 - `*_2D`: Euclidean distances based on the node coordinates data.
     - `EUC_2D`: Double precision distances without rounding.
     - `FLOOR_2D`: Round down all distances to down to an integer.
+    - `CEIL_2D`: Round up all distances to down to an integer.
     - `EXACT_2D`: Multiply the distances by 1000, round to the nearest integer.
 - `EXPLICIT`: the distance data is explicitly provided, in partial or full form. The `EDGE_WEIGHT_FORMAT` specification must be present. We support the following two edge weight formats:
   - `LOWER_ROW`: Lower row triangular matrix without diagonal entries.
