@@ -27,9 +27,8 @@ def test_raise_invalid_vrplib_format(name):
     """
     Tests if a RuntimeError is raised when the text is not in VRPLIB format.
     """
-    with open(DATA_DIR / name, "r") as fh:
-        with assert_raises(RuntimeError):
-            parse_vrplib(fh.read())
+    with open(DATA_DIR / name, "r") as fh, assert_raises(RuntimeError):
+        parse_vrplib(fh.read())
 
 
 @mark.parametrize(

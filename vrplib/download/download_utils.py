@@ -19,8 +19,7 @@ def find_set(instance_name: str) -> str:
     if re.match("(R|C|RC)[12]", instance_name):
         if "_" in instance_name:
             return "HG"
-        else:
-            return "Solomon"
+        return "Solomon"
 
     if any([instance_name.startswith(xxl) for xxl in XXL_NAMES]):
         return "XXL"

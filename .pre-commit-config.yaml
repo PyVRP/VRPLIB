@@ -5,7 +5,6 @@ repos:
     rev: v6.0.0
     hooks:
       - id: debug-statements
-      - id: trailing-whitespace
       - id: end-of-file-fixer
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
