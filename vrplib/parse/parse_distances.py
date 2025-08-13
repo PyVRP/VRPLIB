@@ -62,6 +62,7 @@ def parse_distances(
             # (C)VRPLIB format. Find a better way to identify Eilon instances.
             if comment is not None and "Eilon" in comment:
                 return from_eilon(data)
+
             return from_lower_row(data)
 
         if edge_weight_format == "FULL_MATRIX":

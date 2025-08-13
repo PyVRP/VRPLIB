@@ -29,6 +29,7 @@ def read_instance(
     with open(path, "r") as fi:
         if instance_format == "vrplib":
             return parse_vrplib(fi.read(), compute_edge_weights)
+
         if instance_format == "solomon":
             return parse_solomon(fi.read(), compute_edge_weights)
 
