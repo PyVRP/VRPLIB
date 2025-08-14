@@ -108,25 +108,6 @@ Vehicle types: [1, 2, 3]
 ```
 
 
-### Downloading from CVRPLIB 
-
-> [!WARNING]  
-> This functionality is deprecated and will be removed in the next major version.
-
-``` python
-import vrplib
-
-# Download an instance and a solution file 
-vrplib.download_instance("X-n101-k25", "/path/to/instances/")
-vrplib.download_solution("X-n101-k25", "/path/to/solutions/")
-
-# List all instance names that can be downloaded 
-vrplib.list_names()                      # All instance names
-vrplib.list_names(low=100, high=200)     # Instances with between [100, 200] customers
-vrplib.list_names(vrp_type="cvrp")       # Only CVRP instances
-vrplib.list_names(vrp_type="vrptw")      # Only VRPTW instances
-```
-
 
 ## Documentation
 - [VRPLIB instance format](#vrplib-instance-format)
@@ -247,6 +228,5 @@ Reading the above example solution returns the following dictionary:
 ```
 
 ### Other remarks
-- The `XML100` benchmark set is not listed in `list_names` and cannot be downloaded through this package. You can download these instances directly from [CVRPLIB](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/).
 - In the literature, some instances use rounding conventions different from what is specified in the instance. For example, X instance set proposed by [Uchoa et al. (2017)](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/new-instances) assumes that the distances are rounded to the nearest integer. When you use the `vrplib` package to read this instance, it will return non-rounded Euclidean distances because the instance specifies the `EUC_2D` edge weight type which implies no rounding. To adhere to the convention used in the literature, you can manually round the distances matrix.
 - For large instances (>5000 customers) it's recommended to set the `compute_edge_weights` argument to `False` in `read_instance`.

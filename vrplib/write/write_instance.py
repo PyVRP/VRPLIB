@@ -1,5 +1,5 @@
 import os
-from typing import TypeVar, Union
+from typing import TypeVar
 
 import numpy as np
 
@@ -7,8 +7,8 @@ _ArrayLike = TypeVar("_ArrayLike", list, tuple, np.ndarray)
 
 
 def write_instance(
-    path: Union[str, os.PathLike],
-    data: dict[str, Union[str, int, float, _ArrayLike]],
+    path: str | os.PathLike,
+    data: dict[str, str | int | float | _ArrayLike],
 ):
     """
     Writes a VRP instance to file following the VRPLIB format [1].
@@ -88,7 +88,4 @@ def _format_section(name: str, data: _ArrayLike) -> str:
 
 
 def _is_one_dimensional(data: _ArrayLike) -> bool:
-    for elt in data:
-        if isinstance(elt, (list, tuple, np.ndarray)):
-            return False
-    return True
+    return all(not isinstance(elt, (list, tuple, np.ndarray)) for elt in data)

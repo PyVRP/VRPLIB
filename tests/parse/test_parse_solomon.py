@@ -26,9 +26,8 @@ DATA_DIR = Path("tests/data")
     ],
 )
 def test_raise_invalid_solomon_instance_file(name):
-    with assert_raises(RuntimeError):
-        with open(DATA_DIR / name, "r") as fh:
-            parse_solomon(fh.read())
+    with open(DATA_DIR / name, "r") as fh, assert_raises(RuntimeError):
+        parse_solomon(fh.read())
 
 
 @mark.parametrize(
@@ -43,8 +42,14 @@ def test_raise_invalid_solomon_instance_file(name):
         # no CUSTOMER in fifth line
         ["NAME", "VEHICLES", "NUMBER CAPACITY", "20 100", "wrong"],
         # missing headers in sixth line
-        ["NAME", "VEHICLES", "NUMBER CAPACITY", "20 100", "wrong"]
-        + ["CUST NO. XCOORD. YCOORD. DEMAND"],
+        [
+            "NAME",
+            "VEHICLES",
+            "NUMBER CAPACITY",
+            "20 100",
+            "wrong",
+            "CUST NO. XCOORD. YCOORD. DEMAND",
+        ],
     ],
 )
 def test_raise_invalid_solomon_instance_lines(lines):
