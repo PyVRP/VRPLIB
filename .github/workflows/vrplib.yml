@@ -28,7 +28,7 @@ jobs:
         run: uv sync
 
       - name: Cache pre-commit
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: cache-pre-commit
         with:
           path: ~/.cache/pre-commit/
