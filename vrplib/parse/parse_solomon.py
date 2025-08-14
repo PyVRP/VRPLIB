@@ -1,11 +1,9 @@
-from typing import Union
-
 import numpy as np
 
 from .parse_distances import pairwise_euclidean
 from .parse_utils import text2lines
 
-Instance = dict[str, Union[str, float, np.ndarray]]
+Instance = dict[str, str | float | np.ndarray]
 
 
 def parse_solomon(text: str, compute_edge_weights: bool = True) -> Instance:

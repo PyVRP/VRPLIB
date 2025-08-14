@@ -1,5 +1,4 @@
 from itertools import combinations
-from typing import Optional, Union
 
 import numpy as np
 
@@ -7,10 +6,10 @@ import numpy as np
 def parse_distances(
     data: list[float],
     edge_weight_type: str,
-    edge_weight_format: Optional[str] = None,
-    node_coord: Optional[np.ndarray] = None,
-    comment: Optional[str] = None,
-    **kwargs: Union[float, str, np.ndarray],  # noqa
+    edge_weight_format: str | None = None,
+    node_coord: np.ndarray | None = None,
+    comment: str | None = None,
+    **kwargs: float | str | np.ndarray,
 ) -> np.ndarray:
     """
     Parses the distances. The specification "edge_weight_type" describes how
@@ -63,8 +62,8 @@ def parse_distances(
             # (C)VRPLIB format. Find a better way to identify Eilon instances.
             if comment is not None and "Eilon" in comment:
                 return from_eilon(data)
-            else:
-                return from_lower_row(data)
+
+            return from_lower_row(data)
 
         if edge_weight_format == "FULL_MATRIX":
             return np.array(data)

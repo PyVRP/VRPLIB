@@ -1,51 +1,75 @@
-[tool.poetry]
+[project]
 name = "vrplib"
 version = "1.5.1"
 description = "Python library for reading and writing VRP instances."
-authors = ["Leon Lan <leon.lanyidong@gmail.com>"]
+authors = [
+    { name = "Leon Lan", email = "leon.lanyidong@gmail.com" },
+]
 license = "MIT"
+license-files = ["LICENSE.md"]
+keywords = [
+    "vehicle routing problem",
+    "benchmarking",
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.19.3; python_version < '3.12'",
+    "numpy>=1.26.0; python_version >= '3.12'",
+]
 readme = "README.md"
 repository = "https://github.com/PyVRP/VRPLIB"
 
-[tool.poetry.dependencies]
-python = "^3.9"
-numpy = ">=1.19.3"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.1.2"
-codecov = "^2.1.13"
-pytest-cov = "^4.0.0"
-pre-commit = "^2.19.0"
+[project.urls]
+source = "https://github.com/PyVRP/VRPLIB"
+issues = "https://github.com/PyVRP/VRPLIB/issues"
+
+
+[dependency-groups]
+dev = [
+    "pre-commit>=2.20.0",
+    "pytest>=7.1.2",
+    "pytest-cov>=6.1.1",
+    "codecov",
+]
+
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.10,<0.9.0"]
+build-backend = "uv_build"
 
-[tool.black]
+
+[tool.uv.build-backend]
+module-name = "vrplib"
+module-root = ""
+
+
+[tool.ruff]
 line-length = 79
+
+
+[tool.ruff.lint]
+select = [
+    "E", "F", "I", "NPY", "PYI", "Q", "RET", "RSE", "RUF", "SLF", "SIM", "TC",
+]
+
 
 [tool.mypy]
 ignore_missing_imports = true
 
-[tool.ruff]
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "C",  # flake8-comprehensions
-]
-ignore = [
-    "E501",  # line too long, handled by black
-    "C901",  # too complex
-]
-
-[tool.ruff.per-file-ignores]
-"__init__.py" = ["F401"]
 
 [tool.pytest.ini_options]
 addopts = "--cov=. --cov-report=xml"
 pythonpath = [".", "vrplib"]
+
 
 [tool.coverage.run]
 omit = [
