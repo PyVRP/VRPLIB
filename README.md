@@ -13,7 +13,7 @@
 - [Documentation](#documentation)
 
 ## Installation
-`vrplib` works with Python 3.9+ and only depends on `numpy`. It may be installed in the usual way as 
+`vrplib` only depends on `numpy` and may be installed in the usual way as
 
 ```shell
 pip install vrplib
