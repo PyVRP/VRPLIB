@@ -1,6 +1,6 @@
 [project]
 name = "vrplib"
-version = "2.1.0"
+version = "2.2.0a"
 description = "Python library for reading and writing VRP instances."
 authors = [
     { name = "Leon Lan", email = "leon.lanyidong@gmail.com" },
