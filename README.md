@@ -134,7 +134,7 @@ EOF
 A VRPLIB instance contains problem **specifications** and problem **data**. 
 - Specifications are key-value pairs separated by a colon. In the example above, `NAME` and `EDGE_WEIGHT_TYPE` are the two data specifications.
 - Data are explicit array-like values such as customer coordinates or service times. 
-Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. It is then followed by rows of values and each row must start with an index representing the depot or customer. 
+Each data section should start with a header name that ends with `_SECTION`, e.g., `NODE_COORD_SECTION` and `SERVICE_TIME_SECTION`. Section names may also end with a colon, e.g., `DEMAND_SECTION:`. It is then followed by rows of values and each row must start with an index representing the depot or customer. 
 There are two exceptions: values in `EDGE_WEIGHT_SECTION` and `DEPOT_SECTION` should not start with an index.
 
 Besides the rules outlined above, `vrplib` is not strict about the naming of specifications or sections. 
