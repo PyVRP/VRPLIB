@@ -285,15 +285,16 @@ def test_section_with_colon():
     """
     instance = dedent(
         """
-    DIMENSION: 1
-    EDGE_WEIGHT_TYPE: EXACT_2D
-    NODE_COORD_SECTION:
-    1 1 1
-    DEMAND_SECTION :
-    1 10
-    DEPOT_SECTION
-    1
-    EOF"""
+        DIMENSION: 1
+        EDGE_WEIGHT_TYPE: EXACT_2D
+        NODE_COORD_SECTION:
+        1 1 1
+        DEMAND_SECTION :
+        1 10
+        DEPOT_SECTION
+        1
+        EOF
+        """
     )
 
     result = parse_vrplib(instance)  # should not raise
