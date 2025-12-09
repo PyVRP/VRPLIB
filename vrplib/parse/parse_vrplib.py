@@ -72,7 +72,7 @@ def group_specifications_and_sections(lines: list[str]):
             continue
 
         if "_SECTION" in line:
-            start = lines.index(line)
+            start = idx
             end_section = start + 1
 
             for next_line in lines[start + 1 :]:
