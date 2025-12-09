@@ -1,4 +1,5 @@
 from pathlib import Path
+from textwrap import dedent
 
 import numpy as np
 from numpy.testing import assert_, assert_equal, assert_raises
@@ -275,3 +276,29 @@ def test_empty_text():
     """
     actual = parse_vrplib("")
     assert_equal(actual, {})
+
+
+def test_section_with_colon():
+    """
+    Tests if a section name containing a colon is parsed correctly.
+    See https://github.com/PyVRP/VRPLIB/issues/132 for details.
+    """
+    instance = dedent(
+        """
+    DIMENSION: 1
+    EDGE_WEIGHT_TYPE: EXACT_2D
+    NODE_COORD_SECTION:
+    1 1 1
+    DEMAND_SECTION :
+    1 10
+    DEPOT_SECTION
+    1
+    EOF"""
+    )
+
+    result = parse_vrplib(instance)  # should not raise
+    assert_equal(result["dimension"], 1)
+    assert_equal(result["edge_weight_type"], "EXACT_2D")
+    assert_equal(result["demand"], [10])
+    assert_equal(result["node_coord"], [[1, 1]])
+    assert_equal(result["depot"], [0])

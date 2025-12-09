@@ -71,14 +71,12 @@ def group_specifications_and_sections(lines: list[str]):
         if idx < end_section:  # Skip all lines of the current section
             continue
 
-        if ":" in line:
-            specs.append(line)
-        elif "_SECTION" in line:
+        if "_SECTION" in line:
             start = lines.index(line)
             end_section = start + 1
 
             for next_line in lines[start + 1 :]:
-                if ":" in next_line:
+                if ":" in next_line and "_SECTION" not in next_line:
                     raise ValueError("Specification presented after section.")
 
                 # The current section ends when a next section or an EOF token
@@ -89,6 +87,8 @@ def group_specifications_and_sections(lines: list[str]):
                 end_section += 1
 
             sections.append(lines[start:end_section])
+        elif ":" in line:
+            specs.append(line)
         else:
             msg = "Instance does not conform to the VRPLIB format."
             raise RuntimeError(msg)
@@ -111,7 +111,8 @@ def parse_section(
     """
     Parses the data section lines.
     """
-    name = lines[0].strip().removesuffix("_SECTION").lower()
+    # Some section names include colons, so we strip those as well.
+    name = lines[0].strip(" :").removesuffix("_SECTION").lower()
     rows = [[infer_type(n) for n in line.split()] for line in lines[1:]]
 
     if name == "edge_weight":
