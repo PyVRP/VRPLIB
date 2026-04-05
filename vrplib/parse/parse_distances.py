@@ -111,7 +111,7 @@ def from_lower_row(data: np.ndarray) -> np.ndarray:
     flattened = np.concatenate(data).astype(float)
 
     # The flattened data represents the lower triangle of a symmetric matrix.
-    # Derive the matrix size (https://en.wikipedia.org/wiki/Triangular_number).
+    # See https://en.wikipedia.org/wiki/Triangular_number.
     # m = n * (n - 1) / 2 => n = (1 + sqrt(1 + 8m)) / 2
     n = (1 + int((1 + 8 * flattened.size) ** 0.5)) // 2
 
