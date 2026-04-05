@@ -1,8 +1,12 @@
+from pathlib import Path
+
 import numpy as np
 from numpy.testing import assert_, assert_equal, assert_raises
 from pytest import mark
 
 from vrplib.read import read_instance
+
+DATA_DIR = Path(__file__).parent.parent / "data"
 
 
 @mark.parametrize("instance_format", ["CVRPLIB", "LKH", "VRP"])
@@ -115,3 +119,25 @@ def test_do_not_compute_edge_weights(tmp_path):
 
     instance = read_instance(tmp_path / name, "solomon", False)
     assert_("edge_weight" not in instance)
+
+
+def test_read_explicit_lower_row_instance_objective():
+    """
+    Tests that the E-n13-k4 instance with EXPLICIT LOWER_ROW edge weights
+    is read correctly by verifying the known optimal solution cost of 247.
+    """
+    instance = read_instance(DATA_DIR / "E-n13-k4.vrp")
+    edge_weight = instance["edge_weight"]
+
+    # Known optimal solution routes (0-indexed customer IDs).
+    # Depot is node 0; customers are nodes 1-12.
+    routes = [[1], [8, 5, 3], [9, 12, 10, 6], [11, 4, 7, 2]]
+
+    total_cost = 0
+    for route in routes:
+        total_cost += edge_weight[0, route[0]]
+        for idx in range(len(route) - 1):
+            total_cost += edge_weight[route[idx], route[idx + 1]]
+        total_cost += edge_weight[route[-1], 0]
+
+    assert_equal(total_cost, 247)
