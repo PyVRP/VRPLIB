@@ -1,5 +1,3 @@
-from itertools import combinations
-
 import numpy as np
 
 
@@ -61,11 +59,6 @@ def parse_distances(
 
     if edge_weight_type == "EXPLICIT":
         if edge_weight_format == "LOWER_ROW":
-            # TODO Eilon instances edge weight specifications are incorrect in
-            # (C)VRPLIB format. Find a better way to identify Eilon instances.
-            if comment is not None and "Eilon" in comment:
-                return from_eilon(data)
-
             return from_lower_row(data)
 
         if edge_weight_format == "FULL_MATRIX":
@@ -98,56 +91,33 @@ def pairwise_euclidean(coords: np.ndarray) -> np.ndarray:
     return np.sqrt(sq_dist)
 
 
-def from_lower_row(triangular: np.ndarray) -> np.ndarray:
+def from_lower_row(data: np.ndarray) -> np.ndarray:
     """
-    Computes a full distances matrix from a lower row triangular matrix.
-    The triangular matrix should not contain the diagonal.
+    Computes a full distances matrix from a LOWER_ROW edge weight section.
+
+    The input is treated as a continuous 1D stream of values (as specified
+    by TSPLIB95), regardless of how the values are wrapped across lines.
 
     Parameters
     ----------
-    triangular
-        A list of lists, each list representing the entries of a row in a
-        lower triangular matrix without diagonal entries.
+    data
+        Edge weight data, possibly as a ragged array of rows.
 
     Returns
     -------
     np.ndarray
-        A n-by-n distances matrix.
+        An n-by-n distances matrix.
     """
-    n = len(triangular) + 1
-    distances = np.zeros((n, n))
+    flattened = np.fromiter(
+        (v for row in data for v in row), dtype=float
+    )
 
-    for i in range(n - 1):
-        distances[i + 1, : i + 1] = triangular[i]
-
-    return distances + distances.T
-
-
-def from_eilon(edge_weights: np.ndarray) -> np.ndarray:
-    """
-    Computes a full distances matrix from the Eilon instances with "LOWER_ROW"
-    edge weight format. The specification is incorrect, instead the edge weight
-    section needs to be parsed as a flattend, column-wise triangular matrix.
-
-    See https://github.com/leonlan/VRPLIB/issues/40.
-    """
-    flattened = [dist for row in edge_weights for dist in row]
-    n = int((2 * len(flattened)) ** 0.5) + 1  # The (n+1)-th triangular number
+    # n * (n - 1) / 2 = m => n = (1 + sqrt(1 + 8m)) / 2
+    m = flattened.size
+    n = (1 + int((1 + 8 * m) ** 0.5)) // 2
 
     distances = np.zeros((n, n))
-    indices = sorted([(i, j) for (i, j) in combinations(range(n), r=2)])
-
-    for idx, (i, j) in enumerate(indices):
-        d_ij = flattened[idx]
-        distances[i, j] = d_ij
-        distances[j, i] = d_ij
+    distances[np.tril_indices(n, k=-1)] = flattened
+    distances += distances.T
 
     return distances
-
-
-def is_triangular_number(n):
-    """
-    Checks if n is a triangular number.
-    """
-    i = int((2 * n) ** 0.5)
-    return i * (i + 1) == 2 * n

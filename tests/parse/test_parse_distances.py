@@ -2,12 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal, assert_raises
 
-from vrplib.parse.parse_distances import (
-    from_eilon,
-    from_lower_row,
-    is_triangular_number,
-    parse_distances,
-)
+from vrplib.parse.parse_distances import parse_distances
 
 
 @pytest.mark.parametrize(
@@ -68,33 +63,24 @@ def test_parse_euclidean_distances(edge_weight_type, desired):
 
 
 @pytest.mark.parametrize(
-    "comment, func", [("Eilon", from_eilon), (None, from_lower_row)]
+    "data",
+    [
+        [[1, 2, 3, 4, 5, 6]],  # single line
+        [[1, 2, 3, 4], [5, 6]],  # ragged lines
+        [[1], [2, 3], [4, 5, 6]],  # proper triangular rows
+    ],
 )
-def test_parse_lower_row(comment, func):
+def test_parse_lower_row(data):
     """
-    Tests if a ``LOWER ROW`` instance is parsed as Eilon instance or regular
-    instance. Eilon instances do not contain a proper lower row matrix, but
-    a lower column matrix instead. The current way of detecting an Eilon
-    instance is by means of the ``COMMENT`` field, which is checked for
-    including "Eilon".
+    Tests that LOWER_ROW instances are parsed correctly regardless of how
+    the values are wrapped across lines. See #134.
     """
-    instance = {
-        "data": np.array([[1], [2, 3], [4, 5, 6]], dtype=object),
-        "edge_weight_type": "EXPLICIT",
-        "edge_weight_format": "LOWER_ROW",
-        "comment": comment,
-    }
-
-    assert_equal(parse_distances(**instance), func(instance["data"]))
-
-
-def test_from_lower_row():
-    """
-    Tests that a lower row triangular matrix is correctly transformed into a
-    full matrix.
-    """
-    triangular_matrix = np.array([[1], [2, 3], [4, 5, 6]], dtype=object)
-    actual = from_lower_row(triangular_matrix)
+    data = np.array(data, dtype=object)
+    actual = parse_distances(
+        data,
+        edge_weight_type="EXPLICIT",
+        edge_weight_format="LOWER_ROW",
+    )
     desired = np.array(
         [
             [0, 1, 2, 4],
@@ -105,31 +91,3 @@ def test_from_lower_row():
     )
 
     assert_equal(actual, desired)
-
-
-def test_from_eilon():
-    """
-    Tests that the distance matrix of Eilon instances is correctly transformed.
-    These distance matrices have entries corresponding to the lower column
-    triangular matrices. But the distance matrix is not a triangular matrix,
-    so they are flattened first.
-    """
-    eilon = np.array([[1, 2, 3, 4], [5, 6]], dtype=object)
-    actual = from_eilon(eilon)
-    desired = np.array(
-        [
-            [0, 1, 2, 3],
-            [1, 0, 4, 5],
-            [2, 4, 0, 6],
-            [3, 5, 6, 0],
-        ]
-    )
-
-    assert_equal(actual, desired)
-
-
-@pytest.mark.parametrize(
-    "n, res", [(1, True), (3, True), (4, False), (630, True), (1000, False)]
-)
-def test_is_triangular_number(n, res):
-    assert_equal(is_triangular_number(n), res)
