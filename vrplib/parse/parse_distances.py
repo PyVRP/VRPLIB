@@ -112,9 +112,8 @@ def from_lower_row(data: np.ndarray) -> np.ndarray:
 
     # The flattened data represents the lower triangle of a symmetric matrix.
     # Derive the matrix size (https://en.wikipedia.org/wiki/Triangular_number).
-    # n * (n - 1) / 2 = m => n = (1 + sqrt(1 + 8m)) / 2
-    m = flattened.size
-    n = (1 + int((1 + 8 * m) ** 0.5)) // 2
+    # m = n * (n - 1) / 2 => n = (1 + sqrt(1 + 8m)) / 2
+    n = (1 + int((1 + 8 * flattened.size) ** 0.5)) // 2
 
     distances = np.zeros((n, n))
     distances[np.tril_indices(n, k=-1)] = flattened
